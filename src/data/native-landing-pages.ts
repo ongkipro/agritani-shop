@@ -46,6 +46,14 @@ export const nativeLandingPages: NativeLandingPage[] = [
   //   productSlug: 'pupuk-organik-cair',
   //   description: 'Landing khusus kampanye Lebaran.',
   // },
+  {
+    slug: 'perisai-anti-bulai',
+    title: 'Perisai Anti-Bulai Jagung Hibrida',
+    productSlug: 'bensu-pupuk-cair-organik',
+    description: 'Perkuat dinding sel daun jagung muda dengan Bensu sejak 15 HST agar tanaman lebih tahan bulai.',
+    image: '/images/landing/perisai-anti-bulai/hero-bulai.webp',
+    isActive: true,
+  },
 ];
 
 /**
