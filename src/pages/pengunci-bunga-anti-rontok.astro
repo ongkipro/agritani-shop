@@ -1,0 +1,492 @@
+---
+/**
+ * Native Landing Page: Pengunci Bunga & Pencegah Rontok Pentil Buah (SARATOGA)
+ *
+ * Master Product: saratoga-serum-tanaman-premium
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/pengunci-bunga-anti-rontok.css';
+
+export const prerender = false;
+
+const SLUG = 'pengunci-bunga-anti-rontok';
+
+const product = await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/pengunci-bunga-anti-rontok/hero-bunga.webp';
+---
+
+<BaseLayout
+  title={`Solusi Bunga & Pentil Buah Rontok: Kunci 95% Jadi Buah Bernas | ${Astro.locals.tenant.name}`}
+  description="Hentikan gugur bunga massal dan pentil buah rontok akibat cuaca ekstrem. Formula serum pengunci memperkuat tangkai bunga cabai, tomat, dan melon tanpa rontok."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <div
+      data-landing-hero
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
+    ></div>
+
+    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">JANGAN BIARKAN BERGUGURAN!</span>
+          Kunci Tangkai Bunga & Pentil: 95% Sukses Jadi <span class="hl-brush">BUAH BERNAS</span> Tiap Pohon
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Cukup 1 kali semprot kabut <strong class="text-slate-950 font-bold">SARATOGA</strong>, gugur bunga massal berhenti seketika meski dihantam panas terik dan hujan malam!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi bunga cabai dan tomat lebat mengunci kuat di tangkai tidak rontok setelah aplikasi serum Saratoga"
+            class="h-full w-full object-cover"
+            width="960"
+            height="536"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              Tangkai bunga mengunci tebal, 95% bunga sukses mengikat jadi calon buah super!
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Points Row -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>Formula Serum Aktif</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Garansi Anti-Rontok 48 Jam</span>
+        </div>
+
+        <!-- Takeaway Box with left accent border -->
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Setiap bunga yang rontok adalah uang jutaan rupiah yang terbuang percuma.</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Fluktuasi cuaca ekstrem memicu lonjakan etilen yang mematahkan cincin tangkai bunga. Kunci cincin absisi dengan serum nutrisi L-Prolin dan kalsium aktif agar bunga mengunci kuat jadi buah lebat.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION (Fakta Lapangan Bunga Rontok) -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Bunga & Pentil Buah Bisa <span class="hl-brush-red">Rontok Massal</span>?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Pohon sudah subur dan berbunga lebat, tapi saat cuaca ekstrem berganti, bunga tiba-tiba rontok menguning berserakan di atas mulsa:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Kaget Cuaca Ekstrem Siang Terik Malam Dingin</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Suhu siang tembus 35°C lalu malam diguyur hujan memicu lonjakan hormon stres etilen di dalam tanaman secara mendadak.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Cincin Tangkai Bunga Rapuh & Menguning</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Hormon etilen memicu enzim pelarut selulase di cincin tangkai bunga (lapisan absisi). Tangkai menguning, rapuh, dan bunga gugur saat tersenggol angin.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Pentil Buah Kempes & Tonase Hilang 50%</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Bukan hanya bunga, pentil buah muda yang baru terbentuk pun rontok berguguran, memangkas potensi hasil panen hingga separuh lebih.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Lapangan) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Bunga Rontok</span> vs <span class="hl-brush">Mengunci Jadi Buah</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Bunga rontok yang dibiarkan bikin pohon mandul buah. Tapi dengan serum pengunci, tangkai bunga mengeras liat dan mengikat erat:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <!-- Card Bad (Kondisi Rontok) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/pengunci-bunga-anti-rontok/kondisi-rontok.webp"
+            alt="Kondisi bunga cabai dan tomat menguning gugur berserakan di bedengan mulsa"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Kondisi Rontok
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Bunga Gugur Massal</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Tangkai menguning rapuh, calon buah rontok ke tanah, hasil panen drop drastis.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Good (Hasil Mengunci) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/pengunci-bunga-anti-rontok/kondisi-mengunci.webp"
+            alt="Kondisi tangkai bunga cabai tebal mengunci kuat jadi calon buah pentil sehat"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Hasil 48 Jam
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Tangkai Mengunci Kuat</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Tangkai buah tebal hijau liat, bunga mekar sempurna dan mengikat jadi calon buah super.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk SARATOGA Serum) -->
+    <section class="bg-white px-5 py-10">
+      <!-- Fullwidth Product Banner -->
+      <div class="-mx-5 mb-6">
+        <img
+          src="/images/landing/pengunci-bunga-anti-rontok/saratoga-hero.webp"
+          alt="Botol Serum Tanaman SARATOGA di Kebun Hortikultura Berbunga Lebat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia varian 500ml & 1 Liter dengan formula serum asam amino pengunci bunga dan segel hologram original.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        SARATOGA — Serum Pengunci <span class="hl-brush">Bunga & Pentil Buah</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        SARATOGA diformulasikan dari konsentrat asam amino bioaktif L-Prolin murni dipadu Boron-Etanolamin organik dan Kalsium bio-available. Menembus jaringan tangkai bunga dalam tempo 2 jam untuk menekan enzim perontok absisi, memanjangkan tabung penyerbukan, dan mengikat bakal buah secara permanen.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Menekan Hormon Perontok Etilen</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Asam amino L-Prolin langsung menekan sintesis hormon kerontokan saat tanaman stres cuaca, mencegah cincin tangkai bunga patah.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Mempertebal & Melicinkan Tangkai Buah</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Kalsium aktif dan boron menyatu di berkas serat tangkai bunga, menjadikannya lentur liat dan kebal terpaan angin kencang.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">95% Sukses Jadi Pentil Buah Bernas</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Memaksimalkan pembuahan serbuk sari pada putik bunga, menghasilkan dompolan buah yang montok, padat, dan seragam.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Flower Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/pengunci-bunga-anti-rontok/kuntum-bunga.webp"
+          alt="Foto makro kuntum bunga mekar sempurna dengan bakal buah pentil segar mengunci kuat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Hasil 48 Jam: Kuntum bunga mekar sempurna dan mengunci kuat menjadi bakal buah tanpa rontok.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Sederhana & <span class="hl-brush">Cepat Dipraktekkan</span> di Kebun
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Nggak perlu perlakuan ribet. Cukup semprot kabut merata di waktu pagi:
+      </p>
+
+      <!-- Fullwidth Photo: Petani Aplikasi Semprot di Kebun -->
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/pengunci-bunga-anti-rontok/semprot-kabut.webp"
+          alt="Petani menyemprot kabut halus serum Saratoga ke tajuk tanaman cabai dan tomat yang sedang berbunga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Vertical Timeline Cards -->
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Dosis Hemat Terukur</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Campurkan 2 tutup botol SARATOGA (20-25 ml) ke dalam 1 tangki semprot (16 liter air bersih).
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot Kabut ke Tajuk Bunga</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan kabut halus merata mengarah ke ketiak cabang dan kuntum bunga di pagi hari sebelum terik matahari menyengat.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Ulangi Selang 5-7 Hari</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Aplikasi rutin saat fase pembungaan dan pembentukan buah awal untuk mengawal seluruh tandan buah terikat lebat serempak.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata di Kebun Petani) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Petani: <span class="hl-brush">Bunga Utuh Buah Melimpah</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Lebih dari 1.400 petani cabai, tomat, dan melon membuktikan sendiri bunganya mengunci lebat:
+      </p>
+
+      <div class="space-y-8">
+        <!-- Testimoni 1: Pak Haji Imron -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Haji Imron (49 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Berkah Tani, Desa Tertek, Pare, Kediri</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Rawit Kaliber • Bunga Gugur Massal Kena Panas Terik</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/pengunci-bunga-anti-rontok/testi-imron.webp"
+              alt="Dokumentasi tanaman cabai rawit Pak Haji Imron penuh buah lebat setelah aplikasi Saratoga di Kediri"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Cabai rawit Kaliber 3.000 pohon bunga rontok berserakan di atas mulsa karena siang panas 36°C malam hujan deras. Setelah disemprot SARATOGA 25 ml per tangki 2 kali selang 4 hari, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">gugur bunga berhenti lebih dari 90%</strong>. Tangkainya hijau tebal dan <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">pentil buahnya rapat bertingkat-tingkat</strong>!"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 2: Pak Kusnadi -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Kusnadi (45 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tirta Kencana, Desa Cikajang, Garut</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Tomat Servo F1 • Tandan Bunga Kerap Gugur Disapu Angin</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/pengunci-bunga-anti-rontok/testi-kusnadi.webp"
+              alt="Dokumentasi tanaman tomat Pak Kusnadi lebat bertandan buah padat di Garut"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Tomat Servo di lereng sering kena angin kencang gunung. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Biasanya banyak tandan yang patah rontok</strong>. Pakai SARATOGA tandan bunga sangat kokoh mengikat, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">semua jadi buah super Grade A bernas padat</strong>."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 3: Pak Slamet Riyadi -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Slamet Riyadi (43 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tani Mulyo, Desa Genteng Wetan, Banyuwangi</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Melon Action 434 • Bakal Buah Sering Kuning Rontok</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/pengunci-bunga-anti-rontok/testi-slamet.webp"
+              alt="Dokumentasi buah melon Pak Slamet Riyadi bertangkai tebal dan berbobot di Banyuwangi"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Melon Action 434 persentase jadi buah naik drastis. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Tangkai buah sangat tebal liat anti-pecah</strong> dan bobot buah rata-rata tembus target pasar super."
+          </p>
+        </div>
+      </div>
+
+      <!-- Panorama Hamparan Kebun Pulih (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/pengunci-bunga-anti-rontok/kebun-bunga-lebat.webp"
+          alt="Foto panorama hamparan kebun cabai berbunga lebat dan berbuah rimbun di perbukitan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Kebun Berbunga & Berbuah Lebat: Setiap tandan terisi penuh, mengamankan rekor tonase panen petani.
+          </p>
+        </div>
+      </div>
+
+      <!-- Inset Card Bukti Panen Rekor -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/pengunci-bunga-anti-rontok/dompolan-panen.webp"
+          alt="Foto dompolan buah cabai lebat menunduk ke tanah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Hasil Akhir: Bunga mengunci jadi buah lebat berderot dari dahan bawah hingga dahan atas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Serum Pengunci</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

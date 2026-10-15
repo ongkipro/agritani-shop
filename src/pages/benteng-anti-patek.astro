@@ -1,0 +1,492 @@
+---
+/**
+ * Native Landing Page: Benteng Anti-Patek Buah Cabai Lonyot (SARATOGA)
+ *
+ * Master Product: saratoga-serum-tanaman-premium
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/benteng-anti-patek.css';
+
+export const prerender = false;
+
+const SLUG = 'benteng-anti-patek';
+
+const product = await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/benteng-anti-patek/hero-patek.webp';
+---
+
+<BaseLayout
+  title={`Benteng Anti-Patek Buah Cabai Lonyot: 98% Petikan Mulus | ${Astro.locals.tenant.name}`}
+  description="Bikin kulit buah cabai liat sekeras perisai baja. Jamur patek antraknosa rontok gagal tembus, petikan cabai mulus lolos sortir Grade A pasar induk."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <div
+      data-landing-hero
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
+    ></div>
+
+    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">MUSIM RENDENG TIBA!</span>
+          Bikin Kulit Buah Liat Sekeras Baja: <span class="hl-brush">JAMUR PATEK RONTOK</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Formula Japanese Pro-Plant Complex™ <strong class="text-slate-950 font-bold">SARATOGA</strong>: Bikin enzim pelarut jamur patek gagal melunakkan dinding buah, petikan cabai mulus bebas busuk hitam!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi buah cabai merah lebat mulus mengkilap bebas bintik hitam patek sehabis semprot SARATOGA"
+            class="h-full w-full object-cover"
+            width="960"
+            height="536"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              98% Petikan Mulus: Kulit buah tebal & liat, bebas bercak busuk hitam melingkar!
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Points Row -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>Serum Penebal Kulit Buah</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Garansi Mulus Grade A</span>
+        </div>
+
+        <!-- Takeaway Box with left accent border -->
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Buah cabai yang busuk patek bikin modal puluhan juta ludes di masa petik.</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Spora patek Colletotrichum menyebar cepat terbawa cipratan air hujan. Tebalkan kutikula kulit buah dengan kalsium bioaktif agar spora jamur patah dan gagal melunakkan buah.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION (Fakta Lapangan Penyakit Patek) -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Buah Cabai Bisa <span class="hl-brush-red">Lonyot Membusuk</span> Kena Patek?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Banyak petani mengira patek cukup disemprot fungisida kimia biasa. Padahal di musim rendeng, jamur antraknosa menyerang sangat ganas:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Kelembaban Tinggi Memicu Ledakan Spora</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Hujan malam terus-menerus dengan kelembaban di atas 85% memicu perkecambahan jutaan spora Colletotrichum dalam tempo 12 jam.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Kulit Buah Melunak & Lonyot Berair</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Enzim jamur melarutkan dinding sel buah yang tipis. Muncul bercak busuk hitam melekuk melingkar dan buah lonyot sebelum sempat dipetik merah.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Fungisida Kimia Sering Gagal & Terbilas Hujan</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Obat kimia kontak mudah luntur tercuci hujan, sementara jamur di dalam jaringan buah sudah resisten kebal obat. Petikan susut 40-50%.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Lapangan) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Buah Lonyot Busuk</span> vs <span class="hl-brush">Kulit Tebal Mulus</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Cabai yang kena patek bikin petikan susut hingga 50%. Tapi dengan proteksi seluler, kulit buah tetap mulus mengkilap lolos sortir Grade A:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <!-- Card Bad (Kondisi Patek) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/benteng-anti-patek/kondisi-patek.webp"
+            alt="Kondisi buah cabai busuk patek bercak hitam melekuk melingkar"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Kena Patek
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Buah Lonyot Busuk</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Bercak hitam melekuk melingkar, cabai rontok sebelum merah.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Good (Hasil Saratoga) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/benteng-anti-patek/kondisi-mulus.webp"
+            alt="Kondisi buah cabai merah mulus mengkilap tebal liat bebas patek"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Pakai SARATOGA
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Kulit Tebal Mulus</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Dinding buah liat kenyal, bebas bintik jamur antraknosa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk SARATOGA Serum Buah) -->
+    <section class="bg-white px-5 py-10">
+      <!-- Fullwidth Product Banner -->
+      <div class="-mx-5 mb-6">
+        <img
+          src="/images/landing/benteng-anti-patek/saratoga-hero.webp"
+          alt="Botol Serum Tanaman SARATOGA di Kebun Cabai Merah Lebat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia varian 500ml & 1 Liter dengan formula kalsium-chitosan penebal kulit buah dan segel hologram original.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        SARATOGA — Serum Buah <span class="hl-brush">Penebal Kulit Anti-Patek</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        SARATOGA diramu dari 17 asam amino L-isomer murni, bio-chitosan oligosakarida, dan kalsium bioaktif yang diserap cepat ke jaringan buah. Mengikat pektin dinding sel sehingga kulit buah kenyal, liat, dan kebal dari enzim pelarut jamur patogen.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">98% Petikan Cabai Mulus Bebas Patek</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Dinding buah liat membuat tabung spora antraknosa patah gagal menembus lapisan kutikula buah.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Kulit Buah Tebal & Liat Tahan Simpan</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Cabai tidak mudah berair dan tidak cepat lonyot saat dikirim ke pasar induk antar-pulau.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Lolos Sortir Grade A Pasar Induk</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Petikan merah segar mengkilap diterima pedagang dengan harga penawaran tertinggi di pasar.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Shoot Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/benteng-anti-patek/kulit-tebal.webp"
+          alt="Foto makro kulit buah cabai tebal mengkilap bebas bintik patek"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Kulit Buah Tebal Liat: Membentengi cabai dari penetrasi jamur patek musim hujan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Sederhana & <span class="hl-brush">Cepat Dipraktekkan</span> di Kebun
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Cukup semprot kabut merata di pagi hari untuk membentengi buah cabai muda:
+      </p>
+
+      <!-- Fullwidth Photo: Petani Aplikasi Semprot di Kebun -->
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/benteng-anti-patek/semprot-patek.webp"
+          alt="Petani menyemprot kabut serum pelindung buah cabai di kebun pagi hari"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Vertical Timeline Cards -->
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Takaran Taktis</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Campurkan 2 tutup botol (20-25 ml) SARATOGA ke dalam 1 tangki semprot (16 liter air bersih).
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot Kabut Merata</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan kabut halus ke seluruh tajuk daun dan buah saat pagi hari (pukul 06.00 - 09.00) sebelum matahari terik.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Rutin Tiap 4-5 Hari di Musim Hujan</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Lakukan penyemprotan rutin selang 4-5 hari untuk membentengi pentil dan buah muda yang baru keluar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata di Kebun Petani) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Petani: <span class="hl-brush">Petikan Utuh Lolos Grade A</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Lebih dari 1.600 petani cabai membuktikan sendiri hasil panennya mulus tanpa busuk patek:
+      </p>
+
+      <div class="space-y-8">
+        <!-- Testimoni 1: Pak Nurhadi -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Nurhadi (44 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Ngudi Makmur, Desa Menoreh, Kec. Salaman, Kab. Magelang</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Merah Keriting TM 999 • 98% Lolos Grade A Kramat Jati</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/benteng-anti-patek/testi-nurhadi.webp"
+              alt="Dokumentasi buah cabai Pak Nurhadi mulus lolos Grade A di Magelang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Cabai Merah Keriting TM 999 seluas 0.7 Ha. Musim hujan lebat patek menyerang kebun sekeliling hingga susut 40%. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Tetangga kebun hampir putus asa kena patek</strong>. Rutin semprot SARATOGA menekan patek di bawah 2%, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">kulit cabai tebal mengkilap, 98% lolos sortir Grade A pasar induk Kramat Jati!</strong>"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 2: Pak H. Suparman -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak H. Suparman (50 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tani Makmur, Desa Besowo, Kec. Kepung, Kab. Kediri</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Rawit Asmoro 99 • Buah Mulus Bebas Bintik</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/benteng-anti-patek/testi-suparman.webp"
+              alt="Dokumentasi buah cabai rawit Pak H. Suparman mulus di Kediri"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Cabai Rawit Asmoro 99 populasi 4.500 batang. Semprot rutin SARATOGA tiap 5 hari saat hujan rendeng. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Buah cabai mulus bebas bintik busuk patek, pedagang berebut ambil langsung di kebun</strong>."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 3: Pak Wayan Sudirga -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Wayan Sudirga (46 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Amertha Buana, Desa Sukasada, Kab. Buleleng, Bali</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Rawit Musim Rendeng • Lonyot Berhenti Total</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/benteng-anti-patek/testi-wayan.webp"
+              alt="Dokumentasi tanaman cabai Pak Wayan Sudirga sehat bebas patek di Bali"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Cabai rawit musim rendeng buah lonyot sempat bikin pusing. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Setelah 2 kali aplikasi SARATOGA buah lonyot berhenti total</strong>, petikan merah mengkilap dan bobotnya padat."
+          </p>
+        </div>
+      </div>
+
+      <!-- Panorama Hamparan Kebun Pulih (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/benteng-anti-patek/kebun-patek.webp"
+          alt="Foto panorama hamparan kebun cabai merah lebat mulus di perbukitan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Kebun Bebas Patek: Hamparan cabai merah siap panen dengan petikan mulus melimpah.
+          </p>
+        </div>
+      </div>
+
+      <!-- Inset Card Bukti Panen Rekor -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/benteng-anti-patek/panen-grade-a.webp"
+          alt="Foto hasil petikan cabai merah segar mengkilap lolos sortir Grade A"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Hasil Akhir: Cabai merah segar mengkilap lolos sortir Grade A dengan harga jual tertinggi.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Anti-Patek</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

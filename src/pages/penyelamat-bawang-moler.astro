@@ -1,0 +1,492 @@
+---
+/**
+ * Native Landing Page: Penyelamat Bawang Merah Moler Inul & Umbi Jumbo (BENSU)
+ *
+ * Master Product: bensu-pupuk-cair-organik
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/penyelamat-bawang-moler.css';
+
+export const prerender = false;
+
+const SLUG = 'penyelamat-bawang-moler';
+
+const product = await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/penyelamat-bawang-moler/hero-bawang.webp';
+---
+
+<BaseLayout
+  title={`Penyelamat Bawang Merah Moler Inul: Daun Jegrik & Umbi Jumbo | ${Astro.locals.tenant.name}`}
+  description="Hentikan penyakit moler inul jamur Fusarium pada bawang merah. Daun berdiri kaku jegrik menghadap langit, umbi merah merona super jumbo tahan susut simpan."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <div
+      data-landing-hero
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
+    ></div>
+
+    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">BAHAYA MOLER INUL SAAT RENDENG!</span>
+          Tegakkan Daun Kaku Seperti Jarum: <span class="hl-brush">UMBI JUMBO MERAH MERONA</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Hentikan serangan jamur Fusarium di tanah becek! Cukup semprot <strong class="text-slate-950 font-bold">BENSU</strong>, daun bawang berdiri tegap jegrik kaku menghadap langit, umbi padat montok tahan susut simpan!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi tanaman bawang merah subur daun kaku jegrik menghadap langit dan umbi merah besar sehabis semprot BENSU"
+            class="h-full w-full object-cover"
+            width="960"
+            height="536"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              95% Bebas Moler: Daun kaku jegrik, umbi padat merah menyala rekor 12 ton/Ha!
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Points Row -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>Formula Penegak Daun Bawang</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Garansi Bebas Moler</span>
+        </div>
+
+        <!-- Takeaway Box with left accent border -->
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Daun bawang merah yang melintir nginul dan lehernya membusuk bikin modal bibit jutaan lenyap.</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Jamur Fusarium di tanah basah becek melumpuhkan leher perakaran umbi. Perkuat serat daun dan pacu perakaran umbi agar tegak kaku jegrik dan memompa pembesaran umbi jumbo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION (Fakta Lapangan Penyakit Moler) -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Daun Bawang Bisa <span class="hl-brush-red">Melintir Nginul</span> & Rebah di Tanah?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Banyak petani mengira moler hanya karena bibit kurang bagus. Padahal di tanah becek jenuh air, ada 3 proses fatal yang terjadi:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Tanah Sawah Becek Jenuh Air Hujan</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Jamur Fusarium oxysporum berkembang biak masif di sekitar leher perakaran umbi yang tergenang air asam sehabis hujan lebat.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Daun Terpelintir Inul & Leher Membusuk</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Hifa jamur merusak berkas pembuluh. Daun meliuk-liuk abnormal (nginul), leher batang lembek berair, dan rumpun rebah di tanah.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Umbi Gagal Membesar & Busuk di Gudang</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Fotosintesis mandek total. Umbi kerdil, kadar air berlebih, dan saat disimpan di gudang para-para umbi cepat busuk kempes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Lapangan) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Daun Nginul Melintir</span> vs <span class="hl-brush">Daun Jegrik Kaku</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Bawang merah yang terserang moler bikin umbi busuk berair. Tapi dengan nutrisi seluler aktif, daun berdiri tegak jegrik ke langit dan umbi tumbuh padat super jumbo:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <!-- Card Bad (Kondisi Moler) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-bawang-moler/kondisi-moler.webp"
+            alt="Kondisi daun bawang merah melintir inul leher membusuk rebah di tanah"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Kena Moler
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Daun Nginul Melintir</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Leher batang lembek berair, tanaman rebah di tanah.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Good (Hasil Bensu) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-bawang-moler/kondisi-jegrik.webp"
+            alt="Kondisi daun bawang merah kaku jegrik menghadap langit bebas moler"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Pakai BENSU
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Daun Jegrik Kaku</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Daun tegak lurus seperti jarum, fotosintesis maksimal.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk BENSU Penegak Daun) -->
+    <section class="bg-white px-5 py-10">
+      <!-- Fullwidth Product Banner -->
+      <div class="-mx-5 mb-6">
+        <img
+          src="/images/landing/penyelamat-bawang-moler/bensu-hero.webp"
+          alt="Botol Pupuk Organik Cair BENSU di Hamparan Tanaman Bawang Merah Subur"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia varian 500ml & 1 Liter dengan formula bio-silika penegak daun bawang dan segel hologram original.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        BENSU — Nutrisi Seluler <span class="hl-brush">Spesialis Penegak Daun Bawang</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        BENSU diramu khusus untuk memperkuat berkas vaskular pada leher umbi dan helai daun bawang merah. Meregenerasi bulu akar serabut yang rusak akibat tanah becek, sekaligus memompa fotosintat untuk pembesaran umbi merah merona yang padat padu.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">95% Bebas Penyakit Moler Inul Fusarium</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Membentengi leher umbi dari penetrasi jamur tular tanah, tanaman tetap tegap sehat meski sawah jenuh air.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Daun Kaku Jegrik Menghadap Langit</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Daun berdiri kokoh tanpa ada helai yang terkulai lemas di atas tanah, fotosintesis terpacu maksimal.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Umbi Merah Menyala Padat Jumbo</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Pembentukan umbi serentak, ukuran besar merata, susut timbangan simpan di gudang di bawah 6%.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Shoot Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/penyelamat-bawang-moler/umbi-padat.webp"
+          alt="Foto makro umbi bawang merah padat merah tembaga super jumbo"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Umbi Padat Merah Menyala: Pembesaran umbi maksimal dengan aroma tajam kualitas super.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Sederhana & <span class="hl-brush">Cepat Dipraktekkan</span> di Sawah
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Cukup semprot kabut merata di pagi hari saat embun mulai mengering:
+      </p>
+
+      <!-- Fullwidth Photo: Petani Aplikasi Semprot di Kebun -->
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/penyelamat-bawang-moler/semprot-bawang.webp"
+          alt="Petani menyemprot kabut nutrisi penegak daun bawang merah di sawah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Vertical Timeline Cards -->
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Takaran Taktis</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Campurkan 2-3 tutup botol BENSU ke dalam 1 tangki semprot (16 liter air bersih).
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot Kabut Pagi Hari</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan saat embun daun mulai mengering (pukul 06.30 - 09.00) agar nutrisi langsung meresap ke pori stomata.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Rutin Tiap 4 Hari di Musim Hujan</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Ulangi tiap 4 hari saat kondisi tanah becek untuk mengawal daun tetap kaku jegrik sampai panen umbi.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata di Sawah Petani) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Petani: <span class="hl-brush">Umbi Jumbo Bebas Moler</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Lebih dari 1.500 petani bawang merah di sentra Brebes, Nganjuk, dan Bima membuktikan hasilnya:
+      </p>
+
+      <div class="space-y-8">
+        <!-- Testimoni 1: Pak Taryono -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Taryono (47 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Subur Abadi, Desa Karangbale, Kec. Larangan, Kab. Brebes</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Bawang Merah Bima Brebes • Rekor Tembus 12 Ton/Ha</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/penyelamat-bawang-moler/testi-taryono.webp"
+              alt="Dokumentasi panen bawang merah Pak Taryono rekor 12 ton di Brebes"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Bawang Merah Bima Brebes 0.5 Ha saat hujan rendeng daun mulai nginul melintir dan leher lembek. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Sempat was-was modal benih puluhan juta amblas</strong>. Rutin semprot BENSU tiap 4 hari, daun langsung jegrik kaku menghadap langit, jamur Fusarium berhenti total. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Panen umbi merah menyala super jumbo, rekor tembus 12 ton/Ha!</strong>"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 2: Pak Bambang Sugeng -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Bambang Sugeng (49 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Sumber Rejeki, Desa Sukomoro, Kec. Sukomoro, Kab. Nganjuk</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Bawang Merah Tajuk • Bebas Pucuk Kuning & Moler</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/penyelamat-bawang-moler/testi-bambang.webp"
+              alt="Dokumentasi tanaman bawang merah Pak Bambang Sugeng subur di Nganjuk"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Bawang Merah Tajuk umur 20 HST kena cuaca lembab ekstrem. Pakai BENSU bebas pucuk kuning dan moler inul. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Umbi padat beraroma tajam, susut simpan di gudang para-para sangat rendah</strong>."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 3: Pak H. Hasan Basri -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak H. Hasan Basri (52 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tani Harapan, Desa Belo, Kec. Palibelo, Kab. Bima, NTB</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Bawang Merah Bima • Lahan Becek Terselamatkan</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/penyelamat-bawang-moler/testi-hasan.webp"
+              alt="Dokumentasi panen bawang merah Pak H. Hasan Basri di Bima NTB"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Lahan becek pasca hujan lebat terselamatkan. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Daun tegak kaku jegrik dan umbi montok merah tembaga diserbu bakul bawang</strong> langsung di lahan."
+          </p>
+        </div>
+      </div>
+
+      <!-- Panorama Hamparan Kebun Pulih (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/penyelamat-bawang-moler/hamparan-bawang.webp"
+          alt="Foto panorama hamparan tanaman bawang merah subur daun jegrik di Brebes"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Hamparan Bawang Sehat: Daun hijau jegrik kaku merata siap panen umbi jumbo.
+          </p>
+        </div>
+      </div>
+
+      <!-- Inset Card Bukti Panen Rekor -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/penyelamat-bawang-moler/panen-jumbo.webp"
+          alt="Foto panen raya bawang merah super jumbo berumbi padat mengkilap"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Hasil Akhir: Ikatan bawang merah super jumbo berumbi padat mengkilap diserbu pembeli.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Penyelamat Bawang</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

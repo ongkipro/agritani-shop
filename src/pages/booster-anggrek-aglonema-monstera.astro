@@ -1,0 +1,498 @@
+---
+/**
+ * Native Landing Page: Booster Anggrek, Aglonema & Monstera (SARATOGA)
+ *
+ * Master Product: saratoga-serum-tanaman-premium
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/booster-anggrek-aglonema-monstera.css';
+
+export const prerender = false;
+
+const SLUG = 'booster-anggrek-aglonema-monstera';
+
+const product = await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/booster-anggrek-aglonema-monstera/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Serum Anggrek, Aglonema & Monstera: Solusi Cepat Berbunga & Daun Rimbun Tebal | ${Astro.locals.tenant.name}`}
+  description="Solusi tanaman hias mogok berbunga, daun pucat loyo, dan monstera kerdil sulit robek. Formula serum asam amino murni teknologi Jepang tanpa bau amis."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <div
+      data-landing-hero
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
+    ></div>
+
+    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">JANGAN DIBUANG DULU!</span>
+          Tanaman Hias Mandek Dijamin <span class="hl-brush">SPURT TUNAS & MEKAR</span> Rimbun Mewah
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Cukup semprot kabut & kocor akar dengan <strong class="text-slate-950 font-bold">SARATOGA</strong>, spike anggrek mekar serempak hingga 3 bulan, daun aglonema merah merona tebal, dan monstera melesat cepat robek raksasa tanpa bikin daun gosong!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan tanaman hias kusam mandek vs anggrek berbunga lebat dan aglonema monstera segar mewah sehabis aplikasi SARATOGA"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              Hasil Nyata: Anggrek pecah spike bunga lebat, aglonema merah tebal mengilap, monstera robek raksasa!
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Points Row -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>Formula Bersih Tanpa Amis</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Aman Disemprot Indoor & Teras</span>
+        </div>
+
+        <!-- Takeaway Box with left accent border -->
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Tanaman hias mogok berbunga atau kerdil bertahun-tahun jangan langsung dibuang!</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Seringkali masalahnya bukan karena kurang disiram, tapi sel tanaman mengalami dormansi akibat kekurangan asam amino bebas dan kalium-fosfat larut. Begitu disuplai nutrisi pekat SARATOGA, metabolisme sel langsung aktif, tunas caling bermunculan, dan tangkai bunga keluar serempak.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION (Fakta Masalah Tanaman Hias Lapangan) -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Tanaman Hias Bisa <span class="hl-brush-red">Mandek Berbunga</span> & Daun Loyo?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Banyak penghobi tanaman mengeluhkan tanamannya subur daun tapi tak kunjung berbunga, atau daunnya kian lama kian mengecil dan pucat:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Saluran Nutrisi & Stomata Mengalami Blokade (Dormansi)</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">
+            Pupuk butiran kimia yang tertimbun di media tanam pot sering mengendap menjadi kristal garam asam. Akibatnya ujung akar terbakar (<em>root burn</em>), stomata daun menutup, dan tanaman mogok menyerap hara makanan.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Defisiensi Asam Amino Khusus Fase Generatif (Bunga)</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">
+            Untuk mengeluarkan tangkai bunga (<em>spike</em>) dan kuncup (<em>knop</em>), tanaman seperti anggrek butuh asam amino L-bebas spesifik. Jika hanya diberi pupuk biasa berkadar nitrogen tinggi, tanaman cuma akan memanjangkan daun tanpa pernah mau berbunga.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Klorofil Pudar & Kegagalan Fenestrasi (Monstera & Aglonema)</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">
+            Tanpa asupan trace element mikro chelate yang cepat diserap, aglonema akan kehilangan pigmen merah meronanya (menjadi hijau kusam loyo), sedangkan monstera kekurangan energi untuk merobek daun barunya (<em>gagal fenestrasi</em>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Nyata) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Tanaman Mogok</span> vs <span class="hl-brush">Rimbun Berbunga</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Tanaman yang dibiarkan tanpa nutrisi mikro tepat akan terus kerdil, pucat, dan rawan lonyot. Tapi begitu disemprot kabut rutin SARATOGA, bedanya sangat kontras terlihat di pot:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <!-- Card Bad (Kondisi Mandek & Kusam) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/booster-anggrek-aglonema-monstera/kondisi-rusak.webp"
+            alt="Kondisi tanaman hias kusam daun menguning layu dan anggrek mogok berbunga"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Kondisi Mandek & Kusam
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Daun Loyo & Mogok Bunga</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Anggrek gundul tanpa spike, aglonema kuning pucat, daun monstera kerdil tanpa robekan.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Good (Hasil Aplikasi SARATOGA) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/booster-anggrek-aglonema-monstera/kondisi-pulih.webp"
+            alt="Hasil pemulihan tanaman hias anggrek berbunga mekar lebat dan aglonema monstera segar rimbun"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Hasil Aplikasi SARATOGA
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Bunga Lebat & Daun Raksasa</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Spike mekar serempak tahan 3 bulan, aglonema merah tebal mengilap, monstera robek raksasa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk SARATOGA) -->
+    <section class="bg-white px-5 py-10">
+      <!-- Fullwidth Product Banner -->
+      <div class="-mx-5 mb-6 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/booster-anggrek-aglonema-monstera/saratoga-hero.webp"
+          alt="Botol Serum Tanaman Premium SARATOGA Asli Dikelilingi Tanaman Hias Segar"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia varian 500ml & 1 Liter dengan formula bersih Jepang tanpa bau amis dan segel hologram original.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        SARATOGA — Serum Nutrisi Tanaman <span class="hl-brush">Bio-Active High-End</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        SARATOGA adalah serum nutrisi tanaman konsentrat tinggi berbasis Asam Amino L-Bebas murni hasil fermentasi teknologi Jepang, diperkaya Fosfat Organik, Kalium Terlarut Bebas Klorida, dan Unsur Mikro Chelate (Fe, Zn, B, Mg). Berbeda dari pupuk cair biasa yang sering berbau amis menyengat dan mengotori daun, SARATOGA diformulasikan ultra-bersih tanpa aroma mengganggu sehingga sangat nyaman dan higienis diaplikasikan di teras rumah, balkon apartemen, maupun ruang tamu.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Picu Spike Bunga Anggrek Mekar Serempak & Tahan Lama</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Menstimulasi hormon pembungaan alami agar tanaman anggrek segera mengeluarkan tangkai bunga (<em>spike</em>) baru, memperbanyak kuntum (<em>knop</em>), dan menjaga kelopak mekar segar hingga 90 hari tanpa rontok dini.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Tebalkan & Pertajam Pigmen Merah Aglonema</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Mengaktifkan sintesis antosianin di jaringan mesofil daun, menjadikan warna merah pada varian Suksom, Anjamani, atau Khanza semakin menyala tegas dengan daun tebal kokoh menyerupai mangkok.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Pacu Pertumbuhan Tunas & Fenestrasi Monstera Raksasa</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Mempercepat proses pembelahan sel pada pelepah baru aroid, merangsang daun monstera membuka lebih lebar dengan lubang dan robekan daun (<em>fenestration</em>) yang rapi, simetris, dan kokoh.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Shoot Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/booster-anggrek-aglonema-monstera/tunas-spike.webp"
+          alt="Foto makro tunas merah aglonema, tangkai spike anggrek, dan daun muda monstera membuka segar"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Hasil 14 Hari: Spike baru anggrek muncul tegap, caling aglonema pecah, dan daun baru monstera membuka lebar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI PRAKTIS -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        SOP Sederhana & <span class="hl-brush">Mudah Dipraktekkan</span> di Rumah
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Nggak perlu repot mencampur berbagai macam obat tanaman. Cukup semprot kabut halus pada daun dan kocor ke media tanam:
+      </p>
+
+      <!-- Fullwidth Photo: Aplikasi Semprot Hias -->
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/booster-anggrek-aglonema-monstera/aplikasi-hias.webp"
+          alt="Penghobi tanaman menyemprotkan kabut serum SARATOGA ke koleksi tanaman hias di teras rumah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Vertical Timeline Cards -->
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Takaran Dosis Hemat & Aman</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Campurkan 1-2 tutup botol SARATOGA (15-30 ml) ke dalam 1 sprayer (2-5 liter air bersih). Formula sangat aman, tidak meninggalkan bercak putih pada daun dan tidak membuat pucuk muda terbakar.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot Kabut Halus Daun & Kocor Media</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan merata ke bagian atas dan bawah daun serta batang di pagi hari (jam 06.00 - 08.30) saat stomata tanaman terbuka lebar. Siramkan sisa larutan sedikit ke media tanam dekat perakaran.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Ulangi Rutin 1-2 Minggu Sekali</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Cukup 2-3 kali aplikasi rutin selang 7-10 hari. Hasilnya turgor daun langsung mengilap tegap, spike bunga anggrek mulai keluar, dan caling aglonema cepat bertunas banyak!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata Penghobi & Kolektor) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Penghobi: <span class="hl-brush">Bunga Mekar & Daun Merona</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Ratusan pecinta anggrek, kolektor aglonema, dan pegiat tanaman aroid di berbagai kota membuktikan tanamannya bangkit mekar tanpa ribet:
+      </p>
+
+      <div class="space-y-8">
+        <!-- Testimoni 1: Ibu Ratna -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Ibu Ratna (48 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Kolektor Anggrek Rumahan, Villa Duta, Bogor</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Phalaenopsis (Anggrek Bulan) • 2 Tahun Mandek Spike Bunga</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/booster-anggrek-aglonema-monstera/testi-1.webp"
+              alt="Dokumentasi Ibu Ratna dengan koleksi anggrek bulan berbunga mekar lebat 3 spike sehabis pakai SARATOGA"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Punya anggrek bulan hampir 2 tahun daunnya cuma nambah selembar-selembar, gak pernah mau keluar tangkai bunga sama sekali. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Sempat dikasih pupuk NPK kimia malah ujung daunnya gosong</strong>. Pas lihat rekomendasi SARATOGA langsung saya semprot kabut tiap minggu pagi. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Alhamdulillah sebulan kemudian langsung muncul 3 spike baru serempak!</strong> Bunganya mekar awet banget sampai 3 bulan gak rontok-rontok dan gak ada bau amis sama sekali di teras."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 2: Ibu Desi -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Ibu Desi (42 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Hobiis Aglonema & Tanaman Hias Pot, Sawojajar, Malang</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Aglonema Suksom Jaipong & Pride of Sumatra • Daun Kusam & Sulit Caling</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/booster-anggrek-aglonema-monstera/testi-2.webp"
+              alt="Dokumentasi Ibu Desi memegang Aglonema Suksom daun merah merona tebal sehabis aplikasi SARATOGA"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Aglonema Suksom saya warnanya sempat pudar pucat kehijauan dan daun barunya makin lama makin kecil. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Tunas anakan (caling) gak pernah nongol berbulan-bulan</strong>. Sejak rutin semprot SARATOGA dan dikocor sedikit ke media sekamnya, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">daunnya berubah merah pekat menyala tebal seperti dilap minyak!</strong> Sekarang caling barunya sudah tumbuh 4 anakan gemuk."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 3: Mas Dimas -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Mas Dimas (34 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Pecinta Aroid & Urban Jungle, Dago Atas, Bandung</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Monstera Deliciosa King • Daun Kerdil Tanpa Lubang Fenestrasi</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/booster-anggrek-aglonema-monstera/testi-3.webp"
+              alt="Dokumentasi Mas Dimas bersama koleksi Monstera Deliciosa raksasa berfenestrasi sempurna sehabis aplikasi SARATOGA"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Monstera deliciosa saya sempat mogok tumbuh lama, kalau keluar daun baru pun polos tanpa lubang sobekan seperti sirih gading. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Sudah ganti media tanam impor tetap gak ada perubahan</strong>. Coba pakai SARATOGA 3 kali aplikasi selang seminggu, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">daun baru yang keluar ukurannya langsung melonjak 2 kali lipat</strong> dan robekan fenestrasinya keluar banyak banget rapi dan kokoh!"
+          </p>
+        </div>
+      </div>
+
+      <!-- Panorama Hamparan Taman Hias Pulih (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/booster-anggrek-aglonema-monstera/hamparan-hias.webp"
+          alt="Foto panorama teras taman hias asri dengan tanaman anggrek berbunga lebat dan aroid subur segar"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Taman Hias Asri: Hamparan anggrek berbunga mekar lebat dan koleksi tanaman hias subur segar bebas mandek.
+          </p>
+        </div>
+      </div>
+
+      <!-- Inset Card Bukti Trio Juara -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/booster-anggrek-aglonema-monstera/trio-juara.webp"
+          alt="Foto kompilasi bunga anggrek mekar, daun aglonema merah merona, dan daun monstera berfenestrasi sempurna"
+          class="aspect-[4/5] w-full object-cover object-center"
+          width="960"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Trio Juara Tanaman Hias: Nutrisi lengkap SARATOGA menjaga bunga anggrek awet mekar, daun aglonema merah merona tebal, dan monstera kokoh berfenestrasi sempurna.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Nutrisi SARATOGA</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

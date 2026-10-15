@@ -1,0 +1,474 @@
+---
+/**
+ * Native Landing Page: LP-05 Batang Baja Anti-Rebah Padi & Jagung (BENSU)
+ *
+ * Master Product: bensu-pupuk-cair-organik
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/batang-baja-anti-rebah.css';
+
+export const prerender = false;
+
+const SLUG = 'batang-baja-anti-rebah';
+
+const product = await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/batang-baja-anti-rebah/hero-batang.webp';
+---
+
+<BaseLayout
+  title={`Batang Baja Anti-Rebah Padi Sawah & Jagung: Tahan Badai Tanpa Roboh | ${Astro.locals.tenant.name}`}
+  description="Rahasia batang padi dan jagung sekeras kawat tahan terpaan badai rendeng. Batang kokoh tegak lurus sampai panen, bulir gabah bersih bebas busuk lumpur."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">ANCAMAN ANGIN BADAI RENDENG!</span>
+          Bikin Batang Sekeras Kawat: <span class="hl-brush">TAHAN BADAI TANPA ROBOH</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Rahasia sawah tetap berdiri tegak saat lahan tetangga roboh disapu badai. Cukup semprot <strong class="text-slate-950 font-bold">BENSU</strong>, serat lignin batang bawah mengeras dan akar jangkar mencengkeram kuat!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi rumpun batang padi tegap kokoh sekeras kawat tahan terpaan badai rendeng sehabis semprot BENSU"
+            class="h-full w-full object-cover"
+            width="960"
+            height="640"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              Batang bawah sekeras kawat: 100% berdiri tegak diterjang angin badai rendeng!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>Formula Penguat Batang</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Garansi Batang Baja</span>
+        </div>
+
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Tanaman padi dan jagung yang roboh bikin rugi jutaan rupiah di ujung sabit.</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Batang yang dipupuk kimia berlebih memiliki dinding sel lunak dan berair. Perkuat lignin batang bawah dan pacu akar jangkar agar tanaman membal elastis anti-patah.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Padi & Jagung Bisa <span class="hl-brush-red">Rebah Rata Tanah</span> Ditiup Badai?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Banyak petani mengira tanaman padi roboh murni karena cuaca buruk. Padahal penyebab utamanya ada di dalam dinding sel batang:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Dinding Sel Batang Lembek Berair</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Pemupukan kimia nitrogen (urea) berlebih tanpa pengimbang nutrisi seluler membuat dinding sel rapuh, lunak, dan gampang patah saat diguyur hujan.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Malai Berat Ditiup Badai Hujan</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Saat bulir gabah mulai berisi susu, beban tanaman makin berat. Satu terpaan angin badai malam hari langsung mematahkan ruas terbawah.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Kerugian Berganda di Ujung Sabit</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Bulir terendam lumpur membusuk dan berkecambah. Mesin kombi menolak masuk lahan roboh, petani terpaksa tebas manual dengan biaya mahal.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Roboh Rata Tanah</span> vs <span class="hl-brush">Tegak Lurus 100%</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Padi yang roboh bikin gabah membusuk di lumpur becek. Dengan penguat seluler BENSU, rumpun padi berdiri kokoh sampai sabit panen tiba:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/batang-baja-anti-rebah/kondisi-rebah.webp"
+            alt="Kondisi sawah padi roboh rata tanah terendam lumpur air hujan"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Tanpa Penguat Batang
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Roboh Rata Tanah</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Gabah membusuk di lumpur, mesin kombi menolak tebas.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/batang-baja-anti-rebah/kondisi-tegak.webp"
+            alt="Kondisi tanaman padi tegap lurus batang bawah sekeras kawat"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Pakai BENSU Rutin
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Tegak Lurus 100%</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Batang bawah sekeras kawat, gabah bersih bernas di atas malai.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE -->
+    <section class="bg-white px-5 py-10">
+      <div class="-mx-5 mb-6 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/batang-baja-anti-rebah/bensu-hero.webp"
+          alt="Botol BENSU Pupuk Cair Organik di pematang sawah padi yang tegak kokoh"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia kemasan 500ml & Paket Hemat dengan tutup segel hologram resmi Teknologi Thailand.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        BENSU — Nutrisi Seluler <span class="hl-brush">Spesialis Penguat Batang</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        BENSU diramu dengan kompleks nutrisi seluler aktif, Sulfur, dan Molibdenum yang diserap cepat ke berkas pembuluh tanaman. Mengikat serat lignin batang terbawah dan merangsang perakaran jangkar mencengkeram tanah lumpur anti-roboh.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">100% Tegak Lurus Diterjang Angin Badai</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Batang padi dan jagung berdiri tegak saat lahan di sekelilingnya roboh rata tanah disapu badai hujan.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Batang Liat Elastis Sekeras Kawat</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Batang membal elastis menahan terpaan angin kencang tanpa ada ruas yang retak apalagi patah.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Gabah Bersih Bebas Busuk Lumpur</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Bulir padi tetap kering bersih di atas malai, rendemen giling tinggi, dan mesin kombi panen masuk lancar.
+          </p>
+        </div>
+      </div>
+
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/batang-baja-anti-rebah/akar-jangkar.webp"
+          alt="Perakaran jangkar padi mencengkeram tanah sangat dalam dan kuat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Akar Jangkar Kokoh: Mencengkeram tanah sawah sangat dalam, menopang rumpun tetap tegak.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Sederhana & <span class="hl-brush">Cepat Dipraktekkan</span> di Sawah
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Tanpa perlakuan ribet, cukup semprot kabut merata di dua fase penentu:
+      </p>
+
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/batang-baja-anti-rebah/semprot-batang.webp"
+          alt="Petani menyemprot kabut nutrisi penguat batang di sawah padi pagi hari"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Takaran Hemat</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Campurkan 2–3 tutup botol BENSU ke dalam 1 tangki semprot (16 liter air bersih).
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot di Fase Anakan & Bunting</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan kabut halus ke pangkal batang saat umur 30 HST (anakan aktif) dan 50 HST (menjelang bunting).
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Batang Mengeras Sempurna</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Serat lignin mengikat kuat dan akar jangkar mencengkeram lapisan tanah keras anti-roboh sampai panen raya.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Petani: <span class="hl-brush">Sawah Selamat dari Badai</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Lebih dari 1.800 petani padi dan jagung membuktikan tanamannya tetap berdiri tegak saat lahan tetangga roboh:
+      </p>
+
+      <div class="space-y-8">
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Jayadi Hidayat (53 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Sri Rejeki, Desa Tukdana, Tukdana, Indramayu</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Inpari 32 • Diterpa Angin Puting Beliung Rendeng</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/batang-baja-anti-rebah/testi-jayadi.webp"
+              alt="Dokumentasi sawah padi Pak Jayadi Hidayat tetap tegak di Indramayu"
+              class="h-full w-full object-cover"
+              width="960"
+              height="540"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Padi Inpari 32 seluas 1.2 Ha diterpa angin puting beliung rendeng malam hari menjelang panen. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Sawah kanan-kiri roboh semua sampai gabah kecambah di air becek</strong>. Sawah saya yang pakai BENSU batangnya sekeras kawat, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">tetap berdiri tegak 100% sampai mesin kombi datang!</strong>"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Mansyur (48 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Mawar Sari, Desa Karanganyar, Subang</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Ciherang • Batang Bawah Berkayu Kokoh</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/batang-baja-anti-rebah/testi-mansyur.webp"
+              alt="Dokumentasi tanaman padi Pak Mansyur berdiri tegak di Subang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="540"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Padi Ciherang 1 Ha disemprot rutin umur 30 dan 50 HST. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Batang bawah kokoh besar berkayu, panen aman tanpa rebah sedikit pun</strong> meski disapu hujan lebat berhari-hari."
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Sutopo (52 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Sumber Berkah, Desa Masaran, Sragen</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Inpari 32 • Rendemen Giling Beras Utuh Tinggi</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/batang-baja-anti-rebah/testi-sutopo.webp"
+              alt="Dokumentasi panen padi Pak Sutopo aman tanpa rebah di Sragen"
+              class="h-full w-full object-cover"
+              width="960"
+              height="540"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Padi Inpari 32 terhindar dari roboh saat disapu hujan badai rendeng. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Gabah bersih tidak kena lumpur, rendemen giling beras utuh tinggi</strong> dan dibeli mahal tengkulak."
+          </p>
+        </div>
+      </div>
+
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/batang-baja-anti-rebah/hamparan-sawah.webp"
+          alt="Foto panorama hamparan sawah padi tetap berdiri tegak lurus di Indramayu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Sawah Aman Sampai Panen: Hamparan padi tetap tegak lurus menguning emas siap tebas kombi.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/batang-baja-anti-rebah/panen-aman.webp"
+          alt="Foto panen raya padi aman tebas kombi hasil panen utuh"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="540"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Hasil Akhir: Mesin kombi panen masuk lancar, gabah bersih kering, dan timbangan utuh maksimal.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Penguat Batang</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

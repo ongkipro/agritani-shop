@@ -1,0 +1,492 @@
+---
+/**
+ * Native Landing Page: Kojien — Perisai Sel Baja Kebal Jamur & Virus (KOJIEN)
+ *
+ * Master Product: kojien
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/perisai-kebal-jamur.css';
+
+export const prerender = false;
+
+const SLUG = 'perisai-kebal-jamur';
+
+const product = await getStorefrontProduct(Astro.locals, 'kojien');
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/perisai-kebal-jamur/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Perisai Sel Baja Kebal Jamur & Virus Tanaman: Garansi Daun Kaku Jegrik | ${Astro.locals.tenant.name}`}
+  description="Lindungi tanaman cabai, bawang merah, dan padi dari jamur bulai, moler fusarium, dan patek antraknosa. Teknologi Bio-Silika OSA lapisi sel tanaman jadi sekeras baja."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <div
+      data-landing-hero
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
+    ></div>
+
+    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
+    <section class="bg-white pb-8 text-center">
+      <div class="px-5 pt-8">
+        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight">JANGAN BIARKAN KEBUN LONYOT!</span>
+          Bentengi Tanaman dari Jamur & Virus, Daun Dijamin <span class="hl-brush">KEBAL & JEGRIK KAKU</span> Tanpa Kimia Keras
+        </h1>
+        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+          Cukup 1 kali semprot kabut <strong class="text-slate-950 font-bold">KOJIEN</strong>, dinding sel tanaman terlapis Bio-Silika OSA Thailand hingga 99% spora jamur patek, moler, & bulai gagal tembus!
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi kebun cabai terlindungi dari serangan jamur dan cuaca lembap berkat formula Kojien"
+            class="h-full w-full object-cover"
+            width="960"
+            height="536"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
+            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+              Dinding sel menebal keras, spora jamur terpental dan daun tegak jegrik dalam 3 hari!
+            </p>
+          </div>
+        </div>
+
+        <!-- Trust Points Row -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+          <span>100% Organik Dingin</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Garansi Daun Jegrik & Kebal</span>
+        </div>
+
+        <!-- Takeaway Box with left accent border -->
+        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
+          <p class="text-[14.5px] font-bold text-slate-950">Tanaman diserang jamur jangan buru-buru dibom racun fungisida kimia pekat.</p>
+          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
+            Spora jamur menembus sel daun yang lembek dan rentan. Lapiskan kutikula dengan Bio-Silika OSA dan Sulfur aktif Thailand agar dinding sel sekeras baja sehingga spora terpental dan gagal berkembang biak.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HARD PROBLEM SECTION (Fakta Lapangan Serangan Jamur & Embun Rendeng) -->
+    <section class="bg-red-50/30 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kenapa Tanaman Mudah Sekali <span class="hl-brush-red">Lonyot, Moler & Busuk</span> di Musim Hujan?
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Udara lembap dan embun malam adalah surga bagi jutaan spora patogen jahat. Jika dinding pertahanan sel tanaman tipis, petaka datang mengancam:
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">1. Spora Jamur Menusuk Dinding Sel Daun</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Spora patek (antraknosa), bulai, dan bercak daun mengeluarkan jarum kecambah (haustoria) yang menembus kutikula daun hingga sel pecah dan jaringan lonyot berlendir.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">2. Miselium Merusak Jalur Makan Xilem & Floem</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Jamur akar dan busuk batang (Fusarium) menyumbat pembuluh transportasi hara. Tanaman layu mendadak di siang terik, daun menguning kerdil, lalu layu mati berdiri.</p>
+        </div>
+
+        <div>
+          <h3 class="text-[15.5px] font-bold text-slate-900">3. Jamur Kebal Karena Terlalu Sering Diracun Kimia</h3>
+          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Terlalu sering disemprot fungisida kimia keras membuat strain jamur bermutasi kebal, sementara daun tanaman malah menguning terbakar dan modal jutaan rupiah hangus sia-sia!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Lapangan) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Lonyot & Layu Jamur</span> vs <span class="hl-brush">Dinding Sel Baja Kebal</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Kebun tanpa perlindungan sel baja rawan ludes terkena wabah jamur rendeng. Bandingkan sendiri dengan kebun yang rutin dilapisi Kojien:
+      </p>
+
+      <div class="grid grid-cols-2 gap-3.5">
+        <!-- Card Bad (Kondisi Rusak) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/perisai-kebal-jamur/kondisi-rusak.webp"
+            alt="Kondisi daun tanaman cabai dan tomat terserang jamur hingga menguning kering dan lonyot"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Kondisi Rusak
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-slate-900">Daun Lonyot & Busuk</h3>
+            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
+              Dinding sel tipis tertembus jamur, bercak daun meluas, pucuk busuk dan pentil rontok massal.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Good (Hasil Kojien) -->
+        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+          <img
+            src="/images/landing/perisai-kebal-jamur/kondisi-kebal.webp"
+            alt="Kondisi pucuk daun segar hijau berembun bebas jamur setelah aplikasi rutin Kojien"
+            class="aspect-[3/2] w-full object-cover"
+            width="480"
+            height="320"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            Hasil Kojien
+          </div>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold text-emerald-800">Dinding Sel Baja Kebal</h3>
+            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
+              Lapisan kristal Bio-Silika menolak spora, pucuk baru mekar segar dan daun jegrik kaku.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk KOJIEN Immune Cellactivator) -->
+    <section class="bg-white px-5 py-10">
+      <!-- Fullwidth Product Banner -->
+      <div class="-mx-5 mb-6">
+        <img
+          src="/images/landing/perisai-kebal-jamur/kojien-hero.webp"
+          alt="Botol Pupuk Nutrisi Tanaman KOJIEN Thailand Technology Immune Cellactivator"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi KOJIEN Segel Hologram"
+          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
+          width="64"
+          height="64"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
+          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
+            Tersedia varian 500ml & 1 Liter dengan teknologi Bio-Silika OSA Thailand dan segel hologram original.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        KOJIEN — Perisai Sel Baja <span class="hl-brush">Kebal Jamur & Virus</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        KOJIEN adalah formula nutrisi pelindung sel tanaman berteknologi Thailand (Immune Cellactivator). Menggabungkan Bio-Silika OSA (Orthosilicic Acid) mikronis terlarut dengan Sulfur murni dan Molibdenum aktif. Begitu disemprotkan, partikel nano silika langsung meresap dan mengkristal di kutikula daun, membentuk lapisan perisai baja pelindung fisik yang mustahil ditembus haustoria spora jamur maupun serangga vektor virus.
+      </p>
+
+      <div class="mt-8 space-y-5">
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Bio-Silika OSA (Orthosilicic Acid) Aktif</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Menyerap seketika ke dinding sel tanaman, memperkuat lapisan epidermis sehingga daun jegrik kaku dan tidak mudah lonyot kena tetesan air hujan malam.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Sulfur Mikronis Pemusnah Hifa Jamur</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Memiliki sifat antifungisida dan antitungau alami yang mengikis membran spora jamur bulai, patek antraknosa, dan fusarium sebelum berkembang biak.
+          </p>
+        </div>
+
+        <div class="border-l-2 border-emerald-600 pl-4 py-1">
+          <h3 class="text-[15.5px] font-bold text-slate-900">Molibdenum & Pemicu Imunitas Sel</h3>
+          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
+            Mengaktifkan enzim kekebalan alami tumbuhan untuk memproduksi fitoaleksin, membentengi tanaman dari ancaman virus kuning (gemini) dan layu bakteri.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Shoot Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-8 relative">
+        <img
+          src="/images/landing/perisai-kebal-jamur/daun-jegrik-silika.webp"
+          alt="Foto makro daun tanaman tegap jegrik kaku menghadap matahari berkat lapisan Bio-Silika OSA Kojien"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Hasil 3 Hari: Daun jegrik kaku menghadap langit, kutikula tebal licin dan spora jamur terpental!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
+    <section class="bg-emerald-50/20 px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Protokol Benteng: <span class="hl-brush">Cara Semprot Perlindungan</span> Lahan
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
+        Jangan tunggu kebun terlanjur terserang wabah. Terapkan protokol benteng sel baja sejak dini:
+      </p>
+
+      <!-- Fullwidth Photo: Petani Aplikasi Semprot di Kebun -->
+      <div class="-mx-5 mb-8 mt-2">
+        <img
+          src="/images/landing/perisai-kebal-jamur/semprot-kebun.webp"
+          alt="Petani menyemprot kabut halus larutan Kojien di bedengan tanaman pada pagi hari teduh"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Vertical Timeline Cards -->
+      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            1
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Takaran Hemat & Efektif</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Larutkan 1-2 tutup botol KOJIEN (20-30 ml) ke dalam 1 tangki semprot (16 liter air bersih). Aman dicampur dengan nutrisi organik atau fungisida kontak lainnya.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            2
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Semprot Kabut Bolak-Balik Daun</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Semprotkan kabut halus ke permukaan atas dan bawah daun saat pagi hari teduh (pukul 06.30 - 09.00) agar partikel nano silika terserap sempurna ke stomata daun.
+          </p>
+        </div>
+
+        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
+            3
+          </span>
+          <h3 class="text-[15px] font-bold text-slate-900">Ulangi Rutin Selang 7-10 Hari</h3>
+          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
+            Cukup 1 kali seminggu selama musim hujan. Dinding sel tanaman membentuk lapisan baja permanen, daun kaku jegrik, dan tanaman bebas penyakit sampai panen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata di Kebun Petani) -->
+    <section class="bg-white px-5 py-10">
+      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        Kisah Nyata Petani: <span class="hl-brush">Kebun Bebas Jamur & Panen Rekor</span>
+      </h2>
+      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
+        Bukti nyata petani berbagai daerah yang sukses melindungi kebunnya dari ancaman busuk dan gagal panen berkat Kojien:
+      </p>
+
+      <div class="space-y-8">
+        <!-- Testimoni 1: Pak Ketut Subawa -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak Ketut Subawa (47 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Sari Merta, Desa Candikuning, Baturiti, Tabanan Bali</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Tomat & Melon Hidroponik/Lahan • Rawan Busuk Daun Phytophthora</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/perisai-kebal-jamur/testi-ketut.webp"
+              alt="Dokumentasi Pak Ketut Subawa dengan tanaman tomat dan melon yang sehat dan bebas busuk daun di Baturiti Bali"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Dataran tinggi Baturiti kabutnya tebal dan dingin, biasanya tomat umur 40 hari sudah <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">lonyot kena busuk phytophthora dan patek hitam</strong>. Sejak pakai KOJIEN seminggu sekali, daunnya jegrik kaku kayak plastik, embun gak nempel. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Tomat mulus bersih tanpa bercak, buah padat mengkilap</strong> sampai petikan terakhir!"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 2: Pak H. Masduki -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak H. Masduki (53 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Makmur Sejahtera, Desa Jenggrik, Kedunggalar, Ngawi Jatim</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Inpari 32 • Rawan Kresek Bakteri & Jamur Ustilago</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/perisai-kebal-jamur/testi-masduki.webp"
+              alt="Dokumentasi Pak H. Masduki di sawah padi Inpari 32 yang tegap tahan kresek di Ngawi Jawa Timur"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Musim rendeng kemarin sawah tetangga kena kresek merah dan jamur oncom. Padi Inpari 32 saya semprot KOJIEN 3 kali. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Biasanya daun bendera cepat mengering terbakar</strong>, sekarang <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">daun bendera tetap hijau tegak lurus sampai bulir menguning</strong>. Bulir padat bening tanpa bintik hitam!"
+          </p>
+
+          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Testimoni 3: Pak H. Hasanuddin -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="text-[16px] font-bold text-slate-900">Pak H. Hasanuddin (51 th)</h3>
+            <p class="text-[12px] text-slate-500 mt-0.5">Poktan So Nggelu, Desa Donggobolo, Woha, Bima NTB</p>
+            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Bawang Merah Varietas Bima • Ancaman Moler Fusarium Tanah Becek</p>
+          </div>
+
+          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
+            <img
+              src="/images/landing/perisai-kebal-jamur/testi-hasanuddin.webp"
+              alt="Dokumentasi Pak H. Hasanuddin di kebun bawang merah Bima yang tegak subur bebas moler di Woha Bima NTB"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
+            "Bawang merah paling ngeri kalau musim hujan kena moler inul, daun meliuk-liuk terus busuk ke umbi. Saya spray KOJIEN selang 5 hari. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Daun bawang berdiri tegak kaku sekeras lidi, jamur Fusarium bablas</strong>, panen umbinya merah merona super padat."
+          </p>
+        </div>
+      </div>
+
+      <!-- Panorama Hamparan Kebun Pulih (Fullwidth Edge-to-Edge) -->
+      <div class="-mx-5 mt-10 relative">
+        <img
+          src="/images/landing/perisai-kebal-jamur/hamparan-kebun.webp"
+          alt="Foto panorama hamparan kebun cabai terlindungi dan rimbun hijau subur di perbukitan berlatar pegunungan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
+          <p class="text-[12px] font-bold text-[#BBF7D0]">
+            Kebun Terlindungi: Tanaman hijau segar tegap, bebas jamur rendeng dan siap panen raya maksimal.
+          </p>
+        </div>
+      </div>
+
+      <!-- Inset Card Bukti Panen Rekor -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
+        <img
+          src="/images/landing/perisai-kebal-jamur/panen-rekor.webp"
+          alt="Foto petani di samping tanaman cabai lebat berbuah merah mengkilap kualitas super"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3 text-center">
+          <p class="text-[13px] font-semibold text-slate-800">
+            Hasil Akhir: Kulit buah liat berkilau, bobot padat maksimal, dan 98% lolos sortir Grade A.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Perisai Sel Kojien</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+        </p>
+      </div>
+
+      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>
