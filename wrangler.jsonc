@@ -25,7 +25,7 @@
 
   // Unique within the Cloudflare account. The button lets the operator rename
   // it; the default is a real, deployable name rather than a placeholder.
-  "name": "adsbookcms",
+  "name": "agritani-shop",
   "main": "./src/worker.ts",
 
 
@@ -50,7 +50,8 @@
   // Domains & Routes), the workers.dev copy answers `X-Robots-Tag: noindex` and
   // canonical tags point at the store's own URL. An install may set this to
   // false in its own wrangler.jsonc once its domain is live.
-  "workers_dev": true,
+  // agritani.shop is attached below from the first deploy, so no workers.dev copy.
+  "workers_dev": false,
   // Hourly evaluation catches a stalled conversion outbox even when no operator
   // opens the dashboard. Alert transitions are deduplicated in the install's KV.
   "triggers": {
@@ -64,21 +65,21 @@
   "kv_namespaces": [
     {
       "binding": "SESSION",
-      "id": "00000000000000000000000000000000"
+      "id": "ea7e3b94764b4a5cab27ecfe8befe80e"
     }
   ],
   "d1_databases": [
     {
       "binding": "OMS_DB",
-      "database_name": "adsbookcms-d1",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_name": "agritani-shop-d1",
+      "database_id": "8b2e4ed5-3359-4530-a8e8-8757706a4188",
       "migrations_dir": "src/db/migrations"
     }
   ],
   "r2_buckets": [
     {
       "binding": "ASSET_BUCKET",
-      "bucket_name": "adsbookcms-assets"
+      "bucket_name": "agritani-shop-assets"
     }
   ],
   "ai": {
@@ -93,17 +94,18 @@
     "head_sampling_rate": 1
   },
 
-  // No `routes`: the store's domain is attached in the dashboard (Workers →
-  // Settings → Domains & Routes). Wrangler leaves dashboard-managed routes
-  // alone when this key is absent; declaring one here would replace them on
-  // every deploy, and a placeholder domain would fail the first one.
+  // Declared here, as in the other installs: every deploy owns these domains.
+  "routes": [
+    { "pattern": "agritani.shop", "custom_domain": true },
+    { "pattern": "www.agritani.shop", "custom_domain": true }
+  ],
 
   // These are read at BUILD time through import.meta.env, not at runtime, so a
   // change here only takes effect after `npm run build`. Redeploying an already
   // built bundle with new vars changes nothing. See ARCHITECTURE.md §5.
   "vars": {
-    "PUBLIC_SITE_NAME": "Your Store",
-    "PUBLIC_SITE_URL": "https://example.com",
+    "PUBLIC_SITE_NAME": "Agritani",
+    "PUBLIC_SITE_URL": "https://agritani.shop",
     // Deliberately empty, like the tagline below. A placeholder here becomes
     // the meta description Google prints under the store, and the second half
     // of the home page <title>.
@@ -112,8 +114,8 @@
     // every unconfigured store's <title>, which is how a fresh install came to
     // announce itself as "Toko Anda — Belum Dikonfigurasi".
     "PUBLIC_SITE_TAGLINE": "",
-    "PUBLIC_ADMIN_NAME": "AdsBookCMS Admin",
-    "PUBLIC_EMBED_ALLOWED_ORIGINS": "",
+    "PUBLIC_ADMIN_NAME": "Agritani Admin",
+    "PUBLIC_EMBED_ALLOWED_ORIGINS": "https://agritani.shop",
 
     // Root-relative or absolute. Replace the placeholder wordmark in
     // public/images/ with the store's own brand assets.
