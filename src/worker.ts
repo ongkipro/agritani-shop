@@ -21,6 +21,7 @@ import { enqueuePurchaseForPaidOrder } from "./lib/paid-order-purchase.ts";
 import { envTenantConfig } from "./lib/tenant.ts";
 import { drainCapiOutbox, purgeExpiredCapiOutboxEvents } from "./lib/capi-outbox.ts";
 import { getStoreAdsConfig } from "./lib/store-ads.ts";
+import { drainKelolaLeads, drainKelolaOrders, getKelolaConfig } from "./lib/kelola-order-sync.ts";
 import {
   drainGoogleAdsConversionOutbox,
   purgeExpiredGoogleAdsConversions,
@@ -142,6 +143,16 @@ async function runScheduledMaintenance(
         drainGoogleAdsConversionOutbox(env.OMS_DB, googleAdsOffline),
       )
     : 0;
+  // Retry leg for the Kelola CRM push; checkout already tried once.
+  const syncedKelolaOrders = await housekeeping("scheduled-kelola-order-sync-failed", async () => {
+    const kelola = await getKelolaConfig(env.OMS_DB, env);
+    return kelola ? drainKelolaOrders(env.OMS_DB, kelola, new Date(scheduledTime)) : 0;
+  });
+  // Abandoned orders reach Kelola only here, as leads for CS follow-up.
+  const syncedKelolaLeads = await housekeeping("scheduled-kelola-lead-sync-failed", async () => {
+    const kelola = await getKelolaConfig(env.OMS_DB, env);
+    return kelola ? drainKelolaLeads(env.OMS_DB, kelola, new Date(scheduledTime)) : 0;
+  });
 
   // Receiver Score is whitelisted per Mengantar account; orders taken while it
   // was refused (or never opened in /admin) score themselves here.
@@ -186,6 +197,8 @@ async function runScheduledMaintenance(
     drainedCapiEvents,
     queuedGoogleAdsConversions,
     drainedGoogleAdsConversions,
+    syncedKelolaOrders,
+    syncedKelolaLeads,
     alerts: alerts.map(({ id, state, reason, transition, notification }) => ({
       id,
       state,
