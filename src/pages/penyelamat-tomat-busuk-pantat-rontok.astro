@@ -1,0 +1,577 @@
+---
+/**
+ * Native Landing Page: Obat Tomat Busuk Pantat Hitam Bunga Rontok: Saratoga (SARATOGA)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: saratoga-serum-tanaman-premium (ID: 50510)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/penyelamat-tomat-busuk-pantat-rontok.css';
+
+export const prerender = false;
+
+const SLUG = 'penyelamat-tomat-busuk-pantat-rontok';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium')) ??
+  (await getStorefrontProduct(Astro.locals, '50510'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/penyelamat-tomat-busuk-pantat-rontok/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Obat Tomat Busuk Pantat Hitam Bunga Rontok: Saratoga - ${Astro.locals.tenant.name}`}
+  description="Hentikan penyakit busuk pantat buah tomat hitam cekung, gugur bunga, dan buah retak pecah. Saratoga kunci dompolan tomat merah padat mulus kelas Grade A."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP BUSUK PANTAT TOMAT & BUNGA GUGUR!</span>
+          Tomat Busuk Pantat Hitam, Bunga Rontok & Kulit Retak Dijamin <span class="hl-brush">MULUS MERAH PADAT</span>!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot <strong class="text-slate-950 font-bold">SARATOGA</strong> sejak bunga mekar, Kalsium-Gula Alkohol 6% & L-Prolin 8,5% langsung mengalir ke ujung buah, pantat tomat mulus bebas hitam & dompolan jadi penuh!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan buah tomat terserang busuk pantat hitam Blossom End Rot vs dompolan tomat merah mulus dengan Saratoga"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil Nyata: 0% busuk pantat hitam, 8–10 buah jadi per tandan & kulit tebal tahan kirim antarkota!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Ca-Sugar Alcohol 6% + Prolin</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Lolos Krat Grade A</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Biang Kerok <span class="hl-brush-red">Panen Tomat Anjlok 40%</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa tomat Servo, Tymoti & Gustavi tiba-tiba hitam di pantat buah atau rontok saat hujan:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/gejala-1.webp"
+              alt="Buah tomat muda dan matang terserang busuk pantat hitam cekung Blossom End Rot di pohon"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Busuk Pantat Buah (Blossom End Rot)
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Ujung Bawah Buah Menghitam Cekung & Busuk Basah</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Kalsium tanah tidak mampu naik ke ujung buah saat cuaca panas-hujan, sehingga dinding sel ujung tomat kolaps menghitam.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/gejala-2.webp"
+              alt="Bunga tomat menguning rontok dan buah tomat matang retak pecah kulitnya setelah hujan"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Tandan Bunga Rontok & Kulit Retak
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Bunga Menguning Patah di Buku & Buah Pecah Saat Merah</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Lonjakan hormon etilen saat hujan malam menggugurkan kuntum bunga dan membuat kulit buah tipis mudah retak pecah.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Busuk Pantat</span> Jadi <span class="hl-brush">Dompolan Mulus</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/overclaim-timeline.webp"
+          alt="Tahapan pemulihan tomat dari busuk pantat hitam menjadi dompolan merah mulus dengan Saratoga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">25 HST: Kunci Tandan Bunga</span>
+          <span class="text-amber-300">45 HST: Pantat Buah Mulus</span>
+          <span class="text-emerald-400">Panen: Krat Penuh Grade A</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/kondisi-rusak.webp"
+            alt="Tanaman tomat tanpa Saratoga banyak buah busuk pantat hitam dan bunga rontok"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa SARATOGA
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Busuk Hitam & Rontok</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              30–40% buah dibuang karena pantat hitam cekung, tandan bunga ompong.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/kondisi-pulih.webp"
+            alt="Tanaman tomat dengan Saratoga dompolan buah merah mulus padat dari bawah sampai pucuk"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai SARATOGA
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Mulus Padat 8–10 Buah/Tandan</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Ujung buah bulat mulus mengkilap, daging tebal keras tahan tumpuk di krat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/saratoga-hero.webp"
+          alt="Botol resmi Saratoga Serum Tanaman Premium berhologram asli di kebun tomat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">SARATOGA Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Chelated Ca-Sugar Alcohol 6% + L-Prolin 8,5% + Kalium 14% + Boron 1,2% (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Serum Tomat SARATOGA</span> pada Servo, Tymoti & Gustavi
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Mengirim Kalsium mobile dan Asam Amino langsung menembus tangkai bunga hingga ujung buah:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/overclaim-1.webp"
+              alt="Dompolan buah tomat hijau dan merah dengan ujung bawah bulat mulus bebas busuk pantat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • STOP BUSUK PANTAT (BER)
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kalsium Gula-Alkohol Langsung Tembus ke Ujung Pantat Buah!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Berbeda dari kalsium tabur yang macet di akar, Chelated Ca-Sugar Alcohol 6% bergerak aktif lewat floem langsung mengeraskan ujung buah tomat.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/overclaim-2.webp"
+              alt="Tandan bunga dan pentil buah tomat yang tebal kokoh menempel rapat di batang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • KUNCI 95% TANDAN BUNGA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Tangkai Bunga Tebal Liat, 1 Tandan Jadi 8–10 Buah Utuh!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            L-Prolin 8,5% dan Boron-Etanolamin 1,2% mematikan hormon rontok etilen sehingga bunga mekar sempurna menjadi dompolan buah rapat.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/overclaim-3.webp"
+              alt="Krat panen penuh buah tomat merah menyala mengkilap berukuran besar seragam"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • DAGING PADAT ANTI-PECAH
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kulit Merah Mengkilap Keras, Tahan Kirim Jauh 3 Hari di Truk!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Kalium Karboksilat 14% dan Sitokinin Zeatin 80 ppm memadatkan dinding daging buah sehingga bobot per krat naik dan bebas pecah.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/macro-proof.webp"
+          alt="Close-up makro dompolan tomat merah mengkilap dengan kulit mulus tebal tanpa cacat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Japanese Pro-Plant Complex: Bebas endapan kapur, daun dan buah tetap bersih mengkilap tanpa bercak putih!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/aplikasi-kebun.webp"
+          alt="Petani tomat menyemprot kabut Saratoga pada barisan tanaman tomat berajir bambu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Mulai bunga (25 HST): <strong>20 ml SARATOGA</strong>/tangki 16L.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Pembesaran buah: <strong>30 ml SARATOGA</strong>/tangki 16L tiap 7 hari.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut ke <strong>daun, tandan bunga & pentil buah</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Nol Busuk Pantat & Krat Penuh</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/testi-1.webp"
+            alt="Pak Kusnadi petani tomat Cikajang Garut menunjukkan dompolan tomat Servo F1 mulus"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Kusnadi, Cikajang, Garut</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">0% Busuk Pantat</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Tanam 4.000 pohon tomat Servo F1. Biasanya hujan-panas bikin 30% buah busuk pantat hitam. Rutin semprot SARATOGA, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">ujung buah mulus 100% dan 1 pohon tembus 4,5 kg!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/testi-2.webp"
+            alt="Pak Dwi Antoro di Magelang berdiri di antara barisan tomat yang berbuah lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Dwi Antoro, Sawangan, Magelang</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">1 Tandan Jadi 9 Buah</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Tomat Gustavi F1 tandan bunganya utuh tidak ada yang rontok kena hujan malam. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dompolan rapat sampai atas dan bobot per krat nambah 4 kg!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/testi-3.webp"
+            alt="Pak Hendri Sembiring di Berastagi Karo bersama tumpukan krat panen tomat merah super"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Hendri Sembiring, Berastagi, Karo</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Lolos Sortir Supermarket</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Kulit tomat tebal keras mengkilap, dikirim pikap ke Medan tidak ada yang pecah atau lonyot. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Bandar langsung bayar harga tertinggi Grade A!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/hamparan-kebun.webp"
+          alt="Hamparan kebun tomat dataran tinggi berajir bambu rapi dengan buah merah lebat siap petik"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Andalan Sentra Tomat Garut, Lembang, Malang, Magelang & Berastagi: Tandan penuh, pantat buah mulus!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/panen-rekor.webp"
+            alt="Tumpukan krat plastik penuh tomat merah besar mengkilap kualitas Grade A"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bebas Busuk Pantat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Ujung buah mulus keras merata</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-tomat-busuk-pantat-rontok/panen-2.webp"
+            alt="Dompolan buah tomat merah segar menggantung rapat pada batang tanaman"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bobot Krat Maksimal</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Daging tebal tahan angkut jauh</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Serum Tomat</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

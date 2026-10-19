@@ -1,0 +1,577 @@
+---
+/**
+ * Native Landing Page: Solusi Daun Cabai Keriting Thrips Kutu Kebul: Kojien (KOJIEN)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: kojien (ID: 99118)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/perisai-keriting-thrips-kutu-kebul.css';
+
+export const prerender = false;
+
+const SLUG = 'perisai-keriting-thrips-kutu-kebul';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'kojien')) ??
+  (await getStorefrontProduct(Astro.locals, '99118'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/perisai-keriting-thrips-kutu-kebul/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Solusi Daun Cabai Keriting Thrips Kutu Kebul: Kojien - ${Astro.locals.tenant.name}`}
+  description="Buka kembali pucuk cabai yang keriting kaku akibat serangan Thrips, Tungau, dan Kutu Kebul. Kojien tebalkan perisai silika daun agar pucuk mulus kembali."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP BOROS INSEKTISIDA TANPA HASIL!</span>
+          Pucuk Cabai Keriting Kaku, Keperakan & Kuning Bule Dijamin <span class="hl-brush">MEKAR MULUS LEBAR</span> 7 Hari!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot <strong class="text-slate-950 font-bold">KOJIEN</strong> ke balik daun & pucuk, sel pucuk yang luka dihisap Thrips/Kutu Kebul langsung pulih mekar, daun dilapisi perisai Silika tebal!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan daun cabai keriting kaku diserang thrips vs pucuk baru mulus lebar dengan Kojien"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil 4–7 Hari: Tunas pucuk baru tumbuh rata mulus & daun tebal kaku tidak disukai hama!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Perisai Bio-Silika</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Hemat Racun 50%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Hama Pemicu <span class="hl-brush-red">Keriting Kaku & Bule</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa semprot insektisida kontak tiap 3 hari tapi pucuk tetap menggulung:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-keriting-thrips-kutu-kebul/gejala-1.webp"
+              alt="Pucuk daun cabai menggulung ke atas kaku dan keperakan akibat hisapan hama thrips"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Serangan Thrips & Tungau (Mites)
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Menggulung Perahu & Bawahnya Tembaga</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Parutan mulut Thrips dan Tungau merusak sel epidermis daun sehingga daun kaku rapuh, pucuk macet, dan bunga rontok.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-keriting-thrips-kutu-kebul/gejala-2.webp"
+              alt="Koloni kutu kebul putih di balik daun cabai yang memicu keriting kuning virus gemini"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Kutu Kebul & Virus Kuning (Gemini)
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Tipis Mudah Ditusuk Vektor Kuning Bule</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Daun yang lunak karena kebanyakan pupuk N menjadi sarang Kutu Kebul penyebar virus kuning yang menular satu kebun.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Pucuk Keriting</span> Jadi <span class="hl-brush">Mulus Berbunga</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/perisai-keriting-thrips-kutu-kebul/overclaim-timeline.webp"
+          alt="Tahapan pemulihan pucuk cabai keriting hari ke-0 hingga hari ke-10 tumbuh daun lebar dengan Kojien"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Hari 0: Keriting Kaku</span>
+          <span class="text-amber-300">Hari 5: Pucuk Mekar</span>
+          <span class="text-emerald-400">Hari 10: Tebal & Bunga</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/kondisi-rusak.webp"
+            alt="Tanaman cabai tanpa Kojien keriting kerdil menguning dan gagal berbuah"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Keriting & Bule</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Pucuk mengkerut rapat seperti bonsai, gagal keluar bunga.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/kondisi-pulih.webp"
+            alt="Tanaman cabai dengan Kojien berdaun mulus lebar tebal dan berbunga lebat"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Pucuk Lebar & Kaku</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Daun baru tumbuh rata mengkilap berlapis silika tahan hama.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/perisai-keriting-thrips-kutu-kebul/kojien-hero.webp"
+          alt="Botol resmi Kojien berhologram asli untuk perisai daun keriting thrips dan kutu kebul"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi KOJIEN Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">KOJIEN Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Bio-Silika Kutikula + Imun Sel Klorofil + Asam Amino Pucuk (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Perisai KOJIEN</span> pada Pucuk Keriting
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Memperbaiki sel pucuk yang rusak sekaligus mengeraskan permukaan daun:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-keriting-thrips-kutu-kebul/overclaim-1.webp"
+              alt="Pucuk daun cabai baru tumbuh mulus lebar di atas daun lama yang sempat keriting"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • BUKA PUCUK KERITING
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Dorong Daun Muda Tumbuh Rata, Lebar & Segar!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Memulihkan jaringan meristem pucuk yang kerdil akibat toksin air liur Thrips sehingga daun baru langsung membuka mulus.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-keriting-thrips-kutu-kebul/overclaim-2.webp"
+              alt="Permukaan daun cabai tebal tegak mengkilap berlapis silika tahan tusukan hama"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • PERISAI KUTIKULA SILIKA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Daun Tebal Jegrik, Mulut Hama Gagal Menusuk!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Silika aktif mengkristal di lapisan epidermis daun sehingga Thrips, Tungau, dan Kutu Kebul kesulitan menghisap cairan sel.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-keriting-thrips-kutu-kebul/overclaim-3.webp"
+              alt="Percabangan cabai sehat penuh bunga putih dan buah cabai mulus tanpa keriting"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • IMUN VIRUS KUNING
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Hijau Pekat & Tetap Produktif Berbuah Lebat!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Memperkuat klorofil dan metabolisme tanaman sehingga tahan terhadap penyebaran virus kuning (bule) sampai akhir panen.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/perisai-keriting-thrips-kutu-kebul/macro-proof.webp"
+          alt="Detail makro daun pucuk cabai yang bersih sehat dan berurat tebal setelah semprot Kojien"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Perisai Fisik Alami: Pangkas ketergantungan insektisida abamektin mahal hingga 50%!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/perisai-keriting-thrips-kutu-kebul/aplikasi-kebun.webp"
+          alt="Petani cabai menyemprotkan Kojien mengarah ke balik daun bawah untuk perisai thrips"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Larutkan <strong>30–35 ml KOJIEN</strong> per tangki semprot 16L.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut ke <strong>balik daun bawah & pucuk</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Saat keriting: tiap <strong>4 hari</strong> (3x). Rutin: 7–10 hari.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Pucuk Keriting Mekar Mulus</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/testi-1.webp"
+            alt="Pak Heru Widodo di Magelang menunjukkan pucuk cabai yang mulus kembali setelah Kojien"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Heru Widodo, Magelang, Jateng</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pucuk Mekar 6 Hari</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Cabai 35 HST menggulung parah kena Thrips. Masuk KOJIEN 2x, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">hari ke-6 pucuk baru langsung keluar lebar mulus!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/testi-2.webp"
+            alt="Pak Mulyono di Kediri bersama tanaman cabai rawit yang sehat bebas keriting bule"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Mulyono, Kediri, Jatim</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Aman dari Bule</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Kebun sebelah kuning bule kena kutu kebul. Punya saya rutin KOJIEN, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">daunnya tebal kaku dan aman sampai panen raya!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/testi-3.webp"
+            alt="Pak Deden di Cikajang Garut bersama hasil panen cabai merah mulus"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Deden, Cikajang, Garut</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Irit Racun 50%</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Belanja insektisida turun separuh karena <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">daun yang tebal berlapis KOJIEN tidak disukai tungau maupun thrips!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/perisai-keriting-thrips-kutu-kebul/hamparan-kebun.webp"
+          alt="Hamparan kebun cabai di dataran tinggi dengan tajuk daun hijau tua mulus serempak"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Tajuk Mulus Serempak: Lindungi cabai, tomat, melon & kentang dari keriting hama penusuk!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/panen-rekor.webp"
+            alt="Keranjang dan karung penuh hasil panen cabai merah mulus bebas cacat hama"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Buah Mulus Grade A</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bebas goresan parutan thrips</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-keriting-thrips-kutu-kebul/panen-2.webp"
+            alt="Rumpun tanaman cabai berdaun hijau lebar dengan buah cabai merah dan hijau lebat"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bunga & Buah Lebat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Pucuk sehat tanpa stres hama</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Perisai Anti-Keriting</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

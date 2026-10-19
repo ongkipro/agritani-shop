@@ -1,0 +1,577 @@
+---
+/**
+ * Native Landing Page: Booster Perpanjang Umur Panen Cabai 30x Petik: Bensu (BENSU)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/maraton-panen-cabai.css';
+
+export const prerender = false;
+
+const SLUG = 'maraton-panen-cabai';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/maraton-panen-cabai/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Perpanjang Umur Panen Cabai 30x Petik: Bensu - ${Astro.locals.tenant.name}`}
+  description="Cegah cabai afkir dini dan buah mengecil di petikan ke-12. Bensu memacu tunas cabang Y baru dan menjaga buah atas tetap lurus panjang hingga 30 kali petik."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">JANGAN BONGKAR MULSA DI PETIKAN KE-10!</span>
+          Cabai Loyo, Daun Rontok & Buah Mengecil di Petikan 10 Dijamin <span class="hl-brush">PANEN 30 KALI PETIK</span>!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot & kocor <strong class="text-slate-950 font-bold">BENSU</strong> tiap habis petik, akar tua kembali muda putih, cabang Y atas terus pecah berbunga, buah atas tetap panjang lurus!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan cabai habis bensin di petikan ke-10 vs cabai maraton 30 kali petik dengan Bensu"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil Nyata: Pohon setinggi dada tetap rimbun dengan 3 generasi (merah, hijau & bunga atas)!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Regenerator Pasca-Petik</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>+15 Petikan Ekstra</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Penyebab Cabai <span class="hl-brush-red">Cepat Habis Bensin (Afkir)</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa kebanyakan kebun cabai sudah meranggas habis di petikan ke-10 sampai ke-12:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/maraton-panen-cabai/gejala-1.webp"
+              alt="Pohon cabai meranggas menguning dan berhenti mengeluarkan tunas baru di petikan ke-12"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Pucuk Atas Berhenti Jalan
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Akar Tua Cokelat & Daun Rontok Pasca-Petik</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Ribuan luka petikan menguras energi pohon sementara akar di bawah mulsa jenuh pupuk kimia sehingga cabang baru berhenti keluar.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/maraton-panen-cabai/gejala-2.webp"
+              alt="Buah cabai petikan atas menjadi pendek bengkok dan kerdil kelas afkir"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Buah Atas Pendek & Bengkok
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Buah Petikan Akhir Kerdil Masuk Sortiran Murah</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Kiriman nutrisi ke ranting atas macet sehingga buah cabai petikan ke-12 ke atas menjadi pendek, bengkok, dan ringan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Afkir Petik 10</span> Jadi <span class="hl-brush">Maraton 30 Kali Petik</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/maraton-panen-cabai/overclaim-timeline.webp"
+          alt="Perkembangan pohon cabai dari petikan ke-10 hingga petikan ke-30 tetap rimbun dengan Bensu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Petik 10: Mulai Lelah</span>
+          <span class="text-amber-300">Petik 18: Cabang Y Baru</span>
+          <span class="text-emerald-400">Petik 30: Buah Tetap Super</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/kondisi-rusak.webp"
+            alt="Kebun cabai tanpa Bensu sudah meranggas kering dan habis buah di petikan ke-11"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Habis di Petik 10</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Daun rontok, batang mengering, terpaksa bongkar mulsa.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/kondisi-pulih.webp"
+            alt="Kebun cabai dengan Bensu setinggi dada tetap hijau lebat penuh buah merah dan bunga"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Tembus 25–30 Kali Petik</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Tajuk atas terus bertingkat membawa bunga putih dan buah panjang.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/maraton-panen-cabai/bensu-hero.webp"
+          alt="Botol resmi Bensu Pupuk Cair Organik berhologram asli untuk booster panen cabai"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">BENSU Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Pemulih Luka Petik + Asam Humat-Fulvat + Kalium-Amino Organik (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Maraton Panen BENSU</span> pada Pohon Cabai
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Menjaga estafet akar, tunas cabang Y, dan pengisian buah tanpa putus:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/maraton-panen-cabai/overclaim-1.webp"
+              alt="Pucuk atas tanaman cabai terus memecah cabang Y baru dan bunga putih lebat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • ESTAFET CABANG Y BARU
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pucuk Atas Terus Memecah Tunas & Bunga Putih!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menyembuhkan stres luka petik dengan cepat sehingga ranting atas terus memanjang membentuk percabangan produktif baru.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/maraton-panen-cabai/overclaim-2.webp"
+              alt="Buah cabai merah keriting petikan atas tetap panjang lurus mengkilap Grade A"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • BUAH ATAS TETAP LURUS
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Petikan Ke-25 Tetap Panjang, Lurus & Merah Mengkilap!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Kalium dan asam amino organik menjaga tekanan turgor buah atas sehingga bebas cabai bengkok dan tetap masuk Grade A.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/maraton-panen-cabai/overclaim-3.webp"
+              alt="Perakaran cabai dewasa tetap penuh akar serabut putih aktif di bawah mulsa"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • REMAJAKAN AKAR MULSA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Akar Serabut Putih Baru Terus Tumbuh di Bawah Mulsa!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Humat mencuci endapan garam pupuk di tanah mulsa dan memicu akar serabut baru agar pohon kuat berbuah berbulan-bulan.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/maraton-panen-cabai/macro-proof.webp"
+          alt="Ranting cabai bertingkat yang memuat buah merah matang, buah hijau, dan bunga putih"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            3 Generasi Sekaligus: Bawah merah dipetik, tengah hijau mengisi, atas berbunga lebat!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/maraton-panen-cabai/aplikasi-kebun.webp"
+          alt="Petani cabai mengocor dan menyemprot Bensu setelah selesai memetik cabai"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot <strong>30 ml BENSU</strong>/tangki 16L tiap habis 2x petik.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Kocor <strong>3–4 ml/liter air</strong> (200 ml/pohon) tiap 14 hari.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Mulai sejak <strong>petikan ke-3</strong> atau saat pohon mulai lelah.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Tembus 25–30 Kali Petik</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/testi-1.webp"
+            alt="Pak Syarifuddin di Kerinci Jambi bersama pohon cabai merah keriting petikan ke-29"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Syarifuddin, Kerinci, Jambi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Rekor 29 Kali Petikan</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Cabai merah keriting saya tembus petikan ke-29! <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Pohon setinggi dada dan buah atasnya masih lurus panjang semua!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/testi-2.webp"
+            alt="Pak Edi Santoso di Blitar Jawa Timur menunjukkan karung panen cabai rawit"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Edi Santoso, Blitar, Jatim</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Rawit Panen 6 Bulan</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Rutin semprot & kocor BENSU habis petik, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">cabai rawit Ori terus pecah tunas sampai 26 kali petik!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/testi-3.webp"
+            alt="Pak Agus Permana di Garut Jawa Barat bersama panen cabai besar yang mulus"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Agus Permana, Garut, Jabar</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Tetap Grade A Super</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya petikan ke-12 buah sudah bengkok kecil. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Pakai BENSU, sampai petikan ke-22 masih masuk harga super!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/maraton-panen-cabai/hamparan-kebun.webp"
+          alt="Hamparan kebun cabai dewasa yang masih hijau rimbun dan produktif di dataran tinggi"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Untung Bersih Berlipat: Nikmati 15+ petikan ekstra tepat saat harga cabai melambung!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/panen-rekor.webp"
+            alt="Karung-karung panen cabai merah penuh dari kebun cabai berumur panjang"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">1,5 Kg+ Per Pohon</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Akumulasi tonase naik berlipat ganda</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/maraton-panen-cabai/panen-2.webp"
+            alt="Keranjang panen penuh cabai merah keriting lurus panjang dan mengkilap"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Buah Padat Mengkilap</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Tahan simpan & disukai bandar</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Maraton Panen Cabai</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,577 @@
+---
+/**
+ * Native Landing Page: Booster Umbi Bawang Merah Anti Pucuk Kuning: Bensu (BENSU)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/booster-umbi-bawang-anti-pucuk-kuning.css';
+
+export const prerender = false;
+
+const SLUG = 'booster-umbi-bawang-anti-pucuk-kuning';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/booster-umbi-bawang-anti-pucuk-kuning/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Umbi Bawang Merah Anti Pucuk Kuning: Bensu - ${Astro.locals.tenant.name}`}
+  description="Atasi pucuk daun bawang merah menguning kering, anakan sedikit, dan umbi kecil susut gudang. Bensu tegakkan daun pipa hijau dan besarkan umbi merah padat."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP MATI PUCUK KUNING & UMBI BAWANG KERDIL!</span>
+          Pucuk Daun Bawang Menguning Kering & Umbi Kecil Kempes Dijamin <span class="hl-brush">TEGAK & UMBI JUMBO</span>!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot kabut <strong class="text-slate-950 font-bold">BENSU</strong> sejak 15 HST, L-Asam Amino Peptida 16,5% & Mikro Kelat EDTA hentikan mati pucuk kuning, daun pipa berdiri kaku hijau kebiruan, umbi merah menyala padat tahan simpan!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan bawang merah mati pucuk kuning kerdil vs daun pipa tegak dan umbi super jumbo dengan Bensu"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil Demplot Brebes & Nganjuk: Daun pipa tegak berlilin, anakan 12–16 siung & susut askip di bawah 10%!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>L-Free Amino 16,5% + EDTA</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Tembus 14 Ton/Ha</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Penguras Modal Petani <span class="hl-brush-red">Bawang Merah Gadu & Rendeng</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa daun bawang tiba-tiba menguning terbakar di umur 20 HST dan umbi gagal membesar:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/gejala-1.webp"
+              alt="Tanaman bawang merah mengalami mati pucuk daun menguning kering terbakar di sawah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Mati Pucuk Kuning Terbakar
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Ujung Daun Pipa Mengering Cokelat & Rebah Lemas</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Angin kumbang kering dan defisiensi mikro Zn-Fe-Mn merusak kloroplas ujung daun sehingga fotosintesis berhenti di umur 20 HST.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/gejala-2.webp"
+              alt="Umbi bawang merah berukuran kecil pucat dan kempes susut saat disimpan di gudang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Umbi Kerdil & Susut Simpan >25%
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Siung Sedikit, Warna Pucat & Kempes di Gudang Askip</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Tanpa asam amino pembuka stomata dan pengangkut karbohidrat di umur 35 HST, umbi gagal membelah penuh dan berair mudah busuk.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Pucuk Kuning</span> Jadi <span class="hl-brush">Umbi Super</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/overclaim-timeline.webp"
+          alt="Tahapan pemulihan bawang merah dari mati pucuk kuning hingga panen umbi jumbo dengan Bensu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">15 HST: Stop Pucuk Kuning</span>
+          <span class="text-amber-300">30 HST: Anakan 14+ Siung</span>
+          <span class="text-emerald-400">55 HST: Umbi Merah Padat</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/kondisi-rusak.webp"
+            alt="Bawang merah tanpa Bensu daun menguning rebah dan umbi kecil kempes"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Pucuk Kering & Kempes</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Ujung daun terbakar, anakan cuma 4–5 siung kecil, susut gudang tinggi.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/kondisi-pulih.webp"
+            alt="Bawang merah dengan Bensu daun pipa tegak hijau kebiruan dan umbi merah jumbo"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Daun Pipa & Umbi Jumbo</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Daun kaku berlilin hijau kebiruan, umbi bulat padat merah menyala.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/bensu-hero.webp"
+          alt="Botol resmi Bensu Pupuk Cair Organik berhologram asli di kebun bawang merah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">BENSU Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            L-Free Amino 16,5% + Glutamat 4,8% + Zn/Fe/Mn-EDTA 2,2% + Yucca Saponin (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Booster Bawang BENSU</span> pada Bima, Tajuk & Bauji
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Memulihkan klorofil daun pipa sekaligus memompa karbohidrat penuh ke siung umbi:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/overclaim-1.webp"
+              alt="Hamparan tanaman bawang merah dengan daun pipa hijau kebiruan berdiri tegak kaku"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • STOP MATI PUCUK 48 JAM
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pulihkan Klorofil & Tegakkan Daun Pipa Hijau Kebiruan!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Amino Peptida Bebas 16,5% dan Kelat Fe-Zn-Mn langsung diserap stomata pagi hari untuk menghentikan pengeringan pucuk daun.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/overclaim-2.webp"
+              alt="Rumpun bawang merah sehat dengan belasan anakan siung umbi yang membelah serempak"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • LEDAKAN ANAKAN SIUNG
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Bikin 1 Bibit Pecah 12–16 Siung Seragam Sejak 20 HST!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Giberelin bioaktif alami 150 ppm dan Vitamin B1-B6-Inositol memacu pembelahan cakram siung dan serabut akar putih baru.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/overclaim-3.webp"
+              alt="Umbi bawang merah Bima Brebes berukuran super besar berwarna merah menyala padat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • UMBI MERAH PADAT ASKIP
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kulit Umbi Merah Menyala, Padat Berbobot & Tahan Simpan!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Glutamat 4,8% dan Saponin Yucca mempercepat pengiriman pati dari daun ke umbi sehingga bobot naik dan susut askip di bawah 10%.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/macro-proof.webp"
+          alt="Close-up makro rumpun umbi bawang merah super besar merah mengkilap dengan akar putih lebat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Penembus Alami Yucca Saponin 1,5%: Larutan langsung menempel rata di daun bawang yang licin berlilin!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/aplikasi-kebun.webp"
+          alt="Petani bawang merah menyemprot kabut Bensu di bedengan sawah bawang merah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Umur 12–25 HST: <strong>25 ml BENSU</strong>/tangki 16L tiap 5 hari.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Umur 30–45 HST: <strong>30 ml BENSU</strong>/tangki 16L (pengisian umbi).
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut pagi <strong>06.00–08.30 WIB</strong> saat stomata buka.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Panen Umbi Merah Super</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/testi-1.webp"
+            alt="Pak Taryono petani bawang merah Brebes menunjukkan ikatan umbi bawang merah jumbo"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Taryono, Larangan, Brebes</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Tembus 13,8 Ton/Ha</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Bawang Bima Brebes 0,5 Ha sempat kena angin kumbang pucuknya kuning. Disemprot BENSU 3 kali, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">daun langsung tegak hijau kebiruan dan panen tembus 6,9 ton umbi super!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/testi-2.webp"
+            alt="Pak Bambang Sugeng di Sukomoro Nganjuk bersama hasil panen bawang merah Tajuk"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Bambang Sugeng, Sukomoro, Nganjuk</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Susut Askip Turun 9%</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Varietas Tajuk Nganjuk saya kawal BENSU dari umur 15 HST, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">satu rumpun pecah 14 siung besar rata dan disimpan 2 bulan di gudang tetap keras padat!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/testi-3.webp"
+            alt="Pak H. Hasan Basri di Bima NTB memanen karung-karung bawang merah kualitas super"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Hasan Basri, Palibelo, Bima</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Rebutan Bakul Pasar</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Warna kulit umbinya merah menyala mengkilap dan aromanya tajam. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Pedagang langsung berani tebas Rp 4.000/kg lebih mahal dari petak sebelah!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/hamparan-kebun.webp"
+          alt="Hamparan kebun bawang merah di Brebes dan Nganjuk yang tumbuh seragam hijau tegak siap panen"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Standar Sentra Brebes, Nganjuk, Probolinggo, Demak & Bima: Daun utuh, umbi merah berbobot!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/panen-rekor.webp"
+            alt="Tumpukan panen umbi bawang merah super merah menyala dalam karung jaring"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Umbi Merah Jumbo</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Siung besar padat seragam</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-umbi-bawang-anti-pucuk-kuning/panen-2.webp"
+            alt="Ikatan bawang merah askip kering gudang yang padat berisi dan tidak kempes"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Tahan Simpan Gudang</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Susut bobot sangat rendah</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Booster Bawang</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

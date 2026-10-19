@@ -1,0 +1,577 @@
+---
+/**
+ * Native Landing Page: Obat Layu Fusarium Bakteri Cabai Tomat: Kojien (KOJIEN)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: kojien (ID: 99118)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/penyelamat-layu-mendadak.css';
+
+export const prerender = false;
+
+const SLUG = 'penyelamat-layu-mendadak';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'kojien')) ??
+  (await getStorefrontProduct(Astro.locals, '99118'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/penyelamat-layu-mendadak/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Obat Layu Fusarium Bakteri Cabai Tomat: Kojien - ${Astro.locals.tenant.name}`}
+  description="Hentikan penularan layu mendadak Fusarium dan bakteri Ralstonia di lubang mulsa. Kojien sterilkan pangkal akar dan tegakkan tanaman cabai serta tomat."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP PENULARAN LAYU SATU BEDENGAN!</span>
+          Siang Layu Mendadak, Sore Segar & Besoknya Mati Merembet Dijamin <span class="hl-brush">STOP MENULAR</span> 48 Jam!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup blokade kocor <strong class="text-slate-950 font-bold">KOJIEN</strong> di lubang mulsa, jamur Fusarium & bakteri Ralstonia terkunci mati, akar serabut putih baru tumbuh, pohon berdiri tegak di terik siang!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan tanaman cabai layu mendadak siang hari vs tegak segar berakar putih dengan Kojien"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil 48 Jam: Penularan antar-lubang mulsa berhenti total & pohon gejala awal kembali tegak!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Blokade Rizosfer Mulsa</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Rp 100/Lubang Tanam</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Penyakit <span class="hl-brush-red">Layu Mematikan di Mulsa</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Menyebar cepat lewat aliran air kocor dan hujan dari satu lubang ke lubang sebelahnya:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-layu-mendadak/gejala-1.webp"
+              alt="Tanaman cabai layu mendadak tetapi daun masih berwarna hijau karena serangan bakteri Ralstonia"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Layu Bakteri (Layu Hijau Ralstonia)
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Pucuk Terkulai Seperti Disiram Air Panas</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Lendir bakteri menyumbat pembuluh xilem batang sehingga tanaman layu mendadak dalam 48 jam meski daun masih hijau.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-layu-mendadak/gejala-2.webp"
+              alt="Pangkal batang cabai dibelah tampak cincin cokelat kehitaman akibat jamur Fusarium"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Layu Jamur Fusarium Oxysporum
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Leher Batang Cokelat Busuk & Daun Menguning</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Jamur tanah asam menggerogoti pangkal akar dan cincin pembuluh batang hingga tanaman mengering mati berantai.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Layu Menular</span> Jadi <span class="hl-brush">Tegak 100%</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/penyelamat-layu-mendadak/overclaim-timeline.webp"
+          alt="Tahapan penyelamatan akar dan berhentinya layu mendadak hari ke-0 hingga hari ke-7 dengan Kojien"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Hari 0: Layu Siang</span>
+          <span class="text-amber-300">48 Jam: Stop Menular</span>
+          <span class="text-emerald-400">Hari 7: Akar Putih Tegak</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/kondisi-rusak.webp"
+            alt="Bedengan cabai tanpa Kojien mati berderet menular sepanjang mulsa"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Mati Berantai</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Lubang mulsa kosong melompong menular satu barisan.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/kondisi-pulih.webp"
+            alt="Bedengan cabai dengan Kojien berdiri tegak segar 100 persen di bawah terik matahari siang"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Barisan Utuh Tegak</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Penularan putus total, tanaman tegak segar di siang bolong.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/penyelamat-layu-mendadak/kojien-hero.webp"
+          alt="Botol resmi Kojien berhologram asli untuk pengendali layu fusarium dan bakteri"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi KOJIEN Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">KOJIEN Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Sterilisator Rizosfer + Penstabil pH Mulsa + Silika Pembuluh (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Blokade Layu KOJIEN</span> di Lubang Mulsa
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Menghentikan penularan bawah tanah dan memperkuat pipa pembuluh batang:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-layu-mendadak/overclaim-1.webp"
+              alt="Pangkal batang cabai di lubang mulsa bersih kokoh bebas busuk leher akar"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • STERILISASI LUBANG MULSA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Putus Rantai Penularan Lewat Air Kocor & Hujan!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menetralkan tanah asam di sekitar leher akar sehingga spora Fusarium dan bakteri Ralstonia gagal menginfeksi pohon sebelah.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-layu-mendadak/overclaim-2.webp"
+              alt="Akar serabut putih baru tumbuh lebat menggantikan akar lama yang busuk"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • AKAR SERABUT PUTIH BARU
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pulihkan Pohon Gejala Awal dengan Akar Adventif!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Merangsang keluarnya akar serabut putih sehat di atas jaringan yang luka agar kiriman air ke tajuk kembali lancar.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/penyelamat-layu-mendadak/overclaim-3.webp"
+              alt="Barisan tanaman cabai dan tomat berdiri tegak segar di siang hari yang terik"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • PERISAI PEMBULUH XILEM
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Dinding Pembuluh Batang Keras & Tahan Siang Terik!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Silika ionik memperkokoh dinding pembuluh angkut air di dalam batang sehingga tidak mudah disumbat lendir patogen.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/penyelamat-layu-mendadak/macro-proof.webp"
+          alt="Detail makro bonggol perakaran tanaman yang putih bersih bebas bercak cokelat fusarium"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Benteng Akar Sehat: 1 Liter cukup untuk mengocor 1.000–1.250 lubang tanam mulsa!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/penyelamat-layu-mendadak/aplikasi-kebun.webp"
+          alt="Petani mengocor larutan Kojien tepat ke lubang tanam mulsa cabai"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Larutkan <strong>4–5 ml KOJIEN/liter air</strong> (80 ml/tangki 16L).
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Kocor <strong>200 ml/lubang</strong> di pohon gejala + 10 pohon sebelahnya.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi <strong>5 hari kemudian</strong>. Pencegahan: tiap 14 hari.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Penularan Layu Stop 100%</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/testi-1.webp"
+            alt="Pak Slamet Riyadi di Sleman Yogyakarta di tengah barisan cabai yang utuh bebas layu"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Slamet Riyadi, Sleman, DIY</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Stop Menular 48 Jam</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Habis hujan 3 hari, 15 pohon cabai mulai layu siang. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Langsung blokade kocor KOJIEN, besoknya tegak lagi dan tidak merembet!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/testi-2.webp"
+            alt="Pak Ginting di Berastagi Karo bersama tanaman tomat dan cabai yang sehat berbuah lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Ginting, Berastagi, Sumut</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">98% Populasi Utuh</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Lahan langganan layu bakteri saya kocor KOJIEN rutin dari awal. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dari 6.000 batang tomat & cabai, 98% hidup utuh sampai panen!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/testi-3.webp"
+            alt="Pak H.Tarmizi di Brebes menunjukkan hasil panen cabai dari kebun bebas fusarium"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Tarmizi, Brebes, Jateng</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Akar Putih Gondrong</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Pangkal batang jadi bersih keras dan <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">akar serabut putihnya naik penuh di lubang mulsa!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/penyelamat-layu-mendadak/hamparan-kebun.webp"
+          alt="Hamparan bedengan mulsa cabai dan tomat yang seragam 100 persen tanpa lubang kosong mati layu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Populasi Utuh Sampai Akhir: Pastikan setiap pohon yang Anda tanam menghasilkan uang!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/panen-rekor.webp"
+            alt="Panen raya cabai merah dan tomat segar dari kebun yang bebas penyakit layu"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Tonase Panen Utuh</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Nol kerugian pohon mati berbuah</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/penyelamat-layu-mendadak/panen-2.webp"
+            alt="Pangkal batang cabai kokoh di lubang mulsa dengan ranting atas sarat buah"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Pangkal Akar Kebal</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Aman melewati musim penghujan</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Penyelamat Anti-Layu</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

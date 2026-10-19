@@ -1,0 +1,583 @@
+---
+/**
+ * Native Landing Page: Penyelamat Bibit Sawit Busuk Kuning, Layu & Tumbang (AUSSIE)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: aussie-pupuk-cair-organik (ID: 26039)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/bibit-sawit-busuk-kuning.css';
+
+export const prerender = false;
+
+const SLUG = 'bibit-sawit-busuk-kuning';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'aussie-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '26039'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const price = cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/bibit-sawit-busuk-kuning/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Obat Bibit Sawit Busuk Kuning & Layu 14 Hari - ${Astro.locals.tenant.name}`}
+  description="Atasi bibit kelapa sawit busuk kuning, bercak Curvularia, busuk pupus, dan tumbang pangkal. 99% bibit sawit hidup tegap berbonggol kokoh dalam 14 hari."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={false}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP CABUT & BUANG BIBIT!</span>
+          Bibit Sawit Busuk Kuning, Layu & Tumbang Dijamin <span class="hl-brush">BANGKIT TEGAP</span> 14 Hari
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot & kocor <strong class="text-slate-950 font-bold">AUSSIE</strong>: bercak kuning mati kering, akar putih meledak gondrong, 99% bibit hidup kekar bebas sulam!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan bibit kelapa sawit busuk kuning layu vs pulih hijau tegap sehabis aplikasi AUSSIE"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil 14 Hari: Daun kuning gosong & busuk pucuk pulih hijau pekat, bonggol kekar anti-tumbang!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Immune Cellactivator</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>99% Bebas Sulam</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Serangan Mematikan Pemicu <span class="hl-brush-red">Bibit Kuning & Tumbang</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Jangan tunggu menular satu blok pembibitan atau mati di lubang tanam:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/bibit-sawit-busuk-kuning/gejala-1-busuk-kuning.webp"
+              alt="Gejala daun bibit kelapa sawit busuk kuning bercak Curvularia dan busuk pupus tombak"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Busuk Kuning & Pucuk Lonyot
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Jamur Curvularia & Busuk Pupus (Spear Rot)</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Daun berbintik kuning gosong dari ujung, tombak tengah membusuk berlendir dan patah terkulai.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/bibit-sawit-busuk-kuning/gejala-2-layu-tumbang.webp"
+              alt="Gejala bibit kelapa sawit muda layu mendadak busuk pangkal bonggol dan miring mau tumbang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Layu Mendadak & Tumbang
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Busuk Leher Akar, Tanah Masam & Stres Tanam</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Akar menghitam terbakar asam tanah/pupuk kimia, bibit mendadak layu lemas lalu bonggol roboh.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Kuning Layu</span> Jadi <span class="hl-brush">Hijau Kekar</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/bibit-sawit-busuk-kuning/overclaim-7hari-pulih.webp"
+          alt="Progres pemulihan bibit kelapa sawit dari busuk kuning hari ke-0, hari ke-7, hingga hijau kekar hari ke-14"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Hari 0: Kuning Busuk</span>
+          <span class="text-amber-300">Hari 7: Jamur Kering</span>
+          <span class="text-emerald-400">Hari 14: Pupus Kekar</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/kondisi-rusak.webp"
+            alt="Kondisi bibit kelapa sawit busuk kuning bercak Curvularia layu dan busuk pupus"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Busuk & Roboh</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Daun gosong, pucuk busuk patah, mati satu per satu.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/kondisi-pulih.webp"
+            alt="Kondisi bibit kelapa sawit pulih sehat hijau pekat pupus tegap dan bonggol kokoh"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">99% Hidup Tegap</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Tombak baru mekar mulus, daun hijau gelap berlapis lilin.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/bibit-sawit-busuk-kuning/aussie-hero.webp"
+          alt="Botol Nutrisi Fungisida Organik AUSSIE Asli Dipegang Petani di Kebun Kelapa Sawit"
+          class="aspect-[4/5] w-full object-cover object-top"
+          width="960"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi AUSSIE Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">AUSSIE Original - Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Immune Cellactivator + Fungisida Organik High-End + Humat-Silika (500ml & 1L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Keajaiban AUSSIE</span> pada Bibit & TBM
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Bekerja serentak mematikan jamur, memacu akar baru, dan memperbesar bonggol:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <!-- Overclaim 1: Tombak Pupus Ganda & Jamur Kering -->
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/bibit-sawit-busuk-kuning/overclaim-pupus-tombak.webp"
+              alt="Tombak pupus baru kelapa sawit mencuat tegap hijau gelap mengkilap bebas jamur Curvularia"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • PEMULIHAN DAUN & PUPUS
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Jamur Curvularia Mati Kering, Pupus Baru Mencuat Tegap!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Senyawa Fenolik Bio-Fungistatik & Sulfur aktif menghentikan busuk pucuk dalam hitungan hari dan mendorong tombak baru membuka hijau pekat.
+          </p>
+        </div>
+
+        <!-- Overclaim 2: Ledakan Akar Putih Gondrong -->
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/bibit-sawit-busuk-kuning/overclaim-akar-gondrong.webp"
+              alt="Ledakan akar serabut putih kemerahan bibit kelapa sawit super gondrong mencengkeram tanah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • LEDAKAN AKAR SERAP
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Akar Putih Meledak Gondrong 3x Lipat Anti-Layu!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Humat-Fulvat mencuci racun asam tanah & gosong pupuk, memicu ratusan akar adventif baru yang rakus menyerap hara.
+          </p>
+        </div>
+
+        <!-- Overclaim 3: Bonggol Botol Raksasa Anti-Tumbang -->
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/bibit-sawit-busuk-kuning/overclaim-bonggol-raksasa.webp"
+              alt="Bonggol pangkal batang bibit kelapa sawit membulat raksasa sekeras botol galon anti-tumbang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • PERISAI BONGGOL BAJA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Bonggol Membulat Super Besar Sekeras Beton, Stop Tumbang!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Silika Bio-Available & Kalium mempertebal jaringan pangkal batang sehingga bonggol membesar cepat seperti kaki gajah dan tahan rebah.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/bibit-sawit-busuk-kuning/pupus-akar-segar.webp"
+          alt="Foto makro pupus tombak kelapa sawit segar dan akar serap putih aktif sehabis aplikasi AUSSIE"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Detail Makro: Akar baru langsung mengunci tanah & tunas pupus mencuat lurus.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/bibit-sawit-busuk-kuning/aplikasi-kocor.webp"
+          alt="Petani menyemprot dan mengocor larutan nutrisi AUSSIE pada bibit kelapa sawit"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            <strong>3-4 tutup (50 ml)</strong> per tangki 16L air.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot pupus & kocor <strong>200 ml/polibag</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi tiap <strong>10-14 hari</strong> (cukup 2-3 kali).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Ribuan Bibit Selamat</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <!-- Testimoni 1 -->
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/testi-1.webp"
+            alt="Dokumentasi pembibitan kelapa sawit Pak Hendra di Riau pulih hijau serempak dari bercak kuning"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Hendra (Rokan Hulu, Riau)</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">400 Polibag Pulih</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "400 polibag kena bercak kuning Curvularia & busuk pucuk batal dibuang. Dikocor AUSSIE 2x, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">bercak langsung kering dan pupus baru mekar hijau gelap!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimoni 2 -->
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/testi-2.webp"
+            alt="Dokumentasi sawit muda TBM Pak Damanik di Sumatera Utara berdiri tegap bebas layu dan tumbang"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Damanik (Serdang Bedagai, Sumut)</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">TBM Batal Tumbang</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Bibit TBM di tanah gambut yang tadinya layu kuning dan miring mau roboh <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">langsung berdiri tegap lagi, nol biaya sulam!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimoni 3 -->
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/testi-3.webp"
+            alt="Dokumentasi petani kelapa sawit Pak Sabirin di Kalimantan Barat bersama bibit sawit sehat berbonggol besar"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Sabirin (Melawi, Kalbar)</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Bonggol Gendut</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Bibit stres kuning gara-gara overdosis urea langsung segar kembali, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">bonggol bawahnya cepat membesar kayak botol!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama 1 -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/bibit-sawit-busuk-kuning/hamparan-bibit-sehat.webp"
+          alt="Foto panorama hamparan pembibitan dan kebun kelapa sawit muda tumbuh serempak hijau pekat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            99% Hidup Serempak: Hamparan bibit rata, hijau gelap, bebas bercak kuning!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase: Presisi Simetris (Identical 3:2 Aspect & Equal Flex Height) -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/overclaim-tbm-buah-pasir.webp"
+            alt="Sawit muda TBM berbonggol besar dengan tandan buah segar perdana melingkar penuh"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Panen Perdana Lebat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Buah pasir padat melingkar penuh</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/bibit-sawit-busuk-kuning/bonggol-kokoh-tbm.webp"
+            alt="Foto bonggol kelapa sawit muda kokoh berbuah pasir perdana lebat sehabis perawatan AUSSIE"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bonggol Gajah Kokoh</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Pangkal batang kekar anti-roboh</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Penyelamat Sawit</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={cheapest?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>
