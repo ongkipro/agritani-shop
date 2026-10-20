@@ -8,7 +8,10 @@ export type CmsVersionInfo = {
 };
 
 export const CMS_VERSION: CmsVersionInfo = {
-  version: "1.6.5",
+  version: "1.7.2",
+  // 1.7.2: Inter is declared only as optional faces (latin, latin-ext); the package swap faces are gone.
+  // 1.7.1: Inter latin faces use font-display optional, so text never changes font mid-read (CLS).
+  // 1.7.0: two-minute edge cache for anonymous storefront HTML; Inter preloaded (CLS).
   // 1.6.5: http to https in the Worker; PUBLIC_ALIAS_HOSTS 301s older domains to the canonical one.
   // 1.6.4: a middle-form COD order is handed to WhatsApp from /thanks; clearer buyer-number note.
   // 1.6.3: CRM templates name the variant, quantity and unit price; no invented strike price; cron heartbeat signal.

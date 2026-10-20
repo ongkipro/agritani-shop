@@ -29,10 +29,51 @@ interface ChangelogRelease {
 // changelog.test.ts fails when version.ts moves without a matching entry here.
 const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
-    version: "1.6.5",
+    version: "1.7.2",
     date: "20 Oktober 2026",
     releaseTag: "2026.10-plugins",
     isLatest: true,
+    highlight: "Teks halaman benar-benar tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Font Inter hanya dalam mode optional",
+        description: "Font dipakai bila siap saat halaman pertama digambar; jika belum, halaman memakai font sistem sampai kunjungan berikutnya. Perbaikan 1.7.1 ternyata belum cukup karena aturan font bawaan paket masih ikut termuat dan menukar font; kini aturan itu dihapus. Hanya subset latin dan latin-ext yang dideklarasikan.",
+      },
+    ],
+  },
+  {
+    version: "1.7.1",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Teks halaman tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Font tidak bertukar di tengah halaman",
+        description: "Font Inter kini dipakai bila sudah siap saat halaman pertama digambar; jika belum, halaman memakai font sistem sampai kunjungan berikutnya. Judul dan paragraf tidak lagi melompat (CLS).",
+      },
+    ],
+  },
+  {
+    version: "1.7.0",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Halaman toko dan landing page terbuka lebih cepat, dan tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Cache halaman dua menit",
+        description:
+          "Beranda, daftar produk, dan landing page disimpan sebentar di edge Cloudflare, sehingga pengunjung berikutnya tidak menunggu render ulang. Perubahan dari admin tampil paling lama dua menit kemudian. Halaman produk, form, terima kasih, dan admin tidak pernah di-cache, dan harga tetap divalidasi ulang saat order.",
+      },
+      {
+        title: "Font dimuat lebih awal",
+        description: "Font Inter dipreload sehingga judul tidak lagi bergeser saat font tiba (CLS).",
+      },
+    ],
+  },
+  {
+    version: "1.6.5",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
     highlight: "Satu domain utama: domain lama dan http diarahkan otomatis, link iklan tetap jalan.",
     changes: [
       {
