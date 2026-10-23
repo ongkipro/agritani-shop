@@ -533,6 +533,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
           product_title: config.productName,
           address: addressInput ? addressInput.value.trim() : "",
           province: state.selectedProvince || state.geoProvince || "",
+          source_page_path: window.location.pathname,
         }),
       })
         .then((response) => {

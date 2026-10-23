@@ -51,7 +51,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Perisai Anti-Bulai Daun Putih Jagung Hibrida',
     productSlug: 'bensu-pupuk-cair-organik',
     description: 'Bentengi daun jagung muda dari spora jamur bulai, daun tegap kaku hijau pekat dan tongkol padat berisi rekor 9.8 ton/Ha.',
-    image: '/images/landing/perisai-anti-bulai/hero-bulai.webp',
+    image: '/images/landing/perisai-anti-bulai/hero-problem.webp',
     isActive: true,
   },
   {
@@ -75,7 +75,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Batang Baja Anti-Rebah Padi Sawah & Jagung',
     productSlug: 'bensu-pupuk-cair-organik',
     description: 'Bikin batang padi dan jagung sekeras kawat tahan badai rendeng, batang tegak lurus sampai panen bebas busuk lumpur.',
-    image: '/images/landing/batang-baja-anti-rebah/hero-batang.webp',
+    image: '/images/landing/batang-baja-anti-rebah/hero-problem.webp',
     isActive: true,
   },
   {
@@ -83,7 +83,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Penyelamat Bawang Merah Moler Inul & Umbi Jumbo',
     productSlug: 'bensu-pupuk-cair-organik',
     description: 'Hentikan serangan jamur Fusarium tanah becek, tegakkan daun kaku jegrik dan cetak umbi merah merona super jumbo.',
-    image: '/images/landing/penyelamat-bawang-moler/hero-bawang.webp',
+    image: '/images/landing/penyelamat-bawang-moler/hero-problem.webp',
     isActive: true,
   },
   {
@@ -99,7 +99,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Pengunci Bunga & Pencegah Rontok Pentil Buah',
     productSlug: 'saratoga-serum-tanaman-premium',
     description: 'Kunci tangkai bunga dan pentil buah agar tidak rontok kena cuaca ekstrem, 95% sukses jadi buah bernas.',
-    image: '/images/landing/pengunci-bunga-anti-rontok/hero-bunga.webp',
+    image: '/images/landing/pengunci-bunga-anti-rontok/hero-problem.webp',
     isActive: true,
   },
   {
@@ -107,7 +107,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Benteng Anti-Patek Buah Cabai Lonyot',
     productSlug: 'saratoga-serum-tanaman-premium',
     description: 'Bikin kulit buah cabai liat sekeras perisai baja, jamur antraknosa rontok gagal tembus dan 98% petikan lolos Grade A.',
-    image: '/images/landing/benteng-anti-patek/hero-patek.webp',
+    image: '/images/landing/benteng-anti-patek/hero-problem.webp',
     isActive: true,
   },
   {
@@ -115,7 +115,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
     title: 'Rahasia Gabah Bernas Padi Sawah Sampai Pangkal',
     productSlug: 'saratoga-serum-tanaman-premium',
     description: 'Daun bendera tegak mengawal pengisian susu gabah, bulir padat sampai pangkal malai dan ubinan tembus rekor 9 ton/Ha.',
-    image: '/images/landing/juara-gabah-bernas/hero-gabah.webp',
+    image: '/images/landing/juara-gabah-bernas/hero-problem.webp',
     isActive: true,
   },
   {
@@ -222,6 +222,30 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image: '/images/landing/booster-bunga-buah-tahunan/hero-problem.webp',
     isActive: true,
   },
+  {
+    slug: 'penakluk-sawit-ganoderma',
+    title: 'Aussie - Penyelamat Sawit Busuk Pangkal Batang (Ganoderma), Pelepah Sengkleh & Daun Tombak',
+    productSlug: 'aussie-pupuk-cair-organik',
+    description: 'Kunci pembusukan jamur Ganoderma di bonggol sawit, pancing akar tombak baru menghujam tanah, dan pulihkan tajuk pelepah hijau mekar produktif.',
+    image: '/images/landing/penakluk-sawit-ganoderma/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'booster-sawit-anti-trek',
+    title: 'Aussie - Booster Bobot Janjang Sawit Anti-Trek Musim Kemarau & Pemecah Bunga Betina',
+    productSlug: 'aussie-pupuk-cair-organik',
+    description: 'Pecahkan kemacetan trek panen sawit, dorong rasio bunga betina di tiap ketiak pelepah, dan dongkrak berat TBS +5 s/d +8 kg per janjang.',
+    image: '/images/landing/booster-sawit-anti-trek/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'booster-tongkol-jagung-bobot',
+    title: 'Bensu - Pengisi Tongkol Jagung Penuh Sampai Ujung (Anti-Ompong) & Pendongkrak Bobot Pipilan',
+    productSlug: 'bensu-pupuk-cair-organik',
+    description: 'Kawal penyerbukan rambut jagung agar tongkol terisi penuh sampai ujung bebas ompong, biji bernas padat, dan rendemen pipilan kering tembus 11+ ton/Ha.',
+    image: '/images/landing/booster-tongkol-jagung-bobot/hero-problem.webp',
+    isActive: true,
+  },
 ];
 
 /**
@@ -231,4 +255,4 @@ export const nativeLandingPages: NativeLandingPage[] = [
  * answers first, so the CMS refuses them. Every entry in `nativeLandingPages`
  * is refused the same way without being repeated here.
  */
-export const installRouteSlugs: string[] = [];
+export const installRouteSlugs: string[] = ['meta-ads'];

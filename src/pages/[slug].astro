@@ -13,6 +13,7 @@ import '../styles/form-hybrid.css';
 import '../styles/landing-pages/landing.css';
 import { defaultCatalogContentId } from '../lib/catalog-feed';
 import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
 import { recentOrderCount } from '../lib/social-proof';
 
 export const prerender = false;
@@ -213,11 +214,13 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
   }
   {
     formSections.length === 0 && (
-      <div id="checkout-form" class="scroll-mt-8">
+      <div id="checkout-form" class="scroll-mt-8 pb-20">
         <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
       </div>
     )
   }
+
+  <StickyLandingCtaBar />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

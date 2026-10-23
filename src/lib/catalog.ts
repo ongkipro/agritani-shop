@@ -21,7 +21,7 @@ async function loadCatalogRows(database: D1Database) {
     database.prepare(`
       SELECT id, product_id, sku, title, price, compare_price, stock
       FROM product_variants
-      ORDER BY product_id ASC, id ASC
+      ORDER BY product_id ASC, price ASC, id ASC
     `),
   ]);
 
@@ -47,7 +47,7 @@ async function loadLocalDevCatalogRows() {
     const variants = db.prepare(`
       SELECT id, product_id, sku, title, price, compare_price, stock
       FROM product_variants
-      ORDER BY product_id ASC, id ASC
+      ORDER BY product_id ASC, price ASC, id ASC
     `).all() as unknown as CatalogVariantRow[];
     return { products, variants };
   } catch {

@@ -21,6 +21,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     address?: string;
     province?: string;
     total_amount?: number;
+    source_page_path?: string;
     website?: unknown;
     honeypot?: unknown;
   } | null;
@@ -92,6 +93,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         : undefined,
       variantId:
         Number.isInteger(variantId) && variantId > 0 ? variantId : undefined,
+      sourcePagePath:
+        String(body.source_page_path || '').slice(0, 500) || undefined,
     });
     // Deliberately no notification. An abandoned capture is a lead to work
     // through in `/admin/orders/abandoned`, not an event worth interrupting an

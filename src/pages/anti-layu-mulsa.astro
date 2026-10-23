@@ -1,15 +1,18 @@
 ---
 /**
- * Native Landing Page: LP-01 Anti-Layu Mulsa Panas (BENSU)
+ * Native Landing Page: Anti-Layu Mulsa Panas: Bensu (BENSU)
  *
- * Master Product: bensu-pupuk-cair-organik
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
  * Kontrak Arsitektur: docs/LANDING-PAGES.md
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
 import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
 import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
 import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
 import { defaultCatalogContentId } from '../lib/catalog-feed';
 import { recentOrderCount } from '../lib/social-proof';
@@ -21,7 +24,9 @@ export const prerender = false;
 
 const SLUG = 'anti-layu-mulsa';
 
-const product = await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik');
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
 if (!product) return Astro.rewrite('/404');
 
 const socialProofOrders = await recentOrderCount(
@@ -29,7 +34,11 @@ const socialProofOrders = await recentOrderCount(
 );
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
-const price = cheapest?.price ?? product.price;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
 const heroImage = '/images/landing/anti-layu-mulsa/hero-problem.webp';
@@ -42,7 +51,7 @@ const heroImage = '/images/landing/anti-layu-mulsa/hero-problem.webp';
   preloadImages={heroImage}
   canonical={canonical}
   hideHeader={true}
-  hideFooter={false}
+  hideFooter={true}
 >
   <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
   <SocialProofToast
@@ -57,406 +66,507 @@ const heroImage = '/images/landing/anti-layu-mulsa/hero-problem.webp';
     price={price}
   />
 
-  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
-    <!-- 1. HERO SECTION -->
-    <section class="bg-white pb-8 text-center">
-      <div class="px-5 pt-8">
-        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight">KAPOK BIBIT MATI DI MULSA PANAS?</span>
-          100% Bibit Berdiri Tegak Sejak Hari Pertama: <span class="hl-brush">NOL BIAYA SULAM!</span>
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">KAPOK BIBIT MATI DI MULSA PANAS?</span>
+          100% Bibit Berdiri Tegak Sejak Hari Pertama: Dijamin <span class="hl-brush">NOL BIAYA SULAM</span>!
         </h1>
-        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
           Cukup celup baki semai 15 menit ke larutan <strong class="text-slate-950 font-bold">BENSU</strong> sebelum pindah tanam. Bibit tahan sengatan mulsa 38°C, daun tidak lemas, dan 48 jam akar putih langsung meledak mencengkeram tanah!
         </p>
       </div>
 
-      <div class="mt-6">
+      <div class="mt-5">
         <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
           <img
             src={heroImage}
-            alt="Dokumentasi petani di bedengan mulsa plastik cabai yang layu kepanasan"
+            alt="Perbandingan bibit cabai layu kepanasan di bedengan mulsa plastik vs berdiri tegak segar dengan Bensu"
             class="h-full w-full object-cover"
             width="960"
-            height="640"
+            height="644"
             loading="eager"
             fetchpriority="high"
             decoding="async"
           />
-          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
-            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
-              Tahan suhu mulsa 38°C: 100% bibit hidup tegap, akar serabut putih meledak dalam 48 jam!
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Tahan Suhu Mulsa 38°C: 100% bibit hidup tegap & akar serabut putih meledak dalam 48 jam!
             </p>
           </div>
         </div>
 
-        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
           <span>Formula Dingin Anti-Stres</span>
           <span class="text-slate-300">•</span>
           <span>Bisa COD (Bayar di Tempat)</span>
           <span class="text-slate-300">•</span>
           <span>Garansi Nol Sulam</span>
         </div>
-
-        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
-          <p class="text-[14.5px] font-bold text-slate-950">Jangan biarkan 20–30% bibit cabai dan tomat mati terpanggang di lubang mulsa.</p>
-          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
-            Uap panas dari balik plastik mulsa perak menyedot cairan batang bibit baru tanam. Kunci tekanan air sel daun dan pacu ledakan bulu akar putih sejak menit pertama pindah tanam.
-          </p>
-        </div>
       </div>
     </section>
 
-    <!-- 2. HARD PROBLEM SECTION -->
-    <section class="bg-red-50/30 px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Kenapa Bibit Baru Tanam <span class="hl-brush-red">Mati Terpanggang</span> di Atas Mulsa?
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Penyebab Bibit <span class="hl-brush-red">Mati Terpanggang di Mulsa</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Saat matahari siang menyengat, bedengan mulsa plastik berubah menjadi pemanggang bagi bibit muda:
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Saat matahari siang menyengat, bedengan mulsa plastik berubah menjadi pemanggang bibit muda:
       </p>
 
       <div class="space-y-4">
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">1. Semburan Uap Panas Lubang Mulsa Tembus 38°C</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Udara panas dari tanah di bawah plastik keluar lewat lubang tanam, tepat menghantam pangkal batang dan daun bawah bibit muda.</p>
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/anti-layu-mulsa/gejala-1.webp"
+              alt="Bibit cabai dan tomat lemas terkulai menempel di plastik mulsa panas hingga gosong"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Semburan Uap Lubang Mulsa 38°C
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Pangkal Batang & Daun Bawah Terpanggang Plastik</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Udara panas dari balik plastik mulsa keluar lewat lubang tanam, menyedot habis cairan batang hingga daun lemas menempel plastik.
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">2. Akar Pindah Tanam Koma & Daun Gosong Menempel Plastik</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Akar serabut yang baru dicabut dari baki semai belum sanggup menyedot air tanah. Daun lemas terkulai menempel di mulsa panas hingga gosong mengering.</p>
-        </div>
-
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">3. Rugi Biaya Benih Sulaman & Pertumbuhan Belang</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Petani terpaksa keluar uang jutaan lagi untuk beli bibit sulaman dan upah buruh tanam, sementara umur tanaman di satu kebun jadi belang tidak seragam.</p>
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/anti-layu-mulsa/gejala-2.webp"
+              alt="Akar bibit pindah tanam mengalami stres koma dan gagal menyedot air tanah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Akar Pindah Tanam Koma & Sulam 20%
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Rugi Jutaan Beli Bibit Sulaman & Kebun Belang</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Akar serabut yang baru dicabut belum sanggup menyedot air tanah sehingga 20–30% bibit mati dan umur tanaman di kebun jadi belang.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. PHYSICAL COMPARISON SECTION -->
-    <section class="bg-white px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Bedanya Nyata: <span class="hl-brush-red">Layu Terpanggang</span> vs <span class="hl-brush">100% Tegak Segar</span>
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Layu Terpanggang</span> Jadi <span class="hl-brush">100% Tegak Segar</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Lihat perbedaan fisik bibit setelah 24 jam pindah tanam di bedengan mulsa saat cuaca panas terik:
-      </p>
 
-      <div class="grid grid-cols-2 gap-3.5">
-        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
-          <img
-            src="/images/landing/anti-layu-mulsa/kondisi-layu.webp"
-            alt="Kondisi bibit cabai layu lemas dan daun gosong di atas plastik mulsa panas"
-            class="aspect-[3/2] w-full object-cover"
-            width="480"
-            height="320"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-            Tanpa BENSU
-          </div>
-          <div class="p-3">
-            <h3 class="text-[13px] font-bold text-slate-900">Lemas & Daun Gosong</h3>
-            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
-              Daun terkulai menempel plastik mulsa panas, banyak bibit mati dan wajib sulam ulang.
-            </p>
-          </div>
-        </div>
-
-        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
-          <img
-            src="/images/landing/anti-layu-mulsa/kondisi-tegap.webp"
-            alt="Kondisi bibit cabai berdiri tegak segar di lubang mulsa plastik"
-            class="aspect-[3/2] w-full object-cover"
-            width="480"
-            height="320"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-            Pakai BENSU
-          </div>
-          <div class="p-3">
-            <h3 class="text-[13px] font-bold text-emerald-800">100% Berdiri Tegak</h3>
-            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
-              Daun kaku segar menantang terik matahari, akar langsung aktif menancap ke tanah.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE -->
-    <section class="bg-white px-5 py-10">
-      <div class="-mx-5 mb-6 overflow-hidden bg-slate-100">
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
         <img
-          src="/images/landing/anti-layu-mulsa/bensu-hero.webp"
-          alt="Botol Resmi Pupuk Cair Organik BENSU di Bedengan Mulsa Cabai"
+          src="/images/landing/anti-layu-mulsa/overclaim-timeline.webp"
+          alt="Tahapan pindah tanam bibit cabai dari celup baki semai hingga 48 jam akar meledak dan 12 HST mekar serempak"
           class="aspect-[16/9] w-full object-cover"
           width="960"
-          height="540"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Jam 0: Celup 15 Menit</span>
+          <span class="text-amber-300">48 Jam: Akar Putih</span>
+          <span class="text-emerald-400">12 HST: Mekar Serempak</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/kondisi-rusak.webp"
+            alt="Kondisi bibit cabai tanpa Bensu layu lemas dan daun gosong di atas plastik mulsa panas"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Lemas & Daun Gosong</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Daun terkulai menempel plastik mulsa, banyak mati & wajib sulam.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/kondisi-pulih.webp"
+            alt="Kondisi bibit cabai dengan Bensu berdiri tegak segar di lubang mulsa plastik"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">100% Berdiri Tegak</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Daun kaku segar menantang terik matahari, akar langsung aktif.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/anti-layu-mulsa/bensu-hero.webp"
+          alt="Botol resmi Pupuk Cair Organik BENSU di bedengan mulsa cabai"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
           loading="lazy"
           decoding="async"
         />
       </div>
 
-      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
         <img
           src={product.heroImage}
-          alt="Foto Botol Resmi BENSU Segel Hologram"
-          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
-          width="64"
-          height="64"
+          alt="Foto Botol Resmi BENSU Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
           loading="lazy"
           decoding="async"
         />
         <div class="min-w-0">
-          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
-          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
-            Tersedia varian 500ml & 1 Liter dengan tutup segel hologram resmi Teknologi Thailand.
+          <p class="text-[12px] font-bold text-emerald-950">BENSU Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Nutrisi Dingin Perisai Pindah Tanam + Pemicu Akar Serabut Putih (500ml & 1L).
           </p>
         </div>
       </div>
 
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        BENSU — Nutrisi Dingin <span class="hl-brush">Perisai Pindah Tanam</span>
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Perisai Pindah Tanam BENSU</span> pada Bibit
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        BENSU bekerja sebagai nutrisi pemulih sel dingin dengan Sulfur dan Molibdenum aktif. Saat perakaran baki semai dicelupkan, nutrisi langsung mengunci cairan segar daun dari penguapan ekstrem sekaligus memacu keluarnya bulu akar baru dalam waktu singkat.
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Mengunci tekanan air sel daun sekaligus memacu ledakan bulu akar putih sejak menit pertama:
       </p>
 
-      <div class="mt-8 space-y-5">
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">Tahan Sengatan Terik Mulsa Hingga 38°C</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Mengunci cairan segar di dalam daun sehingga bibit tidak lemas, tidak dehidrasi, dan tidak gosong menempel di plastik mulsa.
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/anti-layu-mulsa/overclaim-1.webp"
+              alt="Bibit cabai dan tomat berdiri tegak segar tahan sengatan terik mulsa 38 derajat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • TAHAN TERIK MULSA 38°C
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kunci Cairan Segar Daun, Anti-Lemas & Anti-Dehidrasi!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menjaga tekanan turgor sel daun dari penguapan ekstrem sehingga bibit tidak terkulai menempel di plastik mulsa panas.
           </p>
         </div>
 
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">48 Jam Akar Serabut Putih Meledak</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Akar tidak mengalami fase tidur (koma) pindah tanam; bulu akar putih baru langsung tumbuh lebat mencengkeram tanah bedengan.
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/anti-layu-mulsa/overclaim-2.webp"
+              alt="Perakaran bibit cabai serabut putih meledak lebat dalam 48 jam setelah celup Bensu"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • AKAR PUTIH MELEDAK 48 JAM
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Tanpa Fase Koma, Bulu Akar Langsung Cengkeram Tanah!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Bulu akar putih baru langsung tumbuh lebat menembus media bedengan untuk menyedot air dan hara secara mandiri.
           </p>
         </div>
 
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">100% Bibit Hidup Seragam, Nol Biaya Sulam</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Modal benih mahal aman seutuhnya, seluruh barisan bedengan tumbuh serempak tanpa ada tanaman yang tertinggal kerdil.
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/anti-layu-mulsa/overclaim-3.webp"
+              alt="Barisan bedengan mulsa cabai tumbuh seragam 100 persen hidup tanpa sulaman"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • 100% SERAGAM NOL SULAM
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Hemat Jutaan Biaya Benih Sulaman & Upah Buruh Tanam!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Seluruh barisan bedengan tumbuh serempak sejak minggu pertama tanpa ada tanaman yang tertinggal kerdil.
           </p>
         </div>
       </div>
 
-      <div class="-mx-5 mt-8 relative">
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
         <img
-          src="/images/landing/anti-layu-mulsa/akar-ledak.webp"
-          alt="Foto bukti perakaran bibit cabai serabut putih meledak lebat setelah celup BENSU"
+          src="/images/landing/anti-layu-mulsa/macro-proof.webp"
+          alt="Bukti makro perakaran bibit cabai serabut putih aktif mencengkeram tanah bedengan"
           class="aspect-[16/9] w-full object-cover"
           width="960"
-          height="540"
+          height="536"
           loading="lazy"
           decoding="async"
         />
-        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
-          <p class="text-[12px] font-bold text-[#BBF7D0]">
-            Bukti 48 Jam: Ledakan bulu akar putih aktif mencengkeram media tanah bedengan.
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Bukti 48 Jam: Ledakan bulu akar putih aktif mencengkeram media tanah bedengan!
           </p>
         </div>
       </div>
     </section>
 
-    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
-    <section class="bg-emerald-50/20 px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Cuma 15 Menit <span class="hl-brush">Celup Baki Semai</span> Sebelum Tanam
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Cuma 15 Menit Celup Semai</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Praktis tanpa alat rumit, cukup siapkan bak atau ember air di pinggir bedengan sebelum bibit ditancapkan:
-      </p>
 
-      <div class="-mx-5 mb-8 mt-2">
+      <div class="-mx-5 my-4">
         <img
-          src="/images/landing/anti-layu-mulsa/demo-celup.webp"
-          alt="Petani mencelupkan baki tray semai bibit cabai ke larutan BENSU"
+          src="/images/landing/anti-layu-mulsa/aplikasi-kebun.webp"
+          alt="Petani mencelupkan baki tray semai bibit cabai ke larutan Bensu sebelum tanam"
           class="aspect-[16/9] w-full object-cover"
           width="960"
-          height="540"
+          height="536"
           loading="lazy"
           decoding="async"
         />
       </div>
 
-      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            1
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Siapkan Larutan Celup</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Tuangkan 2–3 tutup botol BENSU ke dalam 1 bak atau ember air bersih (sekitar 16 liter), lalu aduk merata.
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Tuang <strong>2–3 tutup BENSU</strong> ke bak berisi 16L air bersih.
           </p>
         </div>
 
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            2
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Rendam Baki Semai 10–15 Menit</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Celupkan bagian bawah baki semai selama 10–15 menit hingga larutan BENSU meresap penuh ke gumpalan akar bibit.
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Celup 15 Menit</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Rendam bawah <strong>baki semai 10–15 menit</strong> hingga meresap.
           </p>
         </div>
 
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            3
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Tanam & Kocor Sisa Larutan</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Tancapkan bibit ke lubang mulsa seperti biasa. Sisa air rendaman langsung dikocorkan ke pangkal lubang tanam.
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Tanam & Kocor</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Tanam ke mulsa & <strong>kocorkan sisa larutan</strong> ke pangkal.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- 6. TESTIMONIALS SECTION -->
-    <section class="bg-white px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Kisah Nyata Petani: <span class="hl-brush">Bebas Sulam & Panen Lebat</span>
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Lapangan: <span class="hl-brush">Bebas Sulam & Panen Lebat</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
-        Lebih dari 1.200 petani cabai dan tomat membuktikan bibitnya langsung berdiri tegak di bedengan mulsa panas:
-      </p>
 
-      <div class="space-y-8">
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak Haji Mastur Efendi (49 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Sumber Makmur, Desa Karanganyar, Wongsorejo, Banyuwangi</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Rawit Kaliber 5.000 Pohon • Pindah Tanam Cuaca Terik</p>
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/testi-1.webp"
+            alt="Dokumentasi Pak Haji Mastur Efendi di lahan cabai rawit Kaliber Wongsorejo Banyuwangi"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Mastur Efendi, Banyuwangi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">5.000 Rawit Tegak</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Tanam 5.000 bibit cabai rawit Kaliber di mulsa pas cuaca panas terik. Baki semai dicelup BENSU 15 menit, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">bibit langsung tegak berdiri semua tanpa ada yang layu kepanasan!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/anti-layu-mulsa/testi-mastur.webp"
-              alt="Dokumentasi Pak Haji Mastur Efendi di lahan cabai rawit Kaliber Banyuwangi"
-              class="h-full w-full object-cover"
-              width="960"
-              height="540"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Kemarin saya tanam 5.000 bibit cabai rawit Kaliber di lahan mulsa pas cuaca panas terik. Baki semai saya celup dulu pakai larutan BENSU 15 menit sebelum ditanam. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Bibit langsung tegak berdiri semua tanpa ada yang layu kepanasan!</strong> Cuma mati belasan batang gara-gara jangkrik."
-          </p>
-
-          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         </div>
 
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak Nyoman Suardana (42 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Rinjani Hijau, Desa Sembalun Bumbung, Sembalun, Lombok Timur</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Tomat Servo F1 4.000 Pohon • Umur 12 HST Mekar Serempak</p>
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/testi-2.webp"
+            alt="Dokumentasi Pak Nyoman Suardana di kebun tomat Servo Sembalun Lombok Timur"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Nyoman Suardana, Lombok Timur</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">12 HST Mekar Rata</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Tanam 4.000 pohon tomat Servo pas siang terik. Dicelup BENSU, tanaman tetap segar kaku dan <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">umur 12 hari daunnya sudah mekar hijau lebar serempak!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/anti-layu-mulsa/testi-nyoman.webp"
-              alt="Dokumentasi Pak Nyoman Suardana di kebun tomat Servo Sembalun Lombok Timur"
-              class="h-full w-full object-cover"
-              width="960"
-              height="540"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Tanam 4.000 pohon tomat Servo di bedengan mulsa pas siang terik. <strong class="box-decoration-clone bg-red-100 px-1.5 pb-0.5 text-slate-950 font-semibold">Biasanya tanaman stres lemas berhari-hari</strong>. Dicelup BENSU, tanaman tetap segar kaku dan <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">umur 12 hari daunnya sudah mekar hijau lebar serempak!</strong>"
-          </p>
-
-          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         </div>
 
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak Sukardi (44 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tani Maju, Desa Tulungrejo, Pare, Kediri</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Cabai Rawit Ori 212 3.500 Pohon • Hemat Biaya Bibit Sulaman</p>
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/testi-3.webp"
+            alt="Dokumentasi Pak Sukardi di kebun cabai rawit Ori 212 Pare Kediri"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Sukardi, Pare, Kediri</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Nol Biaya Sulam</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya pindah tanam Ori 212 sulaman habis 20%. Kemarin celup BENSU, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">praktis tidak ada yang mati layu kepanasan, hemat jutaan biaya bibit!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/anti-layu-mulsa/testi-sukardi.webp"
-              alt="Dokumentasi Pak Sukardi di kebun cabai rawit Ori 212 Pare Kediri"
-              class="h-full w-full object-cover"
-              width="960"
-              height="540"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Biasanya kalau pindah tanam cabai Ori 212, sulaman bisa habis 20%. Kemarin celup larutan BENSU, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">praktis tidak ada yang mati layu kepanasan, hemat jutaan biaya bibit dan buruh!</strong>"
-          </p>
         </div>
       </div>
 
-      <div class="-mx-5 mt-10 relative">
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
         <img
-          src="/images/landing/anti-layu-mulsa/hero.webp"
+          src="/images/landing/anti-layu-mulsa/hamparan-kebun.webp"
           alt="Foto panorama hamparan bedengan mulsa cabai tumbuh seragam dan tegak"
           class="aspect-[16/9] w-full object-cover"
           width="960"
-          height="540"
+          height="536"
           loading="lazy"
           decoding="async"
         />
-        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
-          <p class="text-[12px] font-bold text-[#BBF7D0]">
-            Hamparan Kebun Seragam: Bedengan mulsa berdiri hijau tegap merata tanpa ada tanaman yang mogok tumbuh.
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Hamparan Kebun Seragam: Bedengan mulsa berdiri hijau tegap merata tanpa ada yang mogok tumbuh!
           </p>
         </div>
       </div>
 
-      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
-        <img
-          src="/images/landing/anti-layu-mulsa/panen-jumbo.webp"
-          alt="Foto petani memanen cabai merah besar segar mengkilap dari lahan mulsa"
-          class="aspect-[16/9] w-full object-cover"
-          width="960"
-          height="540"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="p-3 text-center">
-          <p class="text-[13px] font-semibold text-slate-800">
-            Hasil Akhir: Tanaman yang bebas stres sejak pindah tanam menghasilkan panen cabai merah berbobot lebat.
-          </p>
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/panen-rekor.webp"
+            alt="Petani memanen cabai merah besar segar mengkilap dari lahan mulsa"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Panen Serempak</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bebas stres sejak pindah tanam</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/anti-layu-mulsa/panen-2.webp"
+            alt="Pangkal batang cabai kokoh di lubang mulsa dengan ranting atas sarat buah"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Populasi 100% Utuh</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Nol lubang mulsa kosong</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 7. CHECKOUT FORM SECTION -->
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
     <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
       <div class="px-5 pb-6 text-center">
-        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
           Form Pemesanan <span class="hl-brush">Paket Anti-Layu Mulsa</span>
         </h2>
         <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
-          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
         </p>
       </div>
 
-      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
     </section>
   </main>
+
+  <StickyLandingCtaBar />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

@@ -2,13 +2,17 @@
 /**
  * Native Landing Page: Rahasia Gabah Bernas Padi Sawah Sampai Pangkal (SARATOGA)
  *
- * Master Product: saratoga-serum-tanaman-premium
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: saratoga-serum-tanaman-premium (ID: 50510)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
 import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
 import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
 import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
 import { defaultCatalogContentId } from '../lib/catalog-feed';
 import { recentOrderCount } from '../lib/social-proof';
@@ -20,7 +24,9 @@ export const prerender = false;
 
 const SLUG = 'juara-gabah-bernas';
 
-const product = await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium');
+const product =
+  (await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium')) ??
+  (await getStorefrontProduct(Astro.locals, '50510'));
 if (!product) return Astro.rewrite('/404');
 
 const socialProofOrders = await recentOrderCount(
@@ -28,10 +34,14 @@ const socialProofOrders = await recentOrderCount(
 );
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
-const price = cheapest?.price ?? product.price;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
-const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
+const heroImage = '/images/landing/juara-gabah-bernas/hero-problem.webp';
 ---
 
 <BaseLayout
@@ -41,8 +51,9 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
   preloadImages={heroImage}
   canonical={canonical}
   hideHeader={true}
-  hideFooter={false}
+  hideFooter={true}
 >
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
   <SocialProofToast
     orderCount={socialProofOrders}
     heroSelector="[data-landing-hero]"
@@ -55,47 +66,39 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
     price={price}
   />
 
-  <main class="relative mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
-    <div
-      data-landing-hero
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 h-screen"
-    ></div>
-
-    <!-- 1. HERO SECTION (High-Impact Mobile First-Fold / Stop Scrolling Hook) -->
-    <section class="bg-white pb-8 text-center">
-      <div class="px-5 pt-8">
-        <h1 class="mx-auto max-w-[440px] text-[clamp(28px,7.8vw,34px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight">JANGAN BIARKAN GABAH KOPONG!</span>
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">JANGAN BIARKAN GABAH KOPONG!</span>
           Bulir Bernas Sampai Pangkal Malai: <span class="hl-brush">REKOR 9 TON/HA</span>
         </h1>
-        <p class="mx-auto mt-4 max-w-[400px] text-[15.5px] font-medium leading-relaxed text-slate-700">
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
           Daun bendera tetap hijau tegak 45° mengawal pengisian susu gabah hingga hari panen! Cukup semprot <strong class="text-slate-950 font-bold">SARATOGA</strong>, bebas blast patah leher, bulir kuning emas padat tanpa gabah melompong sampai pangkal!
         </p>
       </div>
 
-      <div class="mt-6">
-        <!-- Hero Image: Fullwidth Edge-to-Edge with Proof Banner Overlay -->
+      <div class="mt-5">
         <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
           <img
             src={heroImage}
             alt="Dokumentasi malai padi kuning keemasan bernas padat sampai pangkal sehabis semprot SARATOGA"
             class="h-full w-full object-cover"
             width="960"
-            height="536"
+            height="644"
             loading="eager"
             fetchpriority="high"
             decoding="async"
           />
-          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/80 px-4 py-2.5 text-center backdrop-blur-sm">
-            <p class="text-[12.5px] font-bold text-[#BBF7D0]">
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
               Gabah Hampa &lt;3%: Bulir padat terisi sampai pangkal malai, timbangan naik 20%!
             </p>
           </div>
         </div>
 
-        <!-- Trust Points Row -->
-        <div class="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 px-4 text-[12px] font-semibold text-slate-700">
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
           <span>Serum Pemadat Bulir Gabah</span>
           <span class="text-slate-300">•</span>
           <span>Bisa COD (Bayar di Tempat)</span>
@@ -103,103 +106,167 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
           <span>Garansi Rekor Tonase</span>
         </div>
 
-        <!-- Takeaway Box with left accent border -->
-        <div class="mt-5 mx-5 text-left border-l-2 border-emerald-600 pl-4 bg-emerald-50/40 py-2.5 pr-3 rounded-r">
-          <p class="text-[14.5px] font-bold text-slate-950">Jangan biarkan timbangan panen Anda anjlok karena gabah melompong hampa.</p>
-          <p class="text-[13px] leading-relaxed text-slate-600 mt-1">
-            Pengisian bulir optimal ditentukan oleh kesegaran daun bendera pada umur 65–85 HST. Pompa translokasi pati dengan asam amino generatif agar bulir terbawah terisi susu padat.
-          </p>
+        <div class="mx-5 mt-4 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[12px] font-semibold text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Pompa pengisian susu gabah padat berisi sampai bulir pangkal malai</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Jaga daun bendera tetap hijau tegak 45° sampai hari panen raya</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Tekan gabah hampa di bawah 3% & perkuat tangkai dari blast patah leher</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Dongkrak bobot timbangan karung 15–25% & rendemen beras utuh tinggi</span>
+            </li>
+          </ul>
+
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-[#14532D] px-4 py-2.5 text-center text-[13px] font-bold text-white shadow-sm transition-transform active:scale-[0.99]"
+          >
+            <span>Pesan Paket Pemadat Gabah Bernas — Bisa COD</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- 2. HARD PROBLEM SECTION (Fakta Lapangan Gabah Kopong) -->
-    <section class="bg-red-50/30 px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Kenapa Bulir Gabah Bisa <span class="hl-brush-red">Banyak Kopong Hampa</span> di Pangkal?
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Penyebab Bulir Gabah <span class="hl-brush-red">Banyak Kopong Hampa di Pangkal</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Banyak petani mengira gabah hampa hal biasa. Padahal saat bunting tua dan keluar malai, ada 3 penyebab utama yang memutus pengisian susu:
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa timbangan panen sering anjlok 20% saat padi memasuki fase bunting tua (65–85 HST):
       </p>
 
       <div class="space-y-4">
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">1. Daun Bendera Mengering Sebelum Waktunya</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Jamur hawar pelepah dan cuaca ekstrem bikin daun bendera mati prematur umur 70 HST. Pabrik energi fotosintesis tutup sebelum bulir terisi.</p>
-        </div>
-
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">2. Aliran Susu Terputus di Tengah Jalan</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Aliran nutrisi terhenti sehingga bulir bagian pangkal malai tidak kebagian pati dan menjadi gabah melompong hampa.</p>
-        </div>
-
-        <div>
-          <h3 class="text-[15.5px] font-bold text-slate-900">3. Serangan Jamur Blast Patah Leher</h3>
-          <p class="text-[14px] text-slate-600 mt-0.5 leading-relaxed">Tangkai malai membusuk patah diguyur hujan malam, bulir gabah memutih hampa dan timbangan drop drastis saat dipanen.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. PHYSICAL COMPARISON SECTION (Perbandingan Fisik Lapangan) -->
-    <section class="bg-white px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Bedanya Nyata: <span class="hl-brush-red">Gabah Melompong Hampa</span> vs <span class="hl-brush">Bulir Kuning Bernas</span>
-      </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Gabah hampa memangkas hasil panen hingga 20%. Tapi dengan pengawalan nutrisi daun bendera, bulir padi terisi padat sampai pangkal:
-      </p>
-
-      <div class="grid grid-cols-2 gap-3.5">
-        <!-- Card Bad (Kondisi Hampa) -->
-        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
-          <img
-            src="/images/landing/juara-gabah-bernas/kondisi-hampa.webp"
-            alt="Kondisi bulir gabah melompong hampa putih di pangkal malai"
-            class="aspect-[3/2] w-full object-cover"
-            width="480"
-            height="320"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-            Tanpa Pengisi Malai
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/juara-gabah-bernas/gejala-1.webp"
+              alt="Daun bendera padi mengering prematur sebelum pengisian bulir gabah selesai"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Daun Bendera Kering Prematur
+            </span>
           </div>
-          <div class="p-3">
-            <h3 class="text-[13px] font-bold text-slate-900">Gabah Melompong Hampa</h3>
-            <p class="text-[11.5px] text-slate-500 mt-0.5 leading-relaxed">
-              Pangkal malai kopong keputihan, timbangan anjlok drastis.
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Pabrik Fotosintesis Tutup di Umur 70 HST</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Ketika daun bendera mengering lebih awal, aliran susu pati terputus di tengah jalan sehingga bulir pangkal malai tidak kebagian isi.
             </p>
           </div>
         </div>
 
-        <!-- Card Good (Hasil Saratoga) -->
-        <div class="relative overflow-hidden bg-slate-50/60 rounded-lg border border-slate-100 shadow-sm">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/juara-gabah-bernas/gejala-2.webp"
+              alt="Serangan jamur blast patah leher membuat malai padi putih kopong melompong"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Blast Patah Leher & Malai Putih
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Tangkai Malai Membusuk Patah & Gabah Melompong</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Tanpa penguatan silika dan kalium ionik, leher malai mudah patah terserang jamur blast saat hujan malam dan gabah kopong massal.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON (Full Visual Overclaim) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Gabah Hampa</span> Jadi <span class="hl-brush">Kuning Bernas</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/juara-gabah-bernas/overclaim-timeline.webp"
+          alt="Tahapan pengisian bulir gabah dari bunting tua hingga malai merunduk bernas penuh dengan Saratoga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">60 HST: Malai Keluar</span>
+          <span class="text-amber-300">75 HST: Isi Susu Padat</span>
+          <span class="text-emerald-400">90 HST: Bernas Penuh</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
           <img
-            src="/images/landing/juara-gabah-bernas/kondisi-bernas.webp"
-            alt="Kondisi malai padi bernas kuning padat berisi sampai pangkal"
-            class="aspect-[3/2] w-full object-cover"
-            width="480"
-            height="320"
+            src="/images/landing/juara-gabah-bernas/kondisi-rusak.webp"
+            alt="Kondisi bulir gabah melompong hampa putih di pangkal malai"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
             loading="lazy"
             decoding="async"
           />
-          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa SARATOGA
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Gabah Melompong Hampa</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Pangkal malai kopong keputihan, timbangan panen anjlok drastis.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/kondisi-pulih.webp"
+            alt="Kondisi malai padi bernas kuning padat berisi sampai pangkal"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
             Pakai SARATOGA
           </div>
-          <div class="p-3">
-            <h3 class="text-[13px] font-bold text-emerald-800">Bulir Kuning Bernas</h3>
-            <p class="text-[11.5px] text-slate-600 mt-0.5 leading-relaxed">
-              Padat berisi sampai pangkal leher, malai merunduk berat.
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Bulir Kuning Bernas</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Padat berisi sampai pangkal leher, malai merunduk berat berbobot.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. PRODUCT SPECIFICATION & KNOWLEDGE (Solusi Produk SARATOGA Serum Padi) -->
-    <section class="bg-white px-5 py-10">
-      <!-- Fullwidth Product Banner -->
-      <div class="-mx-5 mb-6">
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Image -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
         <img
           src="/images/landing/juara-gabah-bernas/saratoga-hero.webp"
           alt="Botol Serum Tanaman SARATOGA di Hamparan Sawah Padi Kuning Emas"
@@ -211,58 +278,114 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
         />
       </div>
 
-      <div class="mb-6 flex items-center gap-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 p-3">
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
         <img
           src={product.heroImage}
           alt="Foto Botol Resmi SARATOGA Segel Hologram"
-          class="h-16 w-16 shrink-0 rounded-lg object-contain bg-white border border-emerald-100 p-0.5 shadow-sm"
-          width="64"
-          height="64"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
           loading="lazy"
           decoding="async"
         />
         <div class="min-w-0">
-          <p class="text-[12.5px] font-bold text-emerald-950">Kemasan Segel Resmi Berhologram</p>
-          <p class="text-[11px] text-emerald-800 leading-snug mt-0.5">
-            Tersedia varian 500ml & 1 Liter dengan formula serum pemadat bulir gabah dan segel hologram original.
+          <p class="text-[12px] font-bold text-emerald-950">SARATOGA Original, Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Japanese Pro-Plant Complex™ 47.5% + Kalium Terionisasi Pemadat Bulir (500ml & 1L).
           </p>
         </div>
       </div>
 
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        SARATOGA — Serum Padi <span class="hl-brush">Pemadat Bulir Bernas</span>
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Serum Padi SARATOGA</span> Pemadat Bulir Bernas
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        SARATOGA mengandung formula Japanese Pro-Plant Complex™ 47.5% dan kalium terionisasi yang memompa translokasi karbohidrat langsung ke dalam rongga gabah hingga bulir terbawah di pangkal malai. Menjaga daun bendera tetap segar hijau tegak sampai hari panen raya.
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Memompa translokasi karbohidrat langsung ke dalam rongga gabah hingga bulir terbawah:
       </p>
 
-      <div class="mt-8 space-y-5">
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">Gabah Padat Berisi Sampai Pangkal Malai</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Tidak ada lagi bulir gabah pangkal yang putih kopong melompong, semua padat terisi susu matang sempurna.
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/juara-gabah-bernas/overclaim-1.webp"
+              alt="Daun bendera padi berdiri hijau tegak 45 derajat mengawal malai emas"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • DAUN BENDERA TEGAK 45°
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kawal Pengisian Susu Gabah Sampai Hari Panen!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menjaga daun bendera tetap segar hijau tegak sampai panen raya sehingga fotosintesis memompa pati tanpa putus.
           </p>
         </div>
 
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">Gabah Hampa Kopong Ditekan di Bawah 3%</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Tingkat kematangan seragam sempurna dari ujung sampai pangkal leher tangkai malai.
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/juara-gabah-bernas/overclaim-2.webp"
+              alt="Malai padi kuning emas bernas padat berisi sampai bulir pangkal leher"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • GABAH HAMPA DI BAWAH 3%
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Padat Berisi Sampai Pangkal Malai & Bebas Patah Leher!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Tidak ada lagi bulir pangkal yang putih kopong melompong; kematangan kuning emas seragam dari ujung sampai pangkal leher.
           </p>
         </div>
 
-        <div class="border-l-2 border-emerald-600 pl-4 py-1">
-          <h3 class="text-[15.5px] font-bold text-slate-900">Timbangan Melonjak 15-25% Lebih Berbobot</h3>
-          <p class="text-[14px] text-slate-600 mt-1 leading-relaxed">
-            Ubinan panen tembus rekor 8.9 - 9 Ton/Ha dengan rendemen giling beras utuh super tinggi.
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/juara-gabah-bernas/overclaim-3.webp"
+              alt="Panen raya padi sawah dengan karung gabah padat berbobot tinggi"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • TIMBANGAN NAIK 15–25%
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Ubinan Tembus 8,9–9 Ton/Ha & Beras Utuh Super!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Bobot per 1.000 bulir meningkat drastis dengan rendemen giling beras kepala utuh yang dibeli tengkulak harga tertinggi.
           </p>
         </div>
       </div>
 
-      <!-- Macro Shoot Explosion Photo Banner (Fullwidth Edge-to-Edge) -->
-      <div class="-mx-5 mt-8 relative">
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
         <img
-          src="/images/landing/juara-gabah-bernas/daun-bendera.webp"
+          src="/images/landing/juara-gabah-bernas/macro-proof.webp"
           alt="Foto makro daun bendera padi hijau tegak 45 derajat mengawal malai"
           class="aspect-[16/9] w-full object-cover"
           width="960"
@@ -270,27 +393,23 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
           loading="lazy"
           decoding="async"
         />
-        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
-          <p class="text-[12px] font-bold text-[#BBF7D0]">
-            Daun Bendera Tegak Hijau: Mengawal pengisian susu gabah sampai bulir kuning mengkilap.
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Daun Bendera Tegak Hijau: Mengawal pengisian susu gabah sampai bulir kuning mengkilap!
           </p>
         </div>
       </div>
     </section>
 
-    <!-- 5. HOW IT WORKS / CARA APLIKASI LAHAN -->
-    <section class="bg-emerald-50/20 px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Sederhana & <span class="hl-brush">Cepat Dipraktekkan</span> di Sawah
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span> di Sawah
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-6">
-        Cukup 2 kali aplikasi di fase krusial pengisian malai padi:
-      </p>
 
-      <!-- Fullwidth Photo: Petani Aplikasi Semprot di Kebun -->
-      <div class="-mx-5 mb-8 mt-2">
+      <div class="-mx-5 my-4">
         <img
-          src="/images/landing/juara-gabah-bernas/semprot-padi.webp"
+          src="/images/landing/juara-gabah-bernas/aplikasi-kebun.webp"
           alt="Petani menyemprot kabut serum pemadat bulir di sawah padi"
           class="aspect-[16/9] w-full object-cover"
           width="960"
@@ -300,134 +419,108 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
         />
       </div>
 
-      <!-- Vertical Timeline Cards -->
-      <div class="relative border-l-2 border-emerald-100/80 pl-7 space-y-4 ml-2 mt-6">
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            1
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Takaran Tepat</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Campurkan 2-3 tutup botol (25-30 ml) SARATOGA per tangki 16L air bersih.
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Campur <strong>25–30 ml SARATOGA</strong> (2–3 tutup) per tangki 16L.
           </p>
         </div>
 
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            2
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Semprot Fase Bunting & Malai Keluar</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Semprot kabut saat padi bunting tua (malai keluar 5%) dan saat pengisian bulir susu (umur 70-75 HST).
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi 1</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut saat <strong>bunting tua (malai keluar 5%)</strong>.
           </p>
         </div>
 
-        <div class="relative bg-white p-4 rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-          <span class="absolute -left-[41px] top-4 flex h-7 w-7 items-center justify-center rounded-full bg-[#14532D] text-white text-[12px] font-bold ring-4 ring-white shadow-sm shadow-emerald-200">
-            3
-          </span>
-          <h3 class="text-[15px] font-bold text-slate-900">Pengisian Bulir Maksimal</h3>
-          <p class="text-[13.5px] text-slate-600 mt-1.5 leading-relaxed">
-            Daun bendera tetap tegak 45° hijau segar mengawal aliran susu hingga malai merunduk penuh kuning emas sampai panen raya.
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi 2</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi saat <strong>pengisian susu gabah (70–75 HST)</strong>.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- 6. TESTIMONIALS SECTION (Hasil Nyata di Sawah Petani) -->
-    <section class="bg-white px-5 py-10">
-      <h2 class="text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-        Kisah Nyata Petani: <span class="hl-brush">Rekor Tonase Gabah Bernas</span>
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani: <span class="hl-brush">Rekor Tonase Gabah Bernas</span>
       </h2>
-      <p class="text-[15px] leading-relaxed text-slate-600 mt-3 mb-8">
-        Lebih dari 1.700 petani padi sawah membuktikan sendiri lonjakan tonase panennya:
-      </p>
 
-      <div class="space-y-8">
-        <!-- Testimoni 1: Pak Wardoyo -->
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak Wardoyo (50 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Tani Mulyo, Desa Bentak, Kec. Sidoharjo, Kab. Sragen</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Inpari 32 • Ubinan Tembus 8.9 Ton/Ha</p>
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/testi-1.webp"
+            alt="Dokumentasi panen padi Pak Wardoyo ubinan 8.9 ton di Sragen"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Wardoyo, Sidoharjo, Sragen</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Ubinan 8,9 Ton/Ha</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Padi Inpari 32 1 Ha disemprot SARATOGA saat keluar malai & pengisian bulir. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Daun bendera hijau tegak sampai panen, ubinan tembus 8,9 ton/Ha!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/juara-gabah-bernas/testi-wardoyo.webp"
-              alt="Dokumentasi panen padi Pak Wardoyo ubinan 8.9 ton di Sragen"
-              class="h-full w-full object-cover"
-              width="960"
-              height="536"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Padi Inpari 32 seluas 1 Ha aplikasi SARATOGA saat malai keluar dan pengisian bulir. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Daun bendera tetap hijau tegak sampai panen, bulir gabah montok bernas sampai pangkal</strong>. Ubinan tembus 8.9 ton gabah bersih per hektar, tengkulak bayar harga tertinggi!"
-          </p>
-
-          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         </div>
 
-        <!-- Testimoni 2: Pak H. Dedi Junaedi -->
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak H. Dedi Junaedi (54 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Padasuka, Desa Rawagempol Kulon, Kec. Cilamaya Wetan, Kab. Karawang</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Ciherang • Gabah Hampa Turun di Bawah 3%</p>
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/testi-2.webp"
+            alt="Dokumentasi malai padi bernas Pak H. Dedi Junaedi di Karawang"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Dedi Junaedi, Karawang</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">+18 Kg per Kuintal</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya Ciherang pangkal malai banyak kopong. Pakai SARATOGA, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">gabah hampa di bawah 3% & timbangan karung naik 18 kg per kuintal!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/juara-gabah-bernas/testi-dedi.webp"
-              alt="Dokumentasi malai padi bernas Pak H. Dedi Junaedi di Karawang"
-              class="h-full w-full object-cover"
-              width="960"
-              height="536"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Padi Ciherang biasanya pangkal malai banyak yang putih kopong. Setelah disemprot SARATOGA, <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">gabah hampa turun drastis di bawah 3%, timbangan karung naik rata-rata 18 kg per kuintal</strong> saat ditimbang."
-          </p>
-
-          <div class="pt-4 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         </div>
 
-        <!-- Testimoni 3: Pak Andi Mappatunru -->
-        <div class="space-y-3">
-          <div>
-            <h3 class="text-[16px] font-bold text-slate-900">Pak Andi Mappatunru (47 th)</h3>
-            <p class="text-[12px] text-slate-500 mt-0.5">Poktan Mattiro Deceng, Desa Mappesangka, Kec. Ponre, Kab. Bone, Sulsel</p>
-            <p class="text-[12px] font-semibold text-emerald-800 mt-1">Padi Mekongga • Bebas Blast Patah Leher</p>
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/testi-3.webp"
+            alt="Dokumentasi panen padi Pak Andi Mappatunru di Bone Sulsel"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Andi Mappatunru, Bone, Sulsel</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Bebas Patah Leher</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Padi Mekongga malai terisi penuh sampai pangkal leher. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Bebas jamur blast potong leher disapu hujan malam, beras giling utuh tidak patah!</strong>"
+            </p>
           </div>
-
-          <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-slate-100">
-            <img
-              src="/images/landing/juara-gabah-bernas/testi-andi.webp"
-              alt="Dokumentasi panen padi Pak Andi Mappatunru di Bone Sulsel"
-              class="h-full w-full object-cover"
-              width="960"
-              height="536"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-
-          <p class="border-l-2 border-emerald-600/30 pl-3 text-[14.5px] leading-relaxed text-slate-700 italic">
-            "Padi Mekongga malai terisi penuh sampai pangkal leher. <strong class="box-decoration-clone bg-emerald-100 px-1.5 pb-0.5 text-emerald-800 font-semibold">Bebas jamur blast potong leher disapu hujan malam</strong>, gabah kuning mengkilap dan beras giling tidak patah."
-          </p>
         </div>
       </div>
 
-      <!-- Panorama Hamparan Kebun Pulih (Fullwidth Edge-to-Edge) -->
-      <div class="-mx-5 mt-10 relative">
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
         <img
-          src="/images/landing/juara-gabah-bernas/hamparan-sawah.webp"
+          src="/images/landing/juara-gabah-bernas/hamparan-kebun.webp"
           alt="Foto panorama hamparan sawah padi menguning keemasan siap panen"
           class="aspect-[16/9] w-full object-cover"
           width="960"
@@ -435,28 +528,45 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
           loading="lazy"
           decoding="async"
         />
-        <div class="bg-slate-900/90 py-2.5 px-4 text-center">
-          <p class="text-[12px] font-bold text-[#BBF7D0]">
-            Hamparan Sawah Kuning Emas: Malai padi merunduk berat tanda gabah padat berisi.
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Hamparan Sawah Kuning Emas: Malai padi merunduk berat tanda gabah padat berisi!
           </p>
         </div>
       </div>
 
-      <!-- Inset Card Bukti Panen Rekor -->
-      <div class="mt-6 overflow-hidden rounded-xl border border-slate-100 bg-slate-50/50 shadow-sm">
-        <img
-          src="/images/landing/juara-gabah-bernas/panen-9ton.webp"
-          alt="Foto panen raya padi ubinan 9 ton per hektar gabah bernas"
-          class="aspect-[16/9] w-full object-cover"
-          width="960"
-          height="536"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="p-3 text-center">
-          <p class="text-[13px] font-semibold text-slate-800">
-            Hasil Akhir: Rekor panen ubinan 8.9 ton/Ha, bulir padat mentes dan rendemen giling tinggi.
-          </p>
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/panen-rekor.webp"
+            alt="Foto panen raya padi ubinan 9 ton per hektar gabah bernas"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Rekor 8,9–9 Ton/Ha</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bobot karung naik 20%</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/juara-gabah-bernas/panen-2.webp"
+            alt="Malai padi kuning emas bernas tanpa bulir hampa sampai pangkal"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bernas Sampai Pangkal</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Rendemen beras kepala tinggi</p>
+          </div>
         </div>
       </div>
     </section>
@@ -464,17 +574,27 @@ const heroImage = '/images/landing/juara-gabah-bernas/hero-gabah.webp';
     <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
     <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
       <div class="px-5 pb-6 text-center">
-        <h2 class="mx-auto max-w-[340px] text-[clamp(26px,7.2vw,30px)] font-extrabold leading-[1.15] tracking-tight text-slate-950">
-          Form Pemesanan <span class="hl-brush">Paket Pemadat Gabah</span>
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Pemadat Gabah SARATOGA</span>
         </h2>
         <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
-          Isi alamat pengiriman di bawah untuk menerima paket langsung di rumah. Bayar saat barang sampai (COD).
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
         </p>
       </div>
 
-      <GeoIpResolvedForm productSlug={product.slug} mode="hybrid" embedded={true} />
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
     </section>
   </main>
+
+  <StickyLandingCtaBar />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

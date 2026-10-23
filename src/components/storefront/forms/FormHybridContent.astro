@@ -1,7 +1,7 @@
 ---
 import { formatIdr } from '../../../lib/format-idr';
 import { getStorefrontProduct } from '../../../lib/catalog';
-import { resolveFormVariant } from '../../../lib/form-config';
+import { getVariantPresentationMeta, resolvePreferredFormVariant } from '../../../lib/form-config';
 import { getRuntimeEnv } from '../../../lib/env';
 import { loadStoreCodDisabledProvinceCodes } from '../../../lib/form-mode';
 import { jsonForScript } from '../../../lib/json-script';
@@ -28,7 +28,7 @@ const {
 
 const product = await getStorefrontProduct(Astro.locals, productSlug);
 if (!product) throw new Error(`Product ${productSlug} not found`);
-const defaultVariant = resolveFormVariant(product, selectedVariantId) || product.variants[0];
+const defaultVariant = resolvePreferredFormVariant(product, selectedVariantId) || product.variants[0];
 const defaultComparePrice = defaultVariant.comparePrice ?? defaultVariant.price;
 const defaultHasDiscount = defaultComparePrice > defaultVariant.price;
 const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
@@ -68,6 +68,7 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
               product.variants.map((variant: any) => {
                 const comparePrice = variant.comparePrice ?? variant.price;
                 const hasDiscount = comparePrice > variant.price;
+                const variantMeta = getVariantPresentationMeta(product, variant);
                 return (
                   <label class="variant-option simple-variant-option">
                     <input
@@ -84,12 +85,27 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
                       <div class="variant-main simple-variant-main">
                         <div class="simple-variant-head">
                           <p class="variant-label">{variant.label}</p>
+                          {variantMeta.badge && (
+                            <span
+                              class:list={[
+                                'variant-badge',
+                                variantMeta.badgeTone === 'bulk'
+                                  ? 'variant-badge-bulk'
+                                  : 'variant-badge-popular',
+                              ]}
+                            >
+                              {variantMeta.badge}
+                            </span>
+                          )}
                         </div>
                         <div class="variant-price-row simple-variant-price-row">
                           <span class="variant-price">{formatIdr(variant.price)}</span>
                           {hasDiscount && <span class="simple-variant-dot" aria-hidden="true" />}
                           {hasDiscount && <span class="variant-compare">{formatIdr(comparePrice)}</span>}
                         </div>
+                        {variantMeta.dosageNote && (
+                          <p class="variant-dosage-note">{variantMeta.dosageNote}</p>
+                        )}
                       </div>
                     </div>
                   </label>

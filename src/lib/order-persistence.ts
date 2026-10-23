@@ -241,6 +241,7 @@ export type RecordAbandonedOrderInput = {
   province?: string;
   totalAmount?: number;
   variantId?: number;
+  sourcePagePath?: string;
 };
 
 export type RecordedAbandonedOrder = {
@@ -264,6 +265,7 @@ export async function recordAbandonedOrder(
   }
   const address = input.address?.trim() || "";
   const province = input.province?.trim() || "";
+  const sourcePagePath = input.sourcePagePath?.trim().slice(0, 500) || null;
   const selectedVariant = input.variantId && input.variantId > 0
     ? await database
         .prepare(
@@ -300,6 +302,7 @@ export async function recordAbandonedOrder(
          SET customer_name = ?,
              address = COALESCE(NULLIF(?, ''), address),
              province = COALESCE(NULLIF(?, ''), province),
+             source_page_path = COALESCE(?, source_page_path),
              total_amount = ?,
              payment_status = 'unpaid',
              shipping_status = 'abandoned',
@@ -310,6 +313,7 @@ export async function recordAbandonedOrder(
         customerName,
         address,
         province,
+        sourcePagePath,
         totalAmount,
         createdAt,
         existing.id,
@@ -351,14 +355,14 @@ export async function recordAbandonedOrder(
           address, province, city, district,
           payment_method, payment_status, shipping_status,
           total_amount, shipping_cost, discount_amount, cod_service_fee,
-          cod_service_fee_vat, cod_fee_bearer, created_at
+          cod_service_fee_vat, cod_fee_bearer, source_page_path, created_at
         )
         SELECT
           ?, ?, ?, ?,
           ?, ?, '', '',
           'cod', 'unpaid', 'abandoned',
           ?, 0, 0, 0,
-          0, 'buyer', ?
+          0, 'buyer', ?, ?
         WHERE NOT EXISTS (
           SELECT 1
           FROM orders
@@ -375,6 +379,7 @@ export async function recordAbandonedOrder(
         address,
         province || "ID-JK",
         totalAmount,
+        sourcePagePath,
         createdAt,
         customerPhone,
       ),

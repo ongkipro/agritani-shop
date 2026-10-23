@@ -10,6 +10,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
 import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
 import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { formatIdr } from '../lib/format-idr';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -33,7 +34,11 @@ const socialProofOrders = await recentOrderCount(
 );
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
-const price = cheapest?.price ?? product.price;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
 const heroImage = '/images/landing/benteng-lodoh-umbi-kentang/hero-problem.webp';
@@ -46,7 +51,7 @@ const heroImage = '/images/landing/benteng-lodoh-umbi-kentang/hero-problem.webp'
   preloadImages={heroImage}
   canonical={canonical}
   hideHeader={true}
-  hideFooter={false}
+  hideFooter={true}
 >
   <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
   <SocialProofToast
@@ -61,7 +66,7 @@ const heroImage = '/images/landing/benteng-lodoh-umbi-kentang/hero-problem.webp'
     price={price}
   />
 
-  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white text-slate-950">
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
     <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
     <section class="bg-white pb-6 text-center">
       <div class="px-5 pt-7">
@@ -554,12 +559,14 @@ const heroImage = '/images/landing/benteng-lodoh-umbi-kentang/hero-problem.webp'
 
       <GeoIpResolvedForm
         productSlug={product.slug}
-        selectedVariantId={cheapest?.id}
+        selectedVariantId={preferredVariant?.id}
         mode="hybrid"
         embedded={true}
       />
     </section>
   </main>
+
+  <StickyLandingCtaBar />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

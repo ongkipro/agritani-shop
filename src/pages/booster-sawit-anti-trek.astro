@@ -1,0 +1,611 @@
+---
+/**
+ * Native Landing Page: Booster Sawit Anti-Trek & Pengisi Bobot TBS (AUSSIE)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: aussie-pupuk-cair-organik (ID: 26039)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/booster-sawit-anti-trek.css';
+
+export const prerender = false;
+
+const SLUG = 'booster-sawit-anti-trek';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'aussie-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '26039'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/booster-sawit-anti-trek/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Sawit Anti-Trek & Pengisi Bobot TBS: Aussie - ${Astro.locals.tenant.name}`}
+  description="Hentikan sawit trek panjang kosong buah, cegah bunga betina gugur jadi bunga jantan, dan dongkrak bobot janjang TBS 25–35 Kg berondol merah padat."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">SAWIT TREK PANJANG & BUANYA JANTAN SEMUA?</span>
+          Buka Kuncian Bunga Betina & Cetak <span class="hl-brush">TBS JUMBO 30+ KG</span> Melingkar Penuh!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup kocor piringan & semprot ketiak pelepah dengan <strong class="text-slate-950 font-bold">AUSSIE</strong>: hentikan trek berkepanjangan, cegah buah landak/cengkeh, dan dongkrak timbangan RAM tiap rotasi!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Tandan buah segar kelapa sawit super padat melingkar penuh di ketiak pelepah sehabis aplikasi AUSSIE"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Terbukti di Lapangan: Tiap ketiak pelepah keluar dompolan TBS padat, berat janjang naik +4 s/d +6 Kg!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Booster Bunga Betina</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Anti-Buah Landak</span>
+        </div>
+
+        <!-- 4 Point Checklist + Above-the-Fold CTA -->
+        <div class="mx-5 mt-5 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Putus Siklus Sawit Trek</strong> akibat stres kemarau & tanah masam mengunci hara</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Picu Bunga Betina Melingkar</strong> di setiap ketiak pelepah, bukan bunga jantan kosong</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Bebas Buah Landak / Cengkeh</strong> — berondolan terisi penuh merah mengkilap</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Dongkrak Tonase Panen</strong> +30% hingga +50% tanpa boros pupuk kimia</span>
+            </li>
+          </ul>
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center rounded-lg bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold text-white shadow-sm transition-colors hover:bg-[#166534]"
+          >
+            Pesan Paket Booster Anti-Trek Sekarang →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Biang Kerok Tonase Sawit <span class="hl-brush-red">Anjlok & Trek Panjang</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Sudah tabur NPK dan KCl berkarung-karung tapi hasil timbangan tetap turun? Ini penyebabnya:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-sawit-anti-trek/gejala-1.webp"
+              alt="Ketiak pelepah kelapa sawit kosong hanya keluar bunga jantan kering saat trek panjang"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Ketiak Kosong & Bunga Jantan Dominan
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Stres Hormon Mengubah Calon Buah Jadi Bunga Jantan</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Saat akar stres kemarau atau tanah masam, pohon membatalkan pembentukan bunga betina sehingga berbulan-bulan ketiak pelepah kosong melompong.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-sawit-anti-trek/gejala-2.webp"
+              alt="Tandan buah sawit menjadi buah landak kerdil cengkeh dan berondolan kempes"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Buah Landak / Cengkeh & Janjang Enteng
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Defisiensi Boron-Kalium & Kunci Hara di Tanah</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Penyerbukan gagal sempurna, tandan berduri jarang (buah landak), daging mesokarp tipis, dan sering kena potongan sortasi tinggi di pabrik/RAM.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Kebun: <span class="hl-brush-red">Trek Kosong</span> Jadi <span class="hl-brush">Panen Raya</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/booster-sawit-anti-trek/overclaim-timeline.webp"
+          alt="Progres kebun kelapa sawit dari kondisi trek kosong hingga muncul bunga betina dan TBS padat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Hari 14: Akar Aktif</span>
+          <span class="text-amber-300">Hari 30: Dompolan Muncul</span>
+          <span class="text-emerald-400">Hari 60+: TBS Padat</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/kondisi-rusak.webp"
+            alt="Kondisi kelapa sawit trek kosong buah dan pelepah pucat"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Trek & Buah Landak</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Pelepah kaku pucat, bunga jantan semua, panen cuma beberapa janjang.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/kondisi-pulih.webp"
+            alt="Kondisi kelapa sawit berbuah melingkar penuh di setiap ketiak pelepah"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">TBS Melingkar Penuh</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Pelepah lentur membuka, bunga betina susul-menyusul, janjang berat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/booster-sawit-anti-trek/aussie-hero.webp"
+          alt="Botol Nutrisi Organik Kelapa Sawit AUSSIE Asli Dipegang Petani"
+          class="aspect-[4/5] w-full object-cover object-top"
+          width="960"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi AUSSIE Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">AUSSIE Original - Booster Sawit High-End</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Kalium-Boron Kelat + Asam Amino L-Prolin + Asam Humat Pembuka Hara (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Pengungkit Tonase AUSSIE</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Membongkar sisa pupuk yang terkunci di tanah dan mengubahnya menjadi bobot TBS:
+      </p>
+
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-sawit-anti-trek/overclaim-1.webp"
+              alt="Dompolan bunga betina dan buah pasir kelapa sawit muncul rapat melingkar penuh di ketiak pelepah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • PEMICU BUNGA BETINA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Ketiak Pelepah Penuh Bunga Betina Susul-Menyusul!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Amino L-Prolin & Boron aktif menekan hormon stres pemicu bunga jantan dan mengunci penyerbukan sempurna bebas buah cengkeh/landak.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-sawit-anti-trek/overclaim-2.webp"
+              alt="Tandan buah segar kelapa sawit ukuran jumbo 30 kg dengan berondolan merah oranye padat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • DONGKRAK BOBOT & RENDEMEN
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Biji Berondolan Gendut Padat, Berat Janjang Naik +4–6 Kg!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Kalium organik mempercepat pengisian daging buah (mesokarp) dan minyak CPO sehingga janjang terasa jauh lebih berat saat dipikul ke TPH.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-sawit-anti-trek/overclaim-3.webp"
+              alt="Akar serabut kelapa sawit putih gondrong aktif menyerap pupuk di piringan tanah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • BONGKAR HARA TERKUNCI
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Gemburkan Piringan & Hemat Pupuk Kimia Sampai 40%!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Humat-Fulvat menetralkan pH tanah gambut/masam dan mencairkan residu pupuk NPK yang membatu di tanah agar langsung tersedot akar.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-sawit-anti-trek/macro-proof.webp"
+          alt="Detail makro akar serap putih kelapa sawit dan pelepah hijau segar"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Reaksi Cepat: 1 Liter AUSSIE cukup untuk 35–40 tangki (1 Hektar / 130 pokok sawit)!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/booster-sawit-anti-trek/aplikasi-kebun.webp"
+          alt="Petani mengocor dan menyemprot larutan AUSSIE di piringan dan batang kelapa sawit"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            <strong>50–60 ml AUSSIE</strong> per tangki 16L air.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Kocor piringan akar & <strong>semprot pangkal batang</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi tiap <strong>2–3 minggu</strong> untuk hasil maksimal.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani Sawit: <span class="hl-brush">Tonase TPH Meledak</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/testi-1.webp"
+            alt="Pak H. Nasution di Kampar Riau bersama tumpukan panen TBS kelapa sawit super padat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Nasution, Kampar, Riau</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Panen Naik 1,4 Ton</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Kebun 2 hektar sempat trek parah cuma dapat 900 kg per rotasi. Habis dikocor AUSSIE 2 botol, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">bunga betina keluar mutar dan panen tembus 2,3 ton sekali angkut!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/testi-2.webp"
+            alt="Pak Суparno di Muaro Jambi menunjukkan tandan buah segar sawit bebas buah landak"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Suparno, Muaro Jambi, Jambi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">0% Buah Landak</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya buah cengkeh & landak banyak kena sortasi di RAM. Sejak pakai AUSSIE, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">berondolan merah padat sampai ke dalam dan janjang tambah berat 4–5 kilo!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/testi-3.webp"
+            alt="Pak Ruslan di Kotawaringin Timur Kalteng di kebun kelapa sawit yang hijau subur"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Ruslan, Sampit, Kalteng</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pelepah Membuka</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Sawit umur 7 tahun yang tadinya kaku cekik leher langsung membuka lentur setelah disiram AUSSIE. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dompolan buah keluar bersusun 2 tingkat tanpa putus!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-sawit-anti-trek/hamparan-kebun.webp"
+          alt="Hamparan kebun kelapa sawit produktif hijau royo-royo pasca pemupukan AUSSIE"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Investasi Paling Untung: Modal ratusan ribu kembali jutaan rupiah dari kenaikan tonase TBS!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/panen-rekor.webp"
+            alt="Tumpukan hasil panen tandan buah segar kelapa sawit super jumbo di TPH"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Janjang 25–35 Kg</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Padat berondol merah berminyak</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-sawit-anti-trek/panen-2.webp"
+            alt="Pokok kelapa sawit sehat dengan tandan buah melingkar penuh tanpa trek"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Panen Tanpa Putus</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bunga betina keluar tiap ketiak</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Booster Anti-Trek</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

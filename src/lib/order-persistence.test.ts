@@ -259,6 +259,7 @@ test("recordAbandonedOrder normalizes an Indonesian phone and creates an unpaid 
     province: "ID-JB",
     totalAmount: 50000,
     variantId: 101,
+    sourcePagePath: "/booster-sawit-anti-trek",
   });
 
   assert.equal(result.id, 41);
@@ -266,7 +267,9 @@ test("recordAbandonedOrder normalizes an Indonesian phone and creates an unpaid 
   assert.equal(result.action, "created");
   assert.equal(result.orderNumber, "ABN-10101");
   assert.match(batchStatements[0].sql, /'unpaid', 'abandoned'/);
+  assert.match(batchStatements[0].sql, /source_page_path/);
   assert.ok(batchStatements[0].args.includes("628123456789"));
+  assert.ok(batchStatements[0].args.includes("/booster-sawit-anti-trek"));
   assert.match(batchStatements[1].sql, /INSERT INTO order_items/);
 });
 

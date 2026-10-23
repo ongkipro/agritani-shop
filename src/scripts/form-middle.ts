@@ -286,6 +286,7 @@ function initMiddleOrderFormInstance(
           total_amount: abandonedPrice > 0 ? abandonedPrice : undefined,
           address: addressInput ? addressInput.value.trim() : "",
           province,
+          source_page_path: window.location.pathname,
         }),
       })
         .then((response) => {

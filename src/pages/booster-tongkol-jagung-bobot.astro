@@ -1,0 +1,611 @@
+---
+/**
+ * Native Landing Page: Booster Tongkol Jagung Hibrida Bobot Penuh & Anti-Ompong (BENSU)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/booster-tongkol-jagung-bobot.css';
+
+export const prerender = false;
+
+const SLUG = 'booster-tongkol-jagung-bobot';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/booster-tongkol-jagung-bobot/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Tongkol Jagung Bobot Penuh Sampai Ujung: Bensu - ${Astro.locals.tenant.name}`}
+  description="Rahasia tongkol jagung hibrida muput penuh sampai ujung tanpa ompong, janggel tipis, biji oranye kemerahan super berat, dan panen tembus 10–12 ton/Ha."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">STOP RUGI JAGUNG OMPONG & ENTENG!</span>
+          Cetak Tongkol Jagung <span class="hl-brush">MUPUT PENUH SAMPAI UJUNG</span> & Bobot Pipilan Tembus 11 Ton/Ha!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot kabut <strong class="text-slate-950 font-bold">BENSU</strong> saat fase vegetatif & keluar rambut jagung: baris biji rapat 16–18 lajur tanpa ompong, janggel mengecil, dan biji pipilan super bernas!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Tongkol jagung hibrida super besar muput penuh sampai ujung dengan biji oranye padat sehabis aplikasi BENSU"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Hasil Panen Nyata: Biji jagung terisi penuh sampai ujung tongkol, rendemen pipilan naik +35%!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Pengisi Biji Penuh</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>1 Liter Cukup 35–40 Tangki</span>
+        </div>
+
+        <!-- 4 Point Checklist + Above-the-Fold CTA -->
+        <div class="mx-5 mt-5 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Tongkol Muput Penuh 100%</strong> sampai ujung tanpa ompong atau bogang</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Biji Pipilan Padat Berbobot</strong> oranye mengkilap, tidak kempes saat dijemur</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Daun Bendera Hijau Lebar</strong> & batang kokoh berakar jangkar anti-rebah</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Pacu Tongkol Kembar 2</strong> yang sama-sama terisi penuh pada benih unggul</span>
+            </li>
+          </ul>
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center rounded-lg bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold text-white shadow-sm transition-colors hover:bg-[#166534]"
+          >
+            Pesan Paket Booster Jagung Sekarang →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Masalah Utama Pemicu <span class="hl-brush-red">Jagung Ompong & TimbanganJeblok</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Batang jagung kelihatan tinggi di kebun, tapi begitu dikupas dan dipipil hasilnya bikin kecewa:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-tongkol-jagung-bobot/gejala-1.webp"
+              alt="Tongkol jagung ompong bogang ujung kosong dan daun kuning kekurangan nutrisi pengisian biji"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Tongkol Ompong / Bogang & Ujung Kosong
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Penyerbukan Rambut Jagung Gagal & Kehabisan Tenaga</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Saat umur 45–65 HST tanaman kekurangan asam amino dan kalium-boron cair, sehingga sepertiga ujung tongkol kosong tidak berisi biji.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-tongkol-jagung-bobot/gejala-2.webp"
+              alt="Tanaman jagung daun bawah mengering dini sebelum tongkol terisi penuh dan rawan rebah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Janggel Besar Tapi Biji Pipilan Kempes Enteng
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Mengering Dini (Premature Senescence)</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Daun jagung terlanjur kuning kering sebelum pengisian pati selesai. Akibatnya janggel tebal berair tapi biji jagung tipis dan susut drastis saat dijemur!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bedanya Nyata: <span class="hl-brush-red">Tongkol Ompong</span> vs <span class="hl-brush">Muput Penuh</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/booster-tongkol-jagung-bobot/overclaim-timeline.webp"
+          alt="Tahapan pertumbuhan jagung hibrida dari fase vegetatif, keluar rambut janten, hingga tongkol muput penuh"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">20 HST: Batang Kekar</span>
+          <span class="text-amber-300">45 HST: Janten Lebat</span>
+          <span class="text-emerald-400">75 HST: Tongkol Penuh</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/kondisi-rusak.webp"
+            alt="Kondisi tanaman jagung kerdil daun kuning dan tongkol ompong tanpa BENSU"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Ompong & Susut</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Ujung tongkol kosong, baris biji jarang, bobot karungan ringan.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/kondisi-pulih.webp"
+            alt="Kondisi tanaman jagung hijau pekat bertongkol besar muput penuh dengan BENSU"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Muput 18 Baris</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Biji rapat sampai ujung, warna oranye pekat, timbangan berat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Image -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/booster-tongkol-jagung-bobot/bensu-hero.webp"
+          alt="Botol Resmi BENSU Pupuk Cair Organik Pengisi Tongkol Jagung Hibrida"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">BENSU Original - Nutrisi Pengisi Biji & Tongkol</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Asam Amino L-Bebas + Kalium-Fosfat Organik + Bio-Silika (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Reaksi Cepat <span class="hl-brush">BENSU pada Jagung Hibrida</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Mengawal tanaman dari fase pertumbuhan batang hingga pengisian pati biji maksimal:
+      </p>
+
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-tongkol-jagung-bobot/overclaim-1.webp"
+              alt="Tongkol jagung hibrida panjang padat berisi penuh sampai ujung tanpa ompong"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • PENGISIAN BIJI MUPUT 100%
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Tongkol Panjang Berisi Penuh Sampai Ujung Tanpa Ompong!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Mempercepat aliran gula dan karbohidrat dari daun ke janten sehingga setiap baris biji terisi rapat 16–18 lajur dengan janggel yang mengecil padat.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-tongkol-jagung-bobot/overclaim-2.webp"
+              alt="Daun jagung hibrida lebar hijau gelap mengkilap bebas bulai dan karat daun"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • DAUN LEBAR HIJAU AWET
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Dapur Fotosintesis Tetap Hijau Sampai Klobot Mengering!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menjaga daun bendera tetap hijau segar mengawal pengisian biji sampai hari terakhir sehingga biji tidak kempes atau keriput saat dipipil kering.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-tongkol-jagung-bobot/overclaim-3.webp"
+              alt="Akar jangkar jagung merah kekar mencengkeram tanah dan batang bawah kokoh anti-rebah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • AKAR JANGKAR & BATANG BAJA
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Batang Kekar Kuat Menopang 2 Tongkol Besar Anti-Roboh!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Memicu keluarnya akar tunjang (akar cakar ayam) yang mencengkeram tanah dengan kuat agar pohon tidak roboh diterpa angin kencang saat menggendong tongkol berat.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-tongkol-jagung-bobot/macro-proof.webp"
+          alt="Detail daun jagung hijau pekat tebal dan tongkol besar rapat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Cocok untuk Semua Benih: NK, Bisi, Pioneer, Advanta, Pertiwi & Jagung Manis!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/booster-tongkol-jagung-bobot/aplikasi-kebun.webp"
+          alt="Petani menyemprotkan kabut nutrisi BENSU pada hamparan kebun jagung hibrida"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            <strong>30–35 ml BENSU</strong> per tangki 16L air.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut merata ke <strong>daun & batang</strong> pagi/sore.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Jadwal</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Umur <strong>15, 30, 45 & 60 HST</strong> (4x semprot).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani Jagung: <span class="hl-brush">Panen Rekor Tonase</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/testi-1.webp"
+            alt="Pak Joko di Kediri Jawa Timur memegang dua tongkol jagung super besar hasil aplikasi BENSU"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Joko, Kediri, Jawa Timur</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Tembus 10,8 Ton/Ha</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Lahan 1 hektar benih NK Perkasa disemprot BENSU 4 kali. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Tongkolnya muput penuh sampai ujung, bijinya tebal berat, pipilan kering tembus 10,8 ton!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/testi-2.webp"
+            alt="Pak Syamsul di Lampung Timur bersama gunungan panen jagung oranye kemerahan"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Syamsul, Lampung Timur</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Karungan Tambah Berat</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya 1 karung pipilan cuma 65 kg karena biji kempes. Pakai BENSU, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">janggelnya kecil tipis tapi bijinya padat banget, 1 karung tembus 76 kg!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/testi-3.webp"
+            alt="Pak Jayadi di Dompu NTB menunjukkan tongkol jagung kembar dua yang terisi penuh"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Jayadi, Dompu, NTB</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Tongkol Kembar Penuh</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Jagung Bisi 18 banyak yang keluar tongkol dua, dan berkat BENSU <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">tongkol kedua ikut muput penuh gak cuma jadi janten kosong!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/booster-tongkol-jagung-bobot/hamparan-kebun.webp"
+          alt="Hamparan kebun jagung hibrida subur seragam bertongkol besar siap panen raya"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Kunci Keuntungan Jagung: Tambahan 1,5–2 ton pipilan per hektar = ekstra profit puluhan juta!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/panen-rekor.webp"
+            alt="Tumpukan panen tongkol jagung hibrida muput penuh oranye mengkilap"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">0% Ujung Ompong</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Biji rapat 16–18 baris penuh</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-tongkol-jagung-bobot/panen-2.webp"
+            alt="Hasil panen jagung melimpah dengan batang tetap tegak sehat sampai panen"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Rendemen Tinggi</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Janggel kecil, biji super bernas</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName}
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Booster Tongkol Jagung</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

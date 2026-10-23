@@ -1,0 +1,108 @@
+---
+/**
+ * Mobile Sticky Bottom CTA Bar for Direct-Response Landing Pages.
+ *
+ * Stays hidden while the first-fold hero (`[data-landing-hero]`) or the
+ * checkout form (`#checkout-form`) is in the viewport, and hides whenever a
+ * form field is focused so mobile virtual keyboards never collide with the bar.
+ */
+interface Props {
+  ctaText?: string;
+  subText?: string;
+  targetSelector?: string;
+  heroSelector?: string;
+}
+
+const {
+  ctaText = 'Pesan Sekarang — Bisa Bayar di Tempat (COD)',
+  subText = 'Garansi Produk Asli • Pilih Kemasan 500ml / 1 Liter / 2 Liter',
+  targetSelector = '#checkout-form',
+  heroSelector = '[data-landing-hero]',
+} = Astro.props;
+---
+
+<div
+  data-sticky-landing-cta
+  data-hero-selector={heroSelector}
+  data-target-selector={targetSelector}
+  aria-hidden="true"
+  inert
+  class="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-[480px] border-t border-emerald-900/15 bg-white/95 px-3.5 py-2.5 shadow-[0_-8px_24px_rgba(15,23,42,0.14)] backdrop-blur-md transition-all duration-300"
+  style="transform: translateY(100%); opacity: 0; pointer-events: none;"
+>
+  <a
+    href={targetSelector}
+    class="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold leading-tight text-white shadow-[0_6px_16px_-4px_rgba(20,83,45,0.55)] transition-transform active:scale-[0.99]"
+  >
+    <span class="inline-block h-2 w-2 shrink-0 rounded-full bg-[#4ADE80]"></span>
+    <span>{ctaText}</span>
+  </a>
+  {
+    subText && (
+      <p class="mt-1 text-center text-[11px] font-normal leading-tight text-slate-600">
+        {subText}
+      </p>
+    )
+  }
+</div>
+
+<script>
+  function initStickyLandingCta() {
+    const bar = document.querySelector<HTMLElement>('[data-sticky-landing-cta]');
+    if (!bar) return;
+
+    const heroSelector = bar.dataset.heroSelector || '[data-landing-hero]';
+    const targetSelector = bar.dataset.targetSelector || '#checkout-form';
+    const hero = document.querySelector(heroSelector);
+    const formSection = document.querySelector(targetSelector);
+    if (!formSection) return;
+
+    let heroVisible = Boolean(hero);
+    let formVisible = false;
+    let formFocused = false;
+
+    const syncVisibility = () => {
+      if (heroVisible || formVisible || formFocused) {
+        bar.style.transform = 'translateY(100%)';
+        bar.style.opacity = '0';
+        bar.style.pointerEvents = 'none';
+        bar.setAttribute('aria-hidden', 'true');
+        bar.setAttribute('inert', '');
+      } else {
+        bar.style.transform = 'translateY(0)';
+        bar.style.opacity = '1';
+        bar.style.pointerEvents = 'auto';
+        bar.removeAttribute('aria-hidden');
+        bar.removeAttribute('inert');
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.target === hero) heroVisible = entry.isIntersecting;
+          if (entry.target === formSection) formVisible = entry.isIntersecting;
+        }
+        syncVisibility();
+      },
+      { threshold: 0.05 },
+    );
+
+    if (hero) observer.observe(hero);
+    observer.observe(formSection);
+
+    formSection.addEventListener('focusin', () => {
+      formFocused = true;
+      syncVisibility();
+    });
+    formSection.addEventListener('focusout', () => {
+      setTimeout(() => {
+        formFocused = formSection.contains(document.activeElement);
+        syncVisibility();
+      }, 80);
+    });
+  }
+
+  initStickyLandingCta();
+  document.addEventListener('astro:page-load', initStickyLandingCta);
+</script>
