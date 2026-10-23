@@ -84,6 +84,23 @@ export function getVariantPresentationMeta(
     };
   }
 
+  if (/2\s*liter|\b2\s*l\b/i.test(label)) {
+    const oneLiter = product.variants.find((v) =>
+      /1\s*liter|\b1\s*l\b/i.test(v.label),
+    );
+    const extraDiscount =
+      oneLiter && oneLiter.price * 2 > variant.price
+        ? oneLiter.price * 2 - variant.price
+        : 10000;
+    return {
+      badge: `${isSawit ? "PAKET 2 HEKTAR" : "PAKET 1 HEKTAR"} • DISKON Rp ${Math.round(extraDiscount).toLocaleString("id-ID")}`,
+      badgeTone: "bulk",
+      dosageNote: isSawit
+        ? "2 Botol × 1 Liter (Stok Aman 70–80 Tangki / 260 Pokok Sawit)"
+        : "2 Botol × 1 Liter (Stok Aman 70–80 Tangki Semprot)",
+    };
+  }
+
   return {};
 }
 
