@@ -57,7 +57,6 @@ export function getVariantPresentationMeta(
 ): VariantPresentationMeta {
   const label = variant.label || "";
   const isSawit = /aussie|sawit/i.test(product.slug || "");
-  const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 
   if (/500\s*ml/i.test(label)) {
     return {
@@ -68,44 +67,20 @@ export function getVariantPresentationMeta(
   }
 
   if (/1\s*liter|\b1\s*l\b/i.test(label)) {
-    const unitSavings =
-      cheapest && cheapest.price * 2 > variant.price
-        ? cheapest.price * 2 - variant.price
-        : 0;
     const compareSavings =
       (variant.comparePrice ?? variant.price) > variant.price
         ? (variant.comparePrice ?? variant.price) - variant.price
         : 0;
-    const savings = unitSavings >= 40000 ? unitSavings : compareSavings;
     const savingsText =
-      savings > 0 ? ` • HEMAT Rp ${Math.round(savings).toLocaleString("id-ID")}` : "";
+      compareSavings > 0
+        ? ` • HEMAT Rp ${Math.round(compareSavings).toLocaleString("id-ID")}`
+        : "";
     return {
       badge: `PALING LARIS${savingsText}`,
       badgeTone: "popular",
       dosageNote: isSawit
         ? "Cukup 35–40 Tangki Semprot / 130 Pokok Sawit (1 Ha)"
         : "Cukup 35–40 Tangki Semprot (1 Musim)",
-    };
-  }
-
-  if (/2\s*liter|\b2\s*l\b/i.test(label)) {
-    const unitSavings =
-      cheapest && cheapest.price * 4 > variant.price
-        ? cheapest.price * 4 - variant.price
-        : 0;
-    const compareSavings =
-      (variant.comparePrice ?? variant.price) > variant.price
-        ? (variant.comparePrice ?? variant.price) - variant.price
-        : 0;
-    const savings = Math.max(unitSavings, compareSavings);
-    const savingsText =
-      savings > 0 ? ` • HEMAT Rp ${Math.round(savings).toLocaleString("id-ID")}` : "";
-    return {
-      badge: `${isSawit ? "PAKET 2 HEKTAR" : "PAKET 1 HEKTAR"}${savingsText}`,
-      badgeTone: "bulk",
-      dosageNote: isSawit
-        ? "Stok Aman Sampai Panen Raya (70–80 Tangki / 260 Pokok Sawit)"
-        : "Stok Aman Sampai Panen Raya (70–80 Tangki Semprot)",
     };
   }
 

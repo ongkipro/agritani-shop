@@ -62,30 +62,24 @@ test("generated embed URLs keep mode and canonical IDs explicit", () => {
   });
 });
 
-test("resolvePreferredFormVariant defaults to 1 Liter and returns dosage & savings badges", () => {
+test("resolvePreferredFormVariant defaults to 1 Liter and returns DB-exact dosage & savings badges", () => {
   const bensu = {
     slug: "bensu-pupuk-cair-organik",
     variants: [
       { id: "5", label: "500ml", price: 130000, comparePrice: 198000 },
       { id: "6", label: "1 Liter", price: 215000, comparePrice: 298000 },
-      { id: "9", label: "2 Liter", price: 395000, comparePrice: 520000 },
     ],
   } as Product;
 
   assert.equal(resolvePreferredFormVariant(bensu)?.id, "6");
-  assert.equal(resolvePreferredFormVariant(bensu, "9")?.id, "9");
+  assert.equal(resolvePreferredFormVariant(bensu, "5")?.id, "5");
 
   const meta500 = getVariantPresentationMeta(bensu, bensu.variants[0]);
   assert.equal(meta500.badge, undefined);
   assert.match(meta500.dosageNote || "", /16–20 Tangki/);
 
   const meta1L = getVariantPresentationMeta(bensu, bensu.variants[1]);
-  assert.equal(meta1L.badge, "PALING LARIS • HEMAT Rp 45.000");
+  assert.equal(meta1L.badge, "PALING LARIS • HEMAT Rp 83.000");
   assert.equal(meta1L.badgeTone, "popular");
   assert.match(meta1L.dosageNote || "", /35–40 Tangki/);
-
-  const meta2L = getVariantPresentationMeta(bensu, bensu.variants[2]);
-  assert.equal(meta2L.badge, "PAKET 1 HEKTAR • HEMAT Rp 125.000");
-  assert.equal(meta2L.badgeTone, "bulk");
-  assert.match(meta2L.dosageNote || "", /Stok Aman Sampai Panen Raya/);
 });
