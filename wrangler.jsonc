@@ -34,6 +34,13 @@
     "nodejs_compat"
   ],
 
+  // Run the Worker beside its D1, not beside the visitor: a page makes several
+  // sequential D1 reads, and part of Indonesian traffic (and all of PageSpeed)
+  // is served from US colos (ADR-030).
+  "placement": {
+    "mode": "smart"
+  },
+
   // The one secret a store cannot run without, and the only one the Deploy
   // button asks for (.dev.vars.example). `wrangler deploy` refuses a Worker
   // that lacks it. Everything else is optional:
