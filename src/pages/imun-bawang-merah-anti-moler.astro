@@ -1,0 +1,682 @@
+---
+/**
+ * Native Landing Page: Imun Bawang Merah Anti-Moler & Pembesar Umbi (BENSU)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/imun-bawang-merah-anti-moler.css';
+
+export const prerender = false;
+
+const SLUG = 'imun-bawang-merah-anti-moler';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/imun-bawang-merah-anti-moler/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Imun Bawang Merah Anti-Moler Sejak 10 HST & Pembesar Umbi Jumbo | ${Astro.locals.tenant.name}`}
+  description="Bentengi imun bawang merah sejak 10 HST dari serangan moler Fusarium dan pucuk kuning. Pipa daun berdiri kaku seperti jarum, umbi kecil membesar padat merah merona."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">BENTENGI IMUN BAWANG MERAH SEJAK 10 HST DARI SERANGAN MOLER!</span>
+          Kunci Imun Bawang Merah Tahan Hujan Malam: Dijamin <span class="hl-brush">BEBAS LAYU MOLER & UMBI JUMBO</span> Merah Merona!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Jangan tunggu moler menjalar sebedengan! Semprot kabut <strong class="text-slate-950 font-bold">BENSU Original</strong> (Botol Logo Timbul & Shieldtag) sejak 10 HST: pipa daun berdiri kaku seperti jarum, luka akar Fusarium mengering dalam 24 jam, dan umbi kecil membesar padat berbobot!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi tanaman bawang merah tahan hujan malam daun berdiri kaku seperti jarum dan umbi merah jumbo dengan BENSU"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Imun Bawang Terkunci Sejak 10 HST: 95% bebas moler, daun kaku jegrik & umbi padat 12–14 ton/Ha!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Activator Imun Bawang + Bio-Silika</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Botol Logo Timbul & Shieldtag</span>
+        </div>
+
+        <div class="mx-5 mt-4 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[12px] font-semibold text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Bangkitkan imun bawang merah sejak 10 HST & keringkan luka jamur Fusarium dalam 24 jam</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Tegakkan pipa daun berdiri kaku seperti jarum tahan guyuran hujan malam tanpa efek kerdil</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Ubah umbi bawang kerdil kecil-kecil jadi pecah 14–16 siung merah tembaga super jumbo</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Kunci bobot umbi padat keras tahan simpan di gudang para-para (susut askip di bawah 6%)</span>
+            </li>
+          </ul>
+
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-[#14532D] px-4 py-2.5 text-center text-[13px] font-bold text-white shadow-sm transition-transform active:scale-[0.99]"
+          >
+            <span>Pesan Paket Imun Bawang Merah BENSU — Bisa COD</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Gejala Mematikan <span class="hl-brush-red">Bawang Rawan Moler & Umbi Kecil</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Kenapa tanaman bawang merah umur 10–35 HST mendadak melintir rebah dan umbinya gagal membesar:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/imun-bawang-merah-anti-moler/gejala-1.webp"
+              alt="Daun bawang merah melintir rebah moler inul dan pucuk kuning habis diguyur hujan malam"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Moler Inul & Pucuk Kuning Pasca Hujan Malam
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Bawang Melintir Rebah (Moler/Inul) & Pucuk Kuning Habis Diguyur Hujan Malam</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Air hujan asam yang menggenang di bedengan memicu spora jamur Fusarium menyerang leher umbi yang belum punya perisai imun, membuat daun meliuk nginul dan rebah sebedengan.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/imun-bawang-merah-anti-moler/gejala-2.webp"
+              alt="Umbi bawang merah kerdil kecil-kecil akibat salah oplos fungisida dan ZPT panas"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Umbi Kerdil Akibat Obat & ZPT Panas
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Umbi Bawang Kerdil Kecil-Kecil Akibat Salah Oplos Fungisida/ZPT Panas</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Panik menyemprot oplosan 3–4 fungisida kimia panas dan ZPT penekan tumbuh justru membakar pucuk daun dan mengunci akar, sehingga siung bawang macet kerdil.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Rawan Moler</span> Jadi <span class="hl-brush">Daun Jarum & Umbi Besar</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/imun-bawang-merah-anti-moler/overclaim-timeline.webp"
+          alt="Tahapan penguatan imun bawang merah sejak 10 HST hingga daun jegrik kaku dan umbi jumbo dengan Bensu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">10 HST: Kunci Imun</span>
+          <span class="text-amber-300">24 Jam: Luka Kering</span>
+          <span class="text-emerald-400">Panen: Umbi Jumbo</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/kondisi-rusak.webp"
+            alt="Kondisi bawang merah terserang moler inul daun melintir dan umbi kecil kerdil"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Moler & Umbi Kecil</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Daun melintir rebah pasca hujan malam, siung sedikit dan kerdil.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/kondisi-pulih.webp"
+            alt="Kondisi bawang merah disemprot BENSU sejak 10 HST daun berdiri kaku seperti jarum dan umbi besar"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Daun Kaku & Umbi Besar</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Pipa daun tegak lurus tahan hujan, umbi kecil membesar padat merah.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 shadow-sm">
+        <div class="bg-slate-950 px-4 py-3 text-center">
+          <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            FAKTA PETANI BAWANG: STOP OPLOS OBAT PANAS!
+          </span>
+          <h3 class="mt-1 text-[15px] font-bold leading-snug text-white">
+            Mengapa Oplosan Obat Panas Bikin Kerdil vs Stimulator Imun BENSU?
+          </h3>
+        </div>
+
+        <div class="divide-y divide-slate-200 text-[12px]">
+          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
+            <div class="border-r border-slate-200 p-2.5 text-red-700">
+              ✗ Oplosan 3–4 Fungisida Kimia Panas & ZPT Pembuat Kerdil
+            </div>
+            <div class="p-2.5 text-emerald-900">
+              ✓ BENSU Activator Imun Bawang + Bio-Silika Pembesar Umbi
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Pucuk Gosong & Stres Umur 15 HST:</strong>
+              Oplosan fungisida dosis tinggi membakar ujung daun bawang hingga menguning kering dan pertumbuhan terhenti.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Formula Dingin Aman Sejak 10 HST:</strong>
+              Mengaktifkan antibodi alami bawang tanpa efek panas, membuat daun hijau kebiruan segar berlapis lilin.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Leher Umbi Tetap Lembek Lonyot:</strong>
+              Tidak mampu mengeraskan dinding sel sehingga saat diguyur hujan malam penyakit moler tetap menjalar.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Keringkan Luka Moler 24 Jam:</strong>
+              Bio-Silika & Humat mengeringkan luka basah Fusarium di leher umbi dan menegakkan daun kaku seperti jarum.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">ZPT Kimia Mengunci Akar & Umbi:</strong>
+              Daun tampak pendek kaku tapi akar tercekik sehingga umbi bawang jadinya kerdil kecil-kecil.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Solusi Umbi Kecil Jadi Besar:</strong>
+              Memompa karbohidrat penuh dari daun ke cakram umbi hingga pecah 14–16 siung jumbo merah merona!
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Luntur Disapu Hujan & Boros Biaya:</strong>
+              Mudah terbilas air hujan di daun bawang yang licin sehingga harus semprot ulang terus-menerus.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Penembus Alami Tahan Hujan:</strong>
+              Meresap cepat ke pori daun bawang dalam hitungan menit dan menekan susut simpan gudang di bawah 6%.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Image -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/imun-bawang-merah-anti-moler/bensu-hero.webp"
+          alt="Botol BENSU Original Logo Timbul di Lahan Bawang Merah Bebas Moler"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram + Shieldtag Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-3 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Original Botol Logo Timbul dan Hologram Shieldtag"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <span class="inline-block rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">
+            GARANSI 100% ORIGINAL • BOTOL LOGO TIMBUL
+          </span>
+          <p class="mt-1 text-[12px] font-bold text-emerald-950">BENSU Original — Botol Logo Timbul & Hologram Shieldtag</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Pastikan Anda menerima botol resmi berlogo timbul dengan segel hologram & kode verifikasi Shieldtag anti-palsu (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Activator Imun BENSU</span> Sejak 10 HST
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Mengawal tanaman bawang merah dari fase vegetatif 10 HST hingga panen umbi super:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/imun-bawang-merah-anti-moler/overclaim-1.webp"
+              alt="Pipa daun bawang merah berdiri kaku jegrik seperti jarum tahan hujan malam"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • BENTENG IMUN 10 HST ANTI-MOLER
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pipa Daun Berdiri Kaku Seperti Jarum & Luka Kering 24 Jam!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Mempertebal lapisan lilin dan dinding sel pipa daun sejak umur 10 HST sehingga air hujan asam langsung menggelinding jatuh dan jamur Fusarium gagal menginfeksi leher umbi.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/imun-bawang-merah-anti-moler/overclaim-2.webp"
+              alt="Umbi bawang merah kecil membesar padat merah merona 14 sampai 16 siung"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • PEMBESAR UMBI BAWANG KERDIL
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Ubah Umbi Kecil Jadi Besar Padat 14–16 Siung Serempak!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Mengalirkan nutrisi seluler langsung ke cakram perakaran untuk memecah anakan siung lebih banyak dan mendongkrak pengisian umbi bulat penuh.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/imun-bawang-merah-anti-moler/overclaim-3.webp"
+              alt="Hasil panen bawang merah merah menyala padat berbobot tahan simpan askip"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • WARNA MERAH MERONA & BOBOT BERAT
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Kulit Merah Tembaga Mengkilap, Susut Simpan Di Bawah 6%!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Meningkatkan kepadatan daging siung bawang sehingga timbangan karung jauh lebih berat dan tidak gampang kempes saat disimpan di gudang.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/imun-bawang-merah-anti-moler/macro-proof.webp"
+          alt="Foto makro umbi bawang merah besar padat merah merona hasil aplikasi BENSU"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Detail Umbi BENSU: Siung besar seragam, kulit merah merona menyala & leher batang kering sehat!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Semprot <span class="hl-brush">Mulai 10 HST</span> di Lahan
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/imun-bawang-merah-anti-moler/aplikasi-kebun.webp"
+          alt="Petani menyemprot BENSU pada tanaman bawang merah umur 10 HST di bedengan sawah"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Campur <strong>2–3 tutup botol BENSU</strong> per tangki 16L air bersih.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Mulai 10 HST</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut pagi hari <strong>sejak umur 10 HST</strong> merata ke daun.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Rutin tiap <strong>3–4 hari</strong> saat hujan malam, atau <strong>5 hari</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani Bawang: <span class="hl-brush">Bebas Moler & Umbi Besar</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/testi-1.webp"
+            alt="Dokumentasi Mas Andik menyemprot bawang merah sejak 10 HST bebas moler dan panen umbi besar"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Mas Andik Prabowo, Sukomoro, Nganjuk</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Kawal Sejak 10 HST</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Saya kawal BENSU rutin sejak umur 10 HST untuk menguatkan imun bawang merah. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Meski diguyur hujan malam terus, pipa daun berdiri kaku seperti jarum & 100% aman dari moler!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/testi-2.webp"
+            alt="Dokumentasi Pak H. Rohman di Brebes berhasil membesarkan umbi bawang merah yang tadinya kerdil"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Rohman, Wanasari, Brebes</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Umbi Kecil Jadi Jumbo</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Sempat stres karena pucuk kuning dan umbi kerdil gara-gara salah oplos obat panas. Ganti semprot BENSU, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">daun pulih tegak dan umbi yang kecil langsung ngisi besar padat merah merona!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/testi-3.webp"
+            alt="Dokumentasi Pak Andri di Demak menyelamatkan bedengan bawang merah yang mulai kena gejala moler"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Andri Setiawan, Mijen, Demak</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Moler Berhenti 24 Jam</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Begitu ada 2–3 rumpun mulai melintir moler langsung saya hantam BENSU. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dalam 24 jam leher umbi kering gak jadi nyebar sebedengan, panen tembus 13 ton/Ha!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/imun-bawang-merah-anti-moler/hamparan-kebun.webp"
+          alt="Foto panorama hamparan tanaman bawang merah sehat daun kaku jegrik bebas moler"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Hamparan Bawang Berimun Kuat: Daun tegak lurus serempak tahan cuaca ekstrem sampai panen!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/panen-rekor.webp"
+            alt="Foto panen raya bawang merah berumbi jumbo merah menyala"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Umbi Super Jumbo</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Pecah 14–16 siung merah padat</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/imun-bawang-merah-anti-moler/panen-2.webp"
+            alt="Ikatan bawang merah hasil panen kering padat tahan susut simpan"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Tahan Simpan Gudang</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bobot berat &amp; susut &lt;6%</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} • Botol Logo Timbul & Shieldtag
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Imun Bawang BENSU</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

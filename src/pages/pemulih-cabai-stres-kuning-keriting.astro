@@ -1,0 +1,659 @@
+---
+/**
+ * Native Landing Page: Pemulih Cabai Stres Kuning, Layu & Pucuk Keriting 3x Cepat (BENSU)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: bensu-pupuk-cair-organik (ID: 21329)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/pemulih-cabai-stres-kuning-keriting.css';
+
+export const prerender = false;
+
+const SLUG = 'pemulih-cabai-stres-kuning-keriting';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'bensu-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '21329'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/pemulih-cabai-stres-kuning-keriting/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Stimulator Imun & Pemulih Cabai Stres Kuning Keriting 3x Cepat: Bensu - ${Astro.locals.tenant.name}`}
+  description="Solusi daun cabai menguning, layu stres cuaca/obat, dan pucuk macet keriting. Tingkatkan kekebalan tanaman 3x lebih cepat dan buka trubus hijau lebat dalam 72 jam dengan Bensu Original."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Over-Claim, Competitor-Killer, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">DAUN CABAI MENGUNING, LAYU STRES & PUCUK MACET KERITING?</span>
+          Stimulator Imun 3X Lebih Cepat: Pulihkan Cabai Stres Keriting & Kuning Jadi <span class="hl-brush">TRUBUS HIJAU LEBAT</span> Dalam 72 Jam!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Jangan dihantam pupuk kimia panas saat tanaman stres! Semprot kabut <strong class="text-slate-950 font-bold">BENSU Original (Botol Logo Timbul & Hologram Shieldtag)</strong>: tingkatkan kekebalan tanaman 3x lebih cepat, buka pucuk keriting kaku, dan lebatkan bunga cabai!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan tanaman cabai menguning layu keriting stres vs pulih keluar trubus hijau lebat dalam 72 jam dengan Bensu"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Reaksi 72 Jam: Daun kuning kembali hijau tebal, pucuk keriting membuka & trubus baru meledak!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Stimulator Imun 3x Cepat</span>
+          <span class="text-slate-300">•</span>
+          <span>Botol Logo Timbul & Shieldtag</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+        </div>
+
+        <!-- 4 Point Over-Claim Checklist + Above-the-Fold CTA -->
+        <div class="mx-5 mt-5 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Percepat Pemulihan Keriting Daun 3x Lipat</strong> hingga trubus muda membuka lebar dan lentur dalam 72 jam</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Hijaukan Daun Cabai Menguning & Layu</strong> akibat stres cuaca ekstrem, mulsa panas, atau overdosis pestisida</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Aktivator Kekebalan & Pengunci Bunga</strong> agar bakal bunga dan pentil cabai tidak rontok saat cuaca berubah</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Kemasan Otentik Anti-Pecah + Shieldtag</strong> — super irit Rp 4.000-an/tangki untuk ribuan pohon cabai</span>
+            </li>
+          </ul>
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center rounded-lg bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold text-white shadow-sm transition-colors hover:bg-[#166534]"
+          >
+            Pesan Paket Pemulih Cabai Keriting Sekarang →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Gejala Mematikan <span class="hl-brush-red">Cabai Stres & Imun Drop</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Saat cabai stres dan imunnya hancur, memupuk kimia dosis tinggi justru memperparah kerusakan:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemulih-cabai-stres-kuning-keriting/gejala-1.webp"
+              alt="Daun cabai menguning pucat layu terkulai dan pucuk mengerut kaku keriting akibat stres cuaca dan obat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Daun Cabai Menguning Layu & Pucuk Mengerut Kaku Akibat Stres Cuaca/Obat
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Cabai Menguning Layu & Pucuk Mengerut Kaku Akibat Stres Cuaca/Obat</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Perubahan hujan-panas mendadak, serangan hama penusuk, dan residu pestisida panas merusak klorofil serta mengunci stomata hingga daun menguning dan pucuk keriting kaku.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemulih-cabai-stres-kuning-keriting/gejala-2.webp"
+              alt="Tanaman cabai mandek kerdil dan bunga berguguran di atas mulsa plastik karena imun tanaman drop"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Imun Tanaman Drop Sehingga Bunga Gugur & Pertumbuhan Mandek Sebulan
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Imun Tanaman Drop Sehingga Bunga Gugur & Pertumbuhan Mandek Sebulan</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Tanaman kehabisan energi asam amino untuk membelah sel baru sehingga pertumbuhan macet total seperti bonsai, mudah terserang virus/jamur, dan bunga rontok habis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi 72 Jam: <span class="hl-brush-red">Kuning Keriting</span> Jadi <span class="hl-brush">Trubus Lebat</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/pemulih-cabai-stres-kuning-keriting/overclaim-timeline.webp"
+          alt="Tahapan pemulihan cabai stres kuning keriting dari hari ke-1 hingga hari ke-3 memakai Bensu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Jam 0: Kuning Keriting</span>
+          <span class="text-amber-300">24 Jam: Daun Segar</span>
+          <span class="text-emerald-400">72 Jam: Trubus Mekar</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/kondisi-rusak.webp"
+            alt="Tanaman cabai tanpa Bensu tetap menguning layu dan pucuk keriting macet"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Kuning & Macet Total</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Pucuk keriting mengeras, daun menguning rontok, gagal panen.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/kondisi-pulih.webp"
+            alt="Tanaman cabai pakai Bensu pulih dengan trubus daun hijau lebar dan bunga lebat"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai BENSU
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Trubus Hijau & Lebat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Imun bangkit 3x cepat, tunas baru mulus lebar, bunga terkunci jadi buah.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitor-Killer Head-to-Head Matrix -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/60 shadow-sm">
+        <div class="bg-slate-900 px-3.5 py-2.5 text-center">
+          <h3 class="text-[13px] font-bold text-white">
+            Mengapa Pupuk Daun Kimia & POC Encer Gagal vs Keunggulan Mutlak BENSU?
+          </h3>
+        </div>
+        <div class="divide-y divide-slate-200 text-[11px] leading-snug">
+          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
+            <div class="p-2.5 text-red-700 border-r border-slate-200">✗ Pupuk Daun Kimia Panas & POC Molase Encer Rp 30rb-an</div>
+            <div class="p-2.5 text-emerald-800 bg-emerald-50/60">✓ BENSU Stimulator Imun 3x Cepat (L-Amino + Fulvic Detoks)</div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Makin Membakar Daun Stres:</strong> Garam kimia NPK daun memicu plasmolisis sehingga daun kuning makin layu terbakar.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Sejuk & Terserap 2 Jam:</strong> Nutrisi organik L-Amino langsung masuk stomata untuk menyegarkan sel yang layu.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Tidak Bisa Buka Keriting:</strong> POC tetes tebu biasa hanya jadi makanan jamur & tidak mampu membelah sel pucuk yang terkunci.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Dorong Trubus 3x Lebih Cepat:</strong> Mengaktifkan titik tumbuh meristem sehingga pucuk keriting membuka halus dalam 72 jam.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Imun Tetap Lemah:</strong> Tanaman mudah kambuh menguning setiap kali diguyur hujan malam atau terik siang.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Aktivator Kekebalan Sistemik:</strong> Meningkatkan antibodi alami tanaman 3x lipat terhadap stres cuaca & patogen.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Botol Polos Mudah Dipalsukan:</strong> Kemasan jerigen/botol tipis tanpa segel verifikasi resmi.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Botol Logo Timbul & Shieldtag:</strong> Kemasan HDPE tebal anti-pecah dengan Emboss BENSU & Hologram Shieldtag resmi.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/pemulih-cabai-stres-kuning-keriting/bensu-hero.webp"
+          alt="Botol resmi Bensu Pupuk Cair Organik dengan Logo Timbul dan Hologram Shieldtag"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram & Shieldtag Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi BENSU Segel Hologram Shieldtag Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">BENSU Original — Botol Logo Timbul & Hologram Shieldtag</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Kemasan Otentik Anti-Pecah + Stimulator, Aktivator & Obat Imun Tanaman 3x Lebih Cepat (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Aksi <span class="hl-brush">Stimulator Imun BENSU</span> pada Cabai
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Memulihkan cabai kuning, layu, dan keriting sekaligus memacu pembungaan:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemulih-cabai-stres-kuning-keriting/overclaim-1.webp"
+              alt="Pucuk cabai yang semula keriting kaku membuka menjadi trubus daun hijau muda lebar"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • PULIHKAN KERITING DAUN 3X CEPAT
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Buka Kuncian Pucuk Kaku & Pecah Trubus Baru 72 Jam!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Asam Amino L-bebas menembus jaringan pucuk yang mengerut untuk menetralisir stres oksidatif dan mendorong keluarnya tunas ketiak baru yang mulus lebar.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemulih-cabai-stres-kuning-keriting/overclaim-2.webp"
+              alt="Daun cabai yang menguning dan layu kembali tegak hijau pekat mengkilap"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • HIJAUKAN DAUN KUNING & LAYU
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Bangkitkan Klorofil & Kekebalan Tanaman Terhadap Cuaca!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Fulvic Detoks mencuci keasaman perakaran dan menyuplai prekusor klorofil instan sehingga daun pucat menguning kembali hijau gelap dan segar berdiri.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemulih-cabai-stres-kuning-keriting/overclaim-3.webp"
+              alt="Percabangan cabai sehat penuh bunga putih dan buah cabai lebat tanpa rontok"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • KUNCI BUNGA & LEBATKAN BUAH
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Tangkai Bunga Kuat Anti-Rontok, Panen Petikan Melimpah!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menekan hormon stres etilen saat musim hujan maupun panas terik sehingga setiap ruas cabang mengeluarkan bunga yang langsung mengunci jadi buah cabai padat.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/pemulih-cabai-stres-kuning-keriting/macro-proof.webp"
+          alt="Detail makro pucuk trubus cabai hijau segar berembun bebas keriting dan penuh bakal bunga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Bukti Imun 3x Lebih Kuat: Trubus baru keluar mulus lebar membawa bakal bunga di setiap cabang!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/pemulih-cabai-stres-kuning-keriting/aplikasi-kebun.webp"
+          alt="Petani menyemprotkan kabut nutrisi Bensu pada tanaman cabai di pagi hari"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Larutkan <strong>30–40 ml BENSU</strong> per tangki semprot 16L.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut bawah daun & <strong>kocor lubang mulsa</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Saat stres: tiap <strong>3–4 hari sekali</strong> (rutin: 7 hari sekali).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani: <span class="hl-brush">Cabai Kuning & Keriting Pulih Total</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/testi-1.webp"
+            alt="Pak Wahyudi di Kediri Jawa Timur menunjukkan tanaman cabai rawit yang pulih dari keriting daun"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Wahyudi, Kediri, Jawa Timur</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pucuk Keriting Buka</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Cabai rawit 3.500 batang sempat macet keriting dan kuning habis kena hujan malam. Disemprot BENSU 2x, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">3 hari langsung pecah trubus hijau mulus dan bunganya keluar rapat!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/testi-2.webp"
+            alt="Pak Deden di Garut Jawa Barat di kebun cabai merah besar yang sembuh dari layu dan kuning"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Deden, Garut, Jawa Barat</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Bebas Kuning & Layu</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Daun bawah menguning dan siang hari layu stres. Sejak dikocor & semprot BENSU botol logo timbul, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">imun tanaman naik drastis, daun hijau tebal sampai petikan ke-14!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/testi-3.webp"
+            alt="Pak Slamet di Magelang Jawa Tengah bersama hasil panen cabai keriting yang lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Slamet, Magelang, Jawa Tengah</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Imun 3x Lebih Kuat</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Tetangga sebelah banyak yang cabut pohon gara-gara keriting kuning. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Kebun saya rutin pakai BENSU dari awal, pucuk jalan terus dan buahnya penuh dari bawah sampai atas!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/pemulih-cabai-stres-kuning-keriting/hamparan-kebun.webp"
+          alt="Hamparan kebun cabai hijau subur serempak bebas kuning dan keriting pasca aplikasi Bensu"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Bentengi Imun Tanaman 3x Lebih Cepat: Jangan biarkan stres kuning & keriting menggagalkan panen!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/panen-rekor.webp"
+            alt="Hasil panen cabai merah mengkilap berkarung-karung dari kebun yang sehat"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Panen Lebat Beruntun</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Buah padat mengkilap berbobot</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemulih-cabai-stres-kuning-keriting/panen-2.webp"
+            alt="Tajuk tanaman cabai hijau rimbun penuh trubus muda dan bakal buah"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Trubus Mulus Terus</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Bebas macet & tahan cuaca ekstrem</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} — Segel Shieldtag Resmi
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Pemulih Cabai Stres</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,682 @@
+---
+/**
+ * Native Landing Page: Serum Pelebat Buah Asam Amino Jepang & Pengunci Bunga (SARATOGA)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: saratoga-serum-tanaman-premium (ID: 50510)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/serum-pelebat-buah-asam-amino.css';
+
+export const prerender = false;
+
+const SLUG = 'serum-pelebat-buah-asam-amino';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium')) ??
+  (await getStorefrontProduct(Astro.locals, '50510'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Serum Pelebat Buah Asam Amino Jepang & Pengunci Bunga Anti-Rontok | ${Astro.locals.tenant.name}`}
+  description="Paksa tanaman malas berbuah meledak dompolan buah lebat dan kunci 98% bunga anti-rontok dalam 48 jam. Serum Asam Amino Jepang SARATOGA 100% tanpa bau amis."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">SERUM ASAM AMINO JEPANG PELEBAT BUAH & PENGUNCI BUNGA!</span>
+          Paksa Tanaman Malas Berbuah Meledak <span class="hl-brush">DOMPOLAN BUAH LEBAT</span> & Kunci 98% Bunga Anti-Rontok — Tanpa Bau Amis!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Buktikan kedahsyatan <strong class="text-slate-950 font-bold">SARATOGA</strong> (Japanese L-Amino + Kalium + Fosfat + Boron + GA3): mengunci cincin tangkai bunga cabai, tomat, durian, mangga & alpukat dalam 48 jam tanpa bau amis pengundang lalat buah!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi bukti hasil aplikasi serum asam amino Jepang SARATOGA pelebat buah dan pengunci bunga anti rontok"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Bukti Hasil SARATOGA: 98% bunga mengunci jadi pentil buah bernas & dompolan lebat 2x lipat!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Japanese L-Amino + K-P-Boron + GA3</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>100% Tanpa Bau Amis</span>
+        </div>
+
+        <div class="mx-5 mt-4 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[12px] font-semibold text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Las kuat cincin tangkai bunga dalam 48 jam & cegah kerontokan bunga saat hujan angin</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Pacu pembungaan serempak pada cabai, tomat, jeruk, mangga, durian & alpukat yang malas berbuah</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Formula Asam Amino Jepang 100% tanpa bau amis — bebas serbuan lalat buah penyengat cabai</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Pulihkan cabai keriting kembali sehat produktif & pompa bobot buah padat mengkilap Grade A</span>
+            </li>
+          </ul>
+
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-[#14532D] px-4 py-2.5 text-center text-[13px] font-bold text-white shadow-sm transition-transform active:scale-[0.99]"
+          >
+            <span>Pesan Serum Pelebat Buah SARATOGA — Bisa COD</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Gejala Mematikan <span class="hl-brush-red">Perontok Bunga & Perusak Buah</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Mengapa bunga yang sudah mekar lebat tiba-tiba gugur habis dan pentil buah busuk tersengat lalat:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/serum-pelebat-buah-asam-amino/gejala-1.webp"
+              alt="Bunga dan pentil buah gugur berserakan di atas tanah dan mulsa saat hujan angin cuaca ekstrem"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Gugur Bunga & Pentil Saat Cuaca Ekstrem
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Bunga & Pentil Buah Gugur Berserakan Saat Hujan Angin / Cuaca Ekstrem</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Perubahan suhu panas terik ke hujan malam memicu lonjakan hormon etilen yang membuat tangkai bunga menguning pucat dan patah rontok sebelum sempat jadi buah.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/serum-pelebat-buah-asam-amino/gejala-2.webp"
+              alt="Buah cabai dan mangga busuk berulat akibat lalat buah yang terpancing bau amis pupuk asam amino ikan"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Bau Amis Mengundang Lalat Buah
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Salah Pakai Asam Amino Ikan Bau Bangkai yang Mengundang Lalat Buah Menyengat Cabai/Buah</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Pupuk asam amino ikan biasa meninggalkan bau amis busuk di daun dan pentil buah yang justru menjadi magnet pemanggil ribuan lalat buah penyuntik belatung.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Rontok & Keriting</span> Jadi <span class="hl-brush">Dompolan Lebat</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/serum-pelebat-buah-asam-amino/overclaim-timeline.webp"
+          alt="Tahapan kerja serum asam amino Jepang SARATOGA dari penguncian tangkai bunga 48 jam hingga dompolan buah penuh"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Jam 0: Rontok Parah</span>
+          <span class="text-amber-300">48 Jam: Tangkai Kekar</span>
+          <span class="text-emerald-400">Panen: Dompolan Penuh</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/kondisi-rusak.webp"
+            alt="Kondisi tanaman cabai keriting dan bunga rontok di atas mulsa tanpa SARATOGA"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa SARATOGA
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bunga Gugur & Ompong</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Tangkai menguning patah di mulsa, ruas cabang kosong tanpa buah.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/kondisi-pulih.webp"
+            alt="Kondisi tanaman cabai dan buah lebat setiap ketukan cabang mengikat pentil bernas dengan SARATOGA"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai SARATOGA
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Meledak Dompolan Lebat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              98% bunga mengikat jadi pentil buah padat mulus bebas lalat buah.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 shadow-sm">
+        <div class="bg-slate-950 px-4 py-3 text-center">
+          <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            PERBANDINGAN TELAK: JANGAN UNDANG LALAT BUAH!
+          </span>
+          <h3 class="mt-1 text-[15px] font-bold leading-snug text-white">
+            Mengapa Asam Amino Ikan & Pupuk Bubuk Kalah Telak vs SARATOGA?
+          </h3>
+        </div>
+
+        <div class="divide-y divide-slate-200 text-[12px]">
+          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
+            <div class="border-r border-slate-200 p-2.5 text-red-700">
+              ✗ Asam Amino Ikan Bau Bangkai & Pupuk Bubuk MKP Biasa
+            </div>
+            <div class="p-2.5 text-emerald-900">
+              ✓ SARATOGA Serum Asam Amino Jepang 100% Tanpa Bau Amis
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Bau Bangkai Panggil Lalat Buah:</strong>
+              Aroma amis menyengat membuat lalat buah berdatangan menyengat pentil cabai dan buah muda hingga busuk rontok.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">100% Odorless Tanpa Bau Amis:</strong>
+              Teknologi ekstraksi Jepang murni bebas bau amis sehingga pentil buah aman dari sengatan lalat buah.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Penyerapan Lambat Saat Mendung:</strong>
+              Pupuk bubuk MKP butuh sinar matahari terik untuk diolah daun; saat musim hujan bunga tetap gugur massal.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Tembus Stomata & Kunci 48 Jam:</strong>
+              L-Amino + Kalium + Fosfat + Boron + GA3 cair langsung diserap daun dalam 2 jam untuk mengelas cincin tangkai.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Cabai Keriting Macet Berbunga:</strong>
+              Tanaman yang habis terserang keriting tidak sanggup memecah tunas bunga baru hanya dengan pupuk bubuk biasa.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Pulihkan Stres & Pecah Cabang Baru:</strong>
+              Meregenerasi pucuk cabai keriting agar kembali mekar mulus sekaligus memicu bakal bunga di setiap ketukan.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Endapan Kerak Menyumbat Tangki:</strong>
+              Bubuk sering menggumpal di dasar tangki dan meninggalkan bercak residu di kulit buah.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Serum Murni Larut 100% Sempurna:</strong>
+              Hemat dosis (cukup 2 tutup/tangki), mencetak kulit buah tebal mengkilap dan bobot karung naik 2x lipat!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Image -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/serum-pelebat-buah-asam-amino/saratoga-hero.webp"
+          alt="Botol resmi SARATOGA Serum Asam Amino Jepang Pelebat Buah di kebun berbuah lebat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram + Shieldtag Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-3 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Original Serum Asam Amino Jepang Segel Hologram"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <span class="inline-block rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">
+            GARANSI 100% ORIGINAL • FORMULA JEPANG RESMI
+          </span>
+          <p class="mt-1 text-[12px] font-bold text-emerald-950">SARATOGA Original — Serum Asam Amino Jepang Segel Hologram</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Waspada cairan asam amino palsu berbau amis di marketplace! SARATOGA resmi 100% odorless dilengkapi segel hologram & Shieldtag (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Serum Asam Amino SARATOGA</span> Pelebat Buah
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Kombinasi presisi L-Amino Jepang, Fosfat-Kalium tinggi, Boron, dan GA3 aktif:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/serum-pelebat-buah-asam-amino/overclaim-1.webp"
+              alt="Cincin tangkai bunga cabai dan buah mengunci tebal hijau kekar anti rontok dalam 48 jam"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • KUNCI TANGKAI BUNGA 48 JAM
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Stop Kerontokan Bunga & Pentil Meski Hujan Angin!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Memblokir hormon etilen perontok dan mempertebal cincin pangkal tangkai bunga sehingga 98% bunga mekar berhasil mengikat jadi buah muda.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/serum-pelebat-buah-asam-amino/overclaim-2.webp"
+              alt="Dompolan buah cabai, tomat, dan mangga muncul lebat di setiap ruas cabang berkat SARATOGA"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • MELEDAK DOMPOLAN SETANDAN
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Paksa Tanaman Malas Berbuah Penuh di Setiap Cabang!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Merangsang pembungaan serempak di luar musim dan melipatgandakan jumlah buah jadi per tandan tanpa bau amis pengundang lalat buah.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/serum-pelebat-buah-asam-amino/overclaim-3.webp"
+              alt="Buah cabai dan tomat padat bernas mengkilap berbobot berat hasil panen SARATOGA"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • PENGISIAN BUAH PADAT BERBOBOT
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Daging Buah Tebal Bernas & Bobot Timbangan Naik 2X!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Kalium dan Fosfat organik memompa pengisian buah secara maksimal hingga kulit mulus mengkilap tahan pecah dan tahan simpan.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/serum-pelebat-buah-asam-amino/macro-proof.webp"
+          alt="Foto makro dompolan pentil buah dan tangkai bunga hijau kekar hasil semprot SARATOGA"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Bukti Nyata di Cabang: Setiap ruas mengunci pentil buah segar tanpa satupun yang menguning gugur!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Aplikasi <span class="hl-brush">Super Hemat</span> di Kebun
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/serum-pelebat-buah-asam-amino/aplikasi-kebun.webp"
+          alt="Petani menyemprotkan serum asam amino SARATOGA pada tanaman cabai dan buah yang sedang berbunga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Campur <strong>2 tutup SARATOGA</strong> per tangki semprot 16L air.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot kabut ke <strong>daun, cabang & bunga</strong> pagi hari.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Tiap <strong>4 hari</strong> saat rontok, atau <strong>7 hari</strong> rutin.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani: <span class="hl-brush">Buah Lebat Tanpa Rontok</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/testi-1.webp"
+            alt="Dokumentasi Kang Arief menunjukkan bukti hasil Saratoga asam amino pada kebun cabai berbuah sangat lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Kang Arief Hidayat, Lembang, Jabar</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Full Buah Setandan</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Bukti nyata pakai SARATOGA Asam Amino Jepang: bunga cabai dan tomat yang tadinya rontok kena hujan malam langsung mengunci kuat. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Setiap ketukan cabang full pentil buah & bebas lalat buah karena gak bau amis!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/testi-2.webp"
+            alt="Dokumentasi Pak Zilva di Malang dengan tanaman cabai yang pulih dari keriting dan meledak buah lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Zilva Pratama, Poncokusumo, Malang</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pulih Keriting & Lebat</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Cabai sempat keriting dan malas keluar bunga. Rutin semprot SARATOGA 1 Liter tiap minggu, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">pucuk baru trubus mulus dan bunganya langsung meledak jadi buah padat semua!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/testi-3.webp"
+            alt="Dokumentasi Pak H. Darmawan di Banyuwangi sukses mengunci bunga mangga, alpukat, dan jeruk dengan SARATOGA"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Darmawan, Muncar, Banyuwangi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">98% Bunga Jadi Buah</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Dipakai di kebun jeruk dan alpukat yang bunganya sering gugur diterpa angin, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">dalam 2 hari tangkai bunga jadi kekar ulet dan dompolan buahnya sampai merunduk!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/serum-pelebat-buah-asam-amino/hamparan-kebun.webp"
+          alt="Foto panorama kebun cabai dan buah lebat merata hasil aplikasi serum SARATOGA"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Hamparan Kebun Lebat: Bunga mengunci 98% jadi buah bernas tanpa gugur di atas mulsa!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/panen-rekor.webp"
+            alt="Dompolan buah lebat siap panen raya hasil penguncian bunga SARATOGA"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Dompolan Melimpah</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">98% bunga mengikat jadi buah</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/serum-pelebat-buah-asam-amino/panen-2.webp"
+            alt="Hasil panen buah segar mulus padat bernas kualitas Grade A"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bobot Karung 2X</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Buah padat mulus bebas lalat</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} • Segel Hologram & Shieldtag
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Serum Pelebat Buah SARATOGA</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

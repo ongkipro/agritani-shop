@@ -1,0 +1,658 @@
+---
+/**
+ * Native Landing Page: Obat Sawit Busuk Pucuk, Bercak Daun Curvularia & Ganoderma (AUSSIE)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: aussie-pupuk-cair-organik (ID: 26039)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/obat-sawit-busuk-pucuk-ganoderma.css';
+
+export const prerender = false;
+
+const SLUG = 'obat-sawit-busuk-pucuk-ganoderma';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'aussie-pupuk-cair-organik')) ??
+  (await getStorefrontProduct(Astro.locals, '26039'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/obat-sawit-busuk-pucuk-ganoderma/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Obat Sawit Busuk Pucuk, Bercak Daun Curvularia & Ganoderma: Aussie - ${Astro.locals.tenant.name}`}
+  description="Solusi penyakit kelapa sawit terkena busuk pucuk tombak, bercak daun Curvularia, busuk buah, dan jamur Ganoderma. Tombak baru mekar & batang kering keras dalam 14–21 hari dengan AUSSIE Original."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Over-Claim, Competitor-Killer, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">AWAS BUSUK PUCUK & BERCAK DAUN MENULAR SATU PETAK!</span>
+          Sawit Busuk Pucuk Tombak, Bercak Daun Curvularia & Ganoderma Dijamin <span class="hl-brush">TOMBAK BARU MEKAR & BATANG KERING KERAS</span> Dalam 14–21 Hari!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Cukup semprot tajuk & kocor piringan dengan <strong class="text-slate-950 font-bold">AUSSIE Original (Bisa Scan Barcode Resmi)</strong>: hentikan penularan spora bercak daun kuning-oranye, keringkan busuk pucuk tombak, dan kunci mati jamur Ganoderma tanpa bor batang!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan kelapa sawit terserang busuk pucuk tombak, bercak daun Curvularia & Ganoderma vs pulih hijau mekar"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Reaksi 14–21 Hari: Busuk pucuk mengering, bercak daun berhenti menyebar & tombak baru mencuat hijau!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Immune Cellactivator + Bio-Silika</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa Scan Barcode Resmi</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+        </div>
+
+        <!-- 4 Point Over-Claim Checklist + Above-the-Fold CTA -->
+        <div class="mx-5 mt-5 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Hentikan Busuk Pucuk (Spear Rot)</strong> & dorong tombak pupus baru mekar sehat dalam 14–21 hari</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Blokir Bercak Daun Curvularia</strong> agar spora kuning-cokelat tidak menular menghabiskan satu petak</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Kunci Mati Jamur Ganoderma & Busuk Buah</strong> tanpa melukai batang dengan bor atau suntikan</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Hemat Rp 5.500/Pokok</strong> — selamatkan kebun TBM & TM tanpa biaya tumbang-tanam ulang puluhan juta</span>
+            </li>
+          </ul>
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center rounded-lg bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold text-white shadow-sm transition-colors hover:bg-[#166534]"
+          >
+            Pesan Paket Obat Busuk Pucuk & Ganoderma →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Serangan Jamur <span class="hl-brush-red">Pemusnah Kebun Sawit</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Hati-hati! Spora jamur terbang terbawa angin dan air hujan, mengancam seluruh petak kebun:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/gejala-1.webp"
+              alt="Tombak pupus kelapa sawit membusuk lonyot kecokelatan dan patah menggantung akibat penyakit busuk pucuk Spear Rot"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Tombak Pupus Membusuk Lonyot & Patah (Busuk Pucuk Spear Rot)
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Tombak Pupus Membusuk Lonyot & Patah (Busuk Pucuk <em>Spear Rot</em>)</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Jamur patogen menyerang titik tumbuh atas hingga pupus tombak membusuk basah berbau menyengat, patah menggantung, dan menghentikan keluarnya pelepah maupun bunga baru.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/gejala-2.webp"
+              alt="Daun sawit dipenuhi bercak kuning cokelat Curvularia dan pangkal batang keropos terserang Ganoderma"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Bercak Daun Kuning-Cokelat (Curvularia) & Pangkal Keropos Ganoderma
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Bercak Daun Kuning-Cokelat (<em>Curvularia</em>) & Pangkal Keropos Ganoderma</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Bintik kuning-oranye <em>Curvularia</em> menyebar menghanguskan daun seperti terbakar, sementara jamur <em>Ganoderma</em> menggerogoti pangkal batang dan tandan buah hingga membusuk.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Progres Nyata: <span class="hl-brush-red">Pucuk Busuk & Bercak</span> Jadi <span class="hl-brush">Mekar Hijau Kekar</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/overclaim-timeline.webp"
+          alt="Tahapan pemulihan sawit dari busuk pucuk dan bercak daun minggu ke-1 hingga minggu ke-3 dengan AUSSIE"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Minggu 1: Spora Kering</span>
+          <span class="text-amber-300">Minggu 2: Tombak Dorong</span>
+          <span class="text-emerald-400">Minggu 3: Pupus Mekar</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/kondisi-rusak.webp"
+            alt="Kondisi sawit tanpa AUSSIE terserang busuk pucuk, bercak daun mengering dan pangkal keropos"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Menular Satu Petak</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Pucuk membusuk mati, bercak daun kering merembet, pohon tumbang.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/kondisi-pulih.webp"
+            alt="Kondisi sawit pakai AUSSIE tombak baru mekar hijau mulus bebas bercak dan pangkal keras"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai AUSSIE
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Tombak Mekar & Sehat</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Luka busuk mengering keras, daun baru hijau mengkilap, TBS selamat.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitor-Killer Head-to-Head Matrix -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/60 shadow-sm">
+        <div class="bg-slate-900 px-3.5 py-2.5 text-center">
+          <h3 class="text-[13px] font-bold text-white">
+            Mengapa Fungisida Kontak & Bor Batang Gagal vs Keunggulan Mutlak AUSSIE?
+          </h3>
+        </div>
+        <div class="divide-y divide-slate-200 text-[11px] leading-snug">
+          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
+            <div class="p-2.5 text-red-700 border-r border-slate-200">✗ Fungisida Kontak Biasa & Tebang/Bor Batang</div>
+            <div class="p-2.5 text-emerald-800 bg-emerald-50/60">✓ AUSSIE Immune Cellactivator + Bio-Silika</div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Luntur & Tidak Tembus Pucuk:</strong> Fungisida kontak tidak mampu menembus lipatan pupus tombak yang membusuk di dalam.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Sistemik Tembus Titik Tumbuh:</strong> Meresap lewat tajuk & akar piringan untuk mengeringkan busuk pucuk dari dalam.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Bercak Daun Kambuh Lagi:</strong> Daun baru tetap tipis lunak sehingga spora <em>Curvularia</em> mudah menginfeksi ulang.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Perisai Bio-Silika Berlapis:</strong> Mempertebal kutikula daun sehingga spora bercak daun gagal menempel & mati kering.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Luka Bor Undang Kumbang:</strong> Mengebor batang sawit justru memicu infeksi bakteri pembusuk & serangan kumbang tanduk.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Tanpa Bor / Tanpa Luka:</strong> Cukup semprot batang & kocor piringan, hifa <em>Ganoderma</em> terkunci mati & batang mengeras.
+            </div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">
+              <strong class="text-slate-900">Pohon Mandek Berbulan-bulan:</strong> Sekalipun jamur berhenti, titik tumbuh yang rusak tidak sanggup mendorong tombak baru.
+            </div>
+            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
+              <strong class="text-emerald-950">Pacu Tombak Baru 14–21 Hari:</strong> L-Amino & Humat memicu akar baru yang mendorong pupus segar mekar cepat.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Held by Farmer -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/aussie-hero.webp"
+          alt="Botol Nutrisi Fungisida Organik AUSSIE Original Dipegang Petani Kelapa Sawit"
+          class="aspect-[4/5] w-full object-cover"
+          width="960"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram & Barcode Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi AUSSIE Segel Hologram Anti-Pemalsuan"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">AUSSIE Original — Bisa Scan Barcode & Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Awas barang tiruan! Kemasan resmi dilengkapi Barcode Verifikasi Keaslian + Immune Cellactivator (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Mekanisme <span class="hl-brush">AUSSIE Penyelamat Sawit</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Mengobati tuntas busuk pucuk, bercak daun, busuk buah, dan Ganoderma sekaligus:
+      </p>
+
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/overclaim-1.webp"
+              alt="Tombak pupus kelapa sawit yang busuk mengering dan mendorong keluarnya pupus baru hijau segar"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • KERINGKAN BUSUK PUCUK TOMBAK
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Hentikan Pembusukan Titik Tumbuh & Dorong Tombak Baru!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Senyawa <em>Immune Cellactivator</em> menembus lipatan pupus untuk menghentikan pembusukan jaringan meristem dan memacu dorongan tombak sehat dalam 14 hari.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/overclaim-2.webp"
+              alt="Pelepah kelapa sawit baru tumbuh hijau gelap mengkilap bebas bercak kuning Curvularia"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • MATIKAN SPORA BERCAK DAUN
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Keringkan Bercak Curvularia & Lapisi Daun dengan Silika!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Menghentikan perluasan bercak kuning-cokelat pada bibit maupun pokok produksi serta melapisi pelepah baru dengan Bio-Silika agar kebal serangan spora jamur.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/overclaim-3.webp"
+              alt="Pangkal batang kelapa sawit mengeras bebas Ganoderma dan tandan buah segar padat bebas busuk buah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • KUNCI MATI GANODERMA & BUSUK BUAH
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pangkal Batang Keras Beton & Janjang TBS Kembali Padat!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Mematikan hifa <em>Ganoderma boninense</em> di perakaran piringan dan mencegah busuk tandan buah (<em>Marasmius</em>) sehingga panen kembali normal.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/macro-proof.webp"
+          alt="Detail makro pupus tombak kelapa sawit baru yang mekar hijau mulus bebas busuk dan bercak"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Bukti Pemulihan: Tombak baru mencuat hijau mengkilap tanpa bercak, tanda infeksi jamur telah terhenti!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Super Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/aplikasi-kebun.webp"
+          alt="Petani menyemprot tajuk pucuk dan mengocor piringan kelapa sawit dengan larutan AUSSIE"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            <strong>60–80 ml AUSSIE</strong> per tangki 16L air bersih.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Aplikasi</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot pucuk/daun & <strong>kocor pangkal piringan</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi tiap <strong>10–14 hari sekali</strong> (2–3 kali aplikasi).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani: <span class="hl-brush">Sembuh dari Busuk Pucuk & Ganoderma</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/testi-1.webp"
+            alt="Pak Hendra di Muaro Jambi menunjukkan sawit yang pulih dari busuk pucuk tombak"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Hendra, Muaro Jambi, Jambi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Sembuh Busuk Pucuk</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "35 pokok sawit umur 5 tahun kena busuk pucuk sampai tombaknya patah lonyot. Disemprot & kocor AUSSIE 2 kali, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">hari ke-18 tombak baru langsung menyodok naik dan mekar hijau bersih!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/testi-2.webp"
+            alt="Pak Syafrizal di Kampar Riau bersama sawit yang bebas bercak daun Curvularia"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Syafrizal, Kampar, Riau</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Bercak Daun Berhenti</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Bercak daun Curvularia hampir ngabisin satu petak TBM kami. Habis disemprot AUSSIE rutin, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">bintik kuning-cokelat langsung kering mati dan pelepah baru tumbuh mulus tebal!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/testi-3.webp"
+            alt="Pak Ruslan di Kotawaringin Timur Kalimantan Tengah bersama pokok sawit yang pulih dari Ganoderma"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Ruslan, Kotim, Kalimantan Tengah</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Bebas Ganoderma</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Pokok yang kena Ganoderma dan busuk buah tadinya mau ditumbang. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dikocor AUSSIE 3x tanpa bor batang, pangkalnya mengering sekeras batu & buah keluar normal lagi!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/hamparan-kebun.webp"
+          alt="Hamparan kebun kelapa sawit hijau sehat bebas busuk pucuk, bercak daun dan Ganoderma"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Lindungi Satu Petak Penuh: Hentikan penularan busuk pucuk, bercak daun & Ganoderma sekarang!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/panen-rekor.webp"
+            alt="Hasil panen tandan buah segar kelapa sawit merah padat bebas busuk buah"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bebas Busuk Buah</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Janjang TBS merah padat berbobot</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/obat-sawit-busuk-pucuk-ganoderma/panen-2.webp"
+            alt="Tajuk kelapa sawit mekar hijau tegap berlapis silika bebas bercak daun"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Tajuk Mekar Kekar</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Tombak membuka & batang keras</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} — Bisa Scan Barcode
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Obat Busuk Pucuk & Ganoderma</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

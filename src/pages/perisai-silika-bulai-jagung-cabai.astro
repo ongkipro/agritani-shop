@@ -1,0 +1,682 @@
+---
+/**
+ * Native Landing Page: Perisai Silika Bulai Jagung & Cabai Keriting Patek (KOJIEN)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: kojien (ID: 99118)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/perisai-silika-bulai-jagung-cabai.css';
+
+export const prerender = false;
+
+const SLUG = 'perisai-silika-bulai-jagung-cabai';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'kojien')) ??
+  (await getStorefrontProduct(Astro.locals, '99118'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/perisai-silika-bulai-jagung-cabai/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Perisai Kaca Nano-Silika KOJIEN: Solusi Jagung Bule Bulai & Cabai Keriting Patek | ${Astro.locals.tenant.name}`}
+  description="Hentikan jagung bule bulai dan cabai 40 HST keriting patek dalam 7 hari. Semprot KOJIEN Ortho-Silicic Acid + Kalsium-Kalium pelapis sel daun sekeras kaca."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-7">
+        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">JAGUNG RAWAN BULE BULAI & CABAI 40 HST MULAI KERITING?</span>
+          Perisai Kaca Nano-Silika KOJIEN: Hentikan <span class="hl-brush">JAGUNG BULE BULAI & CABAI KERITING</span> Patek Dalam 7 Hari!
+        </h1>
+        <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Jangan tunggu bulai putih dan keriting kuning menghabiskan modal sebedengan! Semprot <strong class="text-slate-950 font-bold">KOJIEN</strong> (Ortho-Silicic Acid + Kalsium-Kalium): lapisi sel daun sekeras kaca agar spora jamur Bulai/Patek & tusukan Kutu Kebul/Thrips patah gagal tembus!
+        </p>
+      </div>
+
+      <div class="mt-5">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Dokumentasi tanaman jagung bebas bule bulai dan cabai 40 HST tahan keriting patek berkat perisai Nano-Silika KOJIEN"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/85 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#BBF7D0]">
+              Andalan Petani Jagung & Cabai: 99% bebas bule bulai, pucuk cabai 40 HST mulus & kebal patek!
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-3.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[11px] font-semibold text-slate-700">
+          <span>Ortho-Silicic Acid (OSA) + Ca-Kalium</span>
+          <span class="text-slate-300">•</span>
+          <span>Bisa COD (Bayar di Tempat)</span>
+          <span class="text-slate-300">•</span>
+          <span>Segel Hologram & Shieldtag Resmi</span>
+        </div>
+
+        <div class="mx-5 mt-4 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[12px] font-semibold text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Bentengi titik tumbuh jagung sejak 10–15 HST agar spora jamur Bule Bulai gagal menembus daun</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Keraskan epidermis daun cabai umur 30–40 HST hingga mulut Thrips & Kutu Kebul tumpul gagal menusuk</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Keringkan luka basah jamur Patek Antraknosa & bercak daun dalam 24 jam dengan Bio-Sulfur aktif</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">✓</span>
+              <span>Perisai kristal kaca permanen tidak luntur hujan & hemat belanja fungisida/insektisida 50%</span>
+            </li>
+          </ul>
+
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-[#14532D] px-4 py-2.5 text-center text-[13px] font-bold text-white shadow-sm transition-transform active:scale-[0.99]"
+          >
+            <span>Pesan Paket Perisai Silika KOJIEN — Bisa COD</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (2 Gejala Mematikan dengan Bukti Foto) -->
+    <section class="bg-red-50/35 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        2 Gejala Mematikan <span class="hl-brush-red">Jagung Bule & Cabai Keriting</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-2 mb-5">
+        Saat dinding sel daun tipis tanpa lapisan silika, penyakit bulai dan hama keriting merusak panen dalam hitungan hari:
+      </p>
+
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-silika-bulai-jagung-cabai/gejala-1.webp"
+              alt="Daun jagung muda klorosis bergaris putih kuning terkena bule bulai Peronosclerospora dan tongkol kosong"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              1. Jagung Kena Bule / Bulai Putih
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Daun Jagung Muda Klorosis Bergaris Putih Kuning (Bule/Bulai <em>Peronosclerospora</em>) & Tongkol Kosong</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Embun pagi membawa spora bulai menembus pori daun jagung muda yang masih lunak, mengunci titik tumbuh hingga daun memutih bule, batang kerdil, dan gagal keluar tongkol.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-silika-bulai-jagung-cabai/gejala-2.webp"
+              alt="Cabai umur 30 sampai 40 HST pucuk keriting kaku terserang Thrips Kutu Kebul dan jamur patek"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
+              2. Cabai 30–40 HST Keriting & Patek
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[14px] font-bold text-slate-950">Cabai Umur 30–40 HST Pucuk Keriting Kaku Terserang Thrips, Kutu Kebul & Jamur Patek</h3>
+            <p class="text-[12px] text-slate-600 mt-1 leading-snug">
+              Memasuki fase generatif 30–40 HST, pucuk daun muda yang lembek mudah ditusuk Thrips dan Kutu Kebul pembawa virus kuning, sementara kulit buah tipis bobol ditembus jamur Patek.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Transformasi Nyata: <span class="hl-brush-red">Bulai & Keriting</span> Jadi <span class="hl-brush">Daun Kaku Kebal</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-5 relative bg-slate-950">
+        <img
+          src="/images/landing/perisai-silika-bulai-jagung-cabai/overclaim-timeline.webp"
+          alt="Tahapan pembentukan perisai kaca Nano-Silika KOJIEN pada jagung dan cabai dalam 7 hari"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Hari 0: Rawan Bulai/Keriting</span>
+          <span class="text-amber-300">24 Jam: Sel Mengeras</span>
+          <span class="text-emerald-400">Hari 7: Jegrik & Mulus</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/kondisi-rusak.webp"
+            alt="Kondisi jagung kena bule bulai putih dan cabai keriting patek tanpa KOJIEN"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Bule Bulai & Keriting</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">
+              Daun jagung putih mandul, pucuk cabai mengkerut & buah busuk patek.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40 shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/kondisi-pulih.webp"
+            alt="Kondisi jagung hijau tegap bebas bulai dan cabai 40 HST mulus berkat KOJIEN"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai KOJIEN
+          </div>
+          <div class="flex flex-1 flex-col justify-center p-3">
+            <h3 class="text-[12px] font-bold leading-tight text-emerald-900">Jegrik Kaku & Mulus</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-600">
+              Jagung hijau pekat bertongkol besar, cabai 40 HST tahan keriting & patek.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 shadow-sm">
+        <div class="bg-slate-950 px-4 py-3 text-center">
+          <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            FAKTA LAPANGAN: MENGAPA OBAT KIMIA BIASA GAGAL?
+          </span>
+          <h3 class="mt-1 text-[15px] font-bold leading-snug text-white">
+            Fungisida/Insektisida Biasa vs Perisai Kristal Kaca Nano-Silika KOJIEN
+          </h3>
+        </div>
+
+        <div class="divide-y divide-slate-200 text-[12px]">
+          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
+            <div class="border-r border-slate-200 p-2.5 text-red-700">
+              ✗ Fungisida Kontak Mudah Luntur Hujan & Insektisida Bikin Hama Kebal
+            </div>
+            <div class="p-2.5 text-emerald-900">
+              ✓ KOJIEN Perisai Kristal Kaca Nano-Silika (OSA) + Bio-Sulfur
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Bulai Jagung Tetap Menular:</strong>
+              Fungisida biasa luntur tersapu embun dan hujan, tidak mampu menutup pori daun jagung muda dari spora bulai.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Kunci Epidermis Jagung Sekeras Kaca:</strong>
+              Ortho-Silicic Acid (OSA) menyatu permanen di dinding sel daun sehingga jarum spora Bulai patah gagal tembus!
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Thrips & Kutu Kebul Makin Resisten:</strong>
+              Semprot racun abamektin terus-menerus bikin hama kebal dan pucuk cabai 40 HST tetap keriting kuning.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Tumpulkan Mulut Hama Penusuk:</strong>
+              Lapisan kristal Nano-Silika membuat daun cabai kaku keras hingga Kutu Kebul & Thrips gagal mengisap pucuk.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Kulit Buah Cabai Tipis Mudah Patek:</strong>
+              Saat lembap tinggi, jamur antraknosa langsung menembus kulit buah cabai hingga busuk menghitam.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">Bio-Sulfur Keringkan Luka 24 Jam:</strong>
+              Mematikan spora jamur di permukaan sekaligus menebalkan kulit buah cabai agar mulus mengkilap bebas patek.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
+              <strong class="block text-slate-900">Boros Jutaan Rupiah Beli Obat:</strong>
+              Harus mencampur banyak merek obat bulai, obat keriting, dan fungisida patek setiap minggu.
+            </div>
+            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
+              <strong class="block text-emerald-950">1 Botol untuk Jagung, Cabai & Padi:</strong>
+              Pangkas pengeluaran pestisida kimia hingga 50% dengan perisai fisik yang tidak bisa dilawan mutasi jamur/hama!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-8">
+      <!-- Authentic Bottle Image -->
+      <div class="-mx-5 mb-5 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/perisai-silika-bulai-jagung-cabai/kojien-hero.webp"
+          alt="Botol resmi KOJIEN Original Perisai Nano-Silika OSA di lahan jagung dan cabai sehat"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram + Shieldtag Badge -->
+      <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-3 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi KOJIEN Original Perisai Nano-Silika OSA Segel Hologram Resmi"
+          class="h-14 w-14 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <span class="inline-block rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">
+            GARANSI 100% ORIGINAL • NANO-SILIKA OSA RESMI
+          </span>
+          <p class="mt-1 text-[12px] font-bold text-emerald-950">KOJIEN Original — Perisai Nano-Silika OSA Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
+            Jangan tertipu silika cair tiruan tanpa kandungan Ortho-Silicic Acid! KOJIEN asli dilengkapi segel hologram & kode Shieldtag resmi (500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        3 Efek <span class="hl-brush">Perisai Kaca Nano-Silika KOJIEN</span>
+      </h2>
+      <p class="text-[14px] text-slate-600 mt-1.5 mb-5">
+        Perlindungan ganda Ortho-Silicic Acid (OSA), Kalsium-Kalium, dan Bio-Sulfur aktif:
+      </p>
+
+      <!-- 3 Big Visual Overclaim Cards -->
+      <div class="space-y-5">
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-silika-bulai-jagung-cabai/overclaim-1.webp"
+              alt="Tanaman jagung berdiri tegap daun kaku 45 derajat hijau pekat bebas bule bulai"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 1 • STOP JAGUNG BULE BULAI 99%
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Daun Jagung Tegap Kaku 45° & Spora Bulai Gagal Tembus!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Melapisi daun jagung muda sejak umur 10–15 HST dengan kristal silika sehingga spora <em>Peronosclerospora</em> terpental dan tanaman tumbuh hijau royo-royo.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-silika-bulai-jagung-cabai/overclaim-2.webp"
+              alt="Tanaman cabai umur 40 HST pucuk daun mekar mulus kaku tahan keriting Thrips dan Kutu Kebul"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 2 • CABAI 40 HST TAHAN KERITING
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Pucuk Cabai Mekar Mulus, Kutu Kebul & Thrips Patah Gigi!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Mengeraskan jaringan epidermis pucuk cabai sehingga hama penusuk-pengisap vektor virus kuning tidak sanggup menembus cairan sel daun.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200/80 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-900">
+            <img
+              src="/images/landing/perisai-silika-bulai-jagung-cabai/overclaim-3.webp"
+              alt="Buah cabai merah mulus mengkilap bebas patek dan tongkol jagung besar padat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent px-3.5 pb-2.5 pt-6">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                EFEK 3 • BENTENG ANTI-PATEK & BOBOT PANEN
+              </span>
+              <h3 class="text-[15px] font-bold text-white mt-1">
+                Keringkan Luka Jamur 24 Jam & Cetak Buah Grade A!
+              </h3>
+            </div>
+          </div>
+          <p class="p-3 text-[12px] text-slate-600 leading-snug">
+            Kalsium-Kalium dan Bio-Sulfur mempertebal kulit buah cabai agar kebal pembusukan patek antraknosa sekaligus mengisi biji tongkol jagung padat penuh.
+          </p>
+        </div>
+      </div>
+
+      <!-- Macro Detail Proof -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/perisai-silika-bulai-jagung-cabai/macro-proof.webp"
+          alt="Foto makro daun jagung dan cabai berlapis kristal Nano-Silika KOJIEN menolak butiran air hujan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-900 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Lapisan Kaca Nano-Silika: Air embun & hujan langsung tergelincir jatuh tanpa sempat memicu spora bulai/patek!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
+    <section class="bg-white px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Cara Semprot <span class="hl-brush">Jagung & Cabai</span>
+      </h2>
+
+      <div class="-mx-5 my-4">
+        <img
+          src="/images/landing/perisai-silika-bulai-jagung-cabai/aplikasi-kebun.webp"
+          alt="Petani menyemprot KOJIEN pada tanaman jagung dan cabai di lahan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 items-stretch gap-2.5 text-center">
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">1</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Takaran</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Campur <strong>2–3 tutup KOJIEN</strong> per tangki semprot 16L air.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">2</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Jagung & Cabai</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Semprot jagung mulai <strong>10 HST</strong> & cabai sejak <strong>15–40 HST</strong>.
+          </p>
+        </div>
+
+        <div class="flex h-full flex-col rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+          <span class="mx-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#14532D] text-[11px] font-bold text-white">3</span>
+          <h3 class="mt-2 text-[12px] font-bold leading-tight text-slate-900">Interval</h3>
+          <p class="mt-1 text-[11px] leading-snug text-slate-600">
+            Ulangi tiap <strong>3–4 hari</strong> saat darurat, atau <strong>7 hari</strong> rutin.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS & OVERCLAIM HARVEST GALLERY -->
+    <section class="bg-slate-50/60 px-5 py-8">
+      <h2 class="text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+        Bukti Petani: <span class="hl-brush">Bebas Bulai & Tahan Keriting</span>
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/testi-1.webp"
+            alt="Dokumentasi Pak Lali Mantan di Kediri mengatasi jagung kena bule bulai dengan nutrisi andalan KOJIEN"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Budi Santoso, Pare, Kediri</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Solusi Jagung Bule Bulai</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Jagung umur 15 hari mulai ada tanda bule putih langsung saya semprot KOJIEN. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Bulai langsung berhenti gak menular, daun baru tumbuh hijau pekat kaku kayak silet & tongkol besar penuh!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/testi-2.webp"
+            alt="Dokumentasi petani Sumsel menunjukkan tanaman cabai 40 HST tahan keriting dan bebas patek berkat KOJIEN"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Bang Hendri, Belitang, Sumatera Selatan</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Cabai 40 HST Tahan Keriting</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "Biasanya cabai masuk umur 35–40 HST mulai keriting kena Thrips dan Kutu Kebul. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dikawal KOJIEN daunnya tebal kaku mengkilap, tahan keriting dan buahnya mulus bebas patek!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/testi-3.webp"
+            alt="Dokumentasi Mas Andik di Nganjuk menggunakan KOJIEN untuk membentengi tanaman dari serangan jamur musim hujan"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Mas Andik Prabowo, Sukomoro, Nganjuk</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Hemat Fungisida 50%</span>
+            </div>
+            <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
+              "KOJIEN jadi nutrisi silika andalan saya di lahan. <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">Dinding sel tanaman jadi sekeras kaca, hujan deras tiap malam tetap kebal jamur & biaya obat kimia turun drastis!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fullwidth Overclaim Panorama -->
+      <div class="-mx-5 mt-6 relative">
+        <img
+          src="/images/landing/perisai-silika-bulai-jagung-cabai/hamparan-kebun.webp"
+          alt="Foto panorama kebun jagung dan cabai hijau segar bebas bulai dan keriting berkat KOJIEN"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="bg-slate-950 py-2 px-4 text-center">
+          <p class="text-[11px] font-bold text-[#BBF7D0]">
+            Hamparan Lahan Terlindungi KOJIEN: Jagung tegap bebas bule bulai & cabai mulus sampai panen raya!
+          </p>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/panen-rekor.webp"
+            alt="Hasil panen jagung tongkol besar padat bebas bulai dan cabai mulus"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">99% Bebas Bule Bulai</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Tongkol jagung isi padat penuh</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/perisai-silika-bulai-jagung-cabai/panen-2.webp"
+            alt="Tanaman cabai 40 HST berdaun mulus kaku dan buah bebas patek"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="flex flex-1 flex-col justify-center px-3 py-2.5 text-center">
+            <h3 class="text-[12px] font-bold leading-tight text-slate-900">Kebal Keriting & Patek</h3>
+            <p class="mt-1 text-[11px] leading-snug text-slate-500">Pucuk mulus & buah Grade A</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION: AdsBook CMS Form Hybrid -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-12">
+      <div class="px-5 pb-6 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} • Segel Hologram & Shieldtag
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Paket Perisai Silika KOJIEN</span>
+        </h2>
+        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
+          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>
