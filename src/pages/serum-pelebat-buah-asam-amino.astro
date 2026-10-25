@@ -35,9 +35,9 @@ const socialProofOrders = await recentOrderCount(
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 const preferredVariant =
-  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
-  product.variants[1] ??
-  cheapest;
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -71,8 +71,8 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
     <section class="bg-white pb-6 text-center">
       <div class="px-5 pt-7">
         <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">SERUM ASAM AMINO JEPANG PELEBAT BUAH & PENGUNCI BUNGA!</span>
-          Paksa Tanaman Malas Berbuah Meledak <span class="hl-brush">DOMPOLAN BUAH LEBAT</span> & Kunci 98% Bunga Anti-Rontok — Tanpa Bau Amis!
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[17px]">BUNGA & PENTIL CABAI / BUAH SERING RONTOK SAAT HUJAN ANGIN?</span>
+          Kunci 98% Tangkai Bunga Anti-Rontok 48 Jam & Paksa Meledak <span class="hl-brush">DOMPOLAN BUAH LEBAT</span> — Tanpa Bau Amis!
         </h1>
         <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
           Buktikan kedahsyatan <strong class="text-slate-950 font-bold">SARATOGA</strong> (Japanese L-Amino + Kalium + Fosfat + Boron + GA3): mengunci cincin tangkai bunga cabai, tomat, durian, mangga & alpukat dalam 48 jam tanpa bau amis pengundang lalat buah!
@@ -262,68 +262,57 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
         </div>
       </div>
 
-      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX -->
-      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 shadow-sm">
-        <div class="bg-slate-950 px-4 py-3 text-center">
+      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX (Clean, Fast Scan) -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="bg-slate-950 px-4 py-2.5 text-center">
           <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
             PERBANDINGAN TELAK: JANGAN UNDANG LALAT BUAH!
           </span>
-          <h3 class="mt-1 text-[15px] font-bold leading-snug text-white">
-            Mengapa Asam Amino Ikan & Pupuk Bubuk Kalah Telak vs SARATOGA?
-          </h3>
         </div>
 
-        <div class="divide-y divide-slate-200 text-[12px]">
-          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
-            <div class="border-r border-slate-200 p-2.5 text-red-700">
-              ✗ Asam Amino Ikan Bau Bangkai & Pupuk Bubuk MKP Biasa
+        <div class="grid grid-cols-2 bg-slate-900 text-[12px] font-bold text-white border-t border-slate-800">
+          <div class="border-r border-slate-800 p-2.5 text-red-300">
+            ✗ Asam Amino Ikan & Bubuk Biasa
+          </div>
+          <div class="p-2.5 text-[#4ADE80]">
+            ✓ SARATOGA Asam Amino Jepang
+          </div>
+        </div>
+
+        <div class="divide-y divide-slate-200 text-[12px] leading-snug">
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Bau amis panggil lalat buah penyengat cabai
             </div>
-            <div class="p-2.5 text-emerald-900">
-              ✓ SARATOGA Serum Asam Amino Jepang 100% Tanpa Bau Amis
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              100% Tanpa Bau Amis — bebas lalat buah
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Bau Bangkai Panggil Lalat Buah:</strong>
-              Aroma amis menyengat membuat lalat buah berdatangan menyengat pentil cabai dan buah muda hingga busuk rontok.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Lambat diserap saat cuaca mendung/hujan
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">100% Odorless Tanpa Bau Amis:</strong>
-              Teknologi ekstraksi Jepang murni bebas bau amis sehingga pentil buah aman dari sengatan lalat buah.
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Tembus stomata 2 jam & kunci tangkai 48 jam
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Penyerapan Lambat Saat Mendung:</strong>
-              Pupuk bubuk MKP butuh sinar matahari terik untuk diolah daun; saat musim hujan bunga tetap gugur massal.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Cabai keriting macet keluar bunga baru
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Tembus Stomata & Kunci 48 Jam:</strong>
-              L-Amino + Kalium + Fosfat + Boron + GA3 cair langsung diserap daun dalam 2 jam untuk mengelas cincin tangkai.
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Pulihkan pucuk keriting & pecah dompolan bunga
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Cabai Keriting Macet Berbunga:</strong>
-              Tanaman yang habis terserang keriting tidak sanggup memecah tunas bunga baru hanya dengan pupuk bubuk biasa.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Endapan bubuk menyumbat spuyer tangki
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Pulihkan Stres & Pecah Cabang Baru:</strong>
-              Meregenerasi pucuk cabai keriting agar kembali mekar mulus sekaligus memicu bakal bunga di setiap ketukan.
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Endapan Kerak Menyumbat Tangki:</strong>
-              Bubuk sering menggumpal di dasar tangki dan meninggalkan bercak residu di kulit buah.
-            </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Serum Murni Larut 100% Sempurna:</strong>
-              Hemat dosis (cukup 2 tutup/tangki), mencetak kulit buah tebal mengkilap dan bobot karung naik 2x lipat!
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Hemat 2 tutup/tangki (500ml = 16–20 tangki)
             </div>
           </div>
         </div>
@@ -560,7 +549,7 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
               <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pulih Keriting & Lebat</span>
             </div>
             <p class="mt-1.5 text-[12px] leading-snug text-slate-700 italic">
-              "Cabai sempat keriting dan malas keluar bunga. Rutin semprot SARATOGA 1 Liter tiap minggu, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">pucuk baru trubus mulus dan bunganya langsung meledak jadi buah padat semua!</strong>"
+              "Cabai sempat keriting dan malas keluar bunga. Rutin semprot SARATOGA 2 tutup/tangki tiap minggu, <strong class="bg-emerald-100 px-1 text-emerald-900 not-italic">pucuk baru trubus mulus dan bunganya langsung meledak jadi buah padat semua!</strong>"
             </p>
           </div>
         </div>
@@ -650,8 +639,8 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
         <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
           Form Pemesanan <span class="hl-brush">Serum Pelebat Buah SARATOGA</span>
         </h2>
-        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
-          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        <p class="mx-auto mt-2 max-w-[340px] text-[13px] text-slate-600 leading-snug">
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong> cukup 16–20 tangki semprot — atau pilih <strong>1 Liter Lebih Hemat</strong>. Bisa bayar di tempat (COD) saat barang sampai.
         </p>
       </div>
 

@@ -62,7 +62,19 @@ test("generated embed URLs keep mode and canonical IDs explicit", () => {
   });
 });
 
-test("resolvePreferredFormVariant defaults to 1 Liter and returns DB-exact dosage & savings badges", () => {
+test("resolvePreferredFormVariant defaults non-sawit (Saratoga/Bensu/Kojien) to 500ml and marks 1 Liter as Lebih Hemat", () => {
+  const saratoga = {
+    slug: "saratoga-serum-tanaman-premium",
+    variants: [
+      { id: "3", label: "500ml", price: 135000, comparePrice: 198000 },
+      { id: "4", label: "1 Liter", price: 268000, comparePrice: 396000 },
+      { id: "10", label: "2 Liter", price: 520000, comparePrice: 792000 },
+    ],
+  } as Product;
+
+  assert.equal(resolvePreferredFormVariant(saratoga)?.id, "3");
+  assert.equal(resolvePreferredFormVariant(saratoga, "4")?.id, "4");
+
   const bensu = {
     slug: "bensu-pupuk-cair-organik",
     variants: [
@@ -72,17 +84,18 @@ test("resolvePreferredFormVariant defaults to 1 Liter and returns DB-exact dosag
     ],
   } as Product;
 
-  assert.equal(resolvePreferredFormVariant(bensu)?.id, "6");
-  assert.equal(resolvePreferredFormVariant(bensu, "5")?.id, "5");
+  assert.equal(resolvePreferredFormVariant(bensu)?.id, "5");
+  assert.equal(resolvePreferredFormVariant(bensu, "6")?.id, "6");
   assert.equal(resolvePreferredFormVariant(bensu, "9")?.id, "9");
 
   const meta500 = getVariantPresentationMeta(bensu, bensu.variants[0]);
-  assert.equal(meta500.badge, undefined);
+  assert.equal(meta500.badge, "PALING LARIS • HEMAT Rp 68.000");
+  assert.equal(meta500.badgeTone, "popular");
   assert.match(meta500.dosageNote || "", /16–20 Tangki/);
 
   const meta1L = getVariantPresentationMeta(bensu, bensu.variants[1]);
-  assert.equal(meta1L.badge, "PALING LARIS • HEMAT Rp 83.000");
-  assert.equal(meta1L.badgeTone, "popular");
+  assert.equal(meta1L.badge, "LEBIH HEMAT • HEMAT Rp 83.000");
+  assert.equal(meta1L.badgeTone, "bulk");
   assert.match(meta1L.dosageNote || "", /35–40 Tangki/);
 
   const meta2L = getVariantPresentationMeta(bensu, bensu.variants[2]);

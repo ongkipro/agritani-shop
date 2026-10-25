@@ -35,9 +35,9 @@ const socialProofOrders = await recentOrderCount(
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 const preferredVariant =
-  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
-  product.variants[1] ??
-  cheapest;
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -174,7 +174,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
           <div class="relative aspect-[16/9] w-full bg-slate-900">
             <img
               src="/images/landing/booster-padi-anakan-bulir-bernas/gejala-2.webp"
-              alt="Malai padi banyak yang kopong hampa di bagian pangkal dan gabah ringan saat ditimbang"
+              alt="Petani berdiri sedih di hamparan sawah padi yang merah menguning kerdil dan anakan macet akibat salah tabur Urea saat asem-aseman"
               class="h-full w-full object-cover"
               width="960"
               height="536"
@@ -182,13 +182,13 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
               decoding="async"
             />
             <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2.5 py-0.5 text-[10px] font-bold text-white shadow">
-              2. Rumpun Kurus & Pangkal Malai Kopong
+              2. Salah Hantam Urea: Anakan Macet & Malai Kopong
             </span>
           </div>
           <div class="p-3">
-            <h3 class="text-[14px] font-bold text-slate-950">Anakan Mentok 8 Batang & Gabah Hampa Terbuang</h3>
+            <h3 class="text-[14px] font-bold text-slate-950">Anakan Mentok 8 Batang & Pangkal Malai Hampa</h3>
             <p class="text-[12px] text-slate-600 mt-0.5 leading-snug">
-              Tanaman kehabisan energi saat bunting sehingga susu gabah gagal mengisi pangkal malai.
+              Sawah makin merah terbakar, anakan macet kerdil, dan susu gabah gagal mengisi pangkal malai.
             </p>
           </div>
         </div>
@@ -567,7 +567,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
         <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <img
             src="/images/landing/booster-padi-anakan-bulir-bernas/panen-rekor.webp"
-            alt="Tumpukan karung gabah panen melimpah dengan bulir padi kuning bernas"
+            alt="Panen raya padi sawah merunduk menguning keemasan dengan gunungan gabah bernas melimpah"
             class="aspect-[3/2] w-full shrink-0 object-cover object-center"
             width="960"
             height="644"
@@ -576,7 +576,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
           />
           <div class="flex flex-1 flex-col justify-center px-3 py-2 text-center">
             <h3 class="text-[12px] font-bold leading-tight text-slate-900">Batal Bajak Ulang</h3>
-            <p class="mt-0.5 text-[11px] leading-snug text-slate-500">Karung gabah melimpah</p>
+            <p class="mt-0.5 text-[11px] leading-snug text-slate-500">Panen raya gabah melimpah</p>
           </div>
         </div>
 
@@ -607,8 +607,8 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
         <h2 class="mx-auto mt-2 max-w-[360px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
           Form Pemesanan <span class="hl-brush">Obat Asem-Aseman & 45+ Anakan</span>
         </h2>
-        <p class="mx-auto mt-1.5 max-w-[350px] text-[13px] text-slate-600">
-          Pilih kemasan di bawah (<strong>1 Liter cukup 1 Hektar sawah</strong>). Barang sampai baru bayar di tempat (<strong>COD</strong>).
+        <p class="mx-auto mt-1.5 max-w-[360px] text-[13px] text-slate-600 leading-snug">
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)}) untuk ½ Ha</strong> atau <strong>1 Liter Lebih Hemat untuk 1 Ha sawah</strong>. Bisa bayar di tempat (<strong>COD</strong>).
         </p>
       </div>
 

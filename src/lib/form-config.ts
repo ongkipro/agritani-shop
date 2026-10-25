@@ -24,9 +24,20 @@ export function resolveFormVariant(
   return product.variants.find((variant) => variant.id === normalized);
 }
 
+export function isSawitProduct(
+  product: Pick<Product, "slug" | "variants">,
+): boolean {
+  if (/aussie|sawit/i.test(product.slug || "")) return true;
+  return (product.variants ?? []).some((v) =>
+    /^aus-|aussie|sawit/i.test(`${v.sku || ""} ${v.label || ""}`),
+  );
+}
+
 /**
- * Resolves the active checkout form variant, defaulting to the 1 Liter package
- * (highest conversion & ROAS anchor) when no explicit variant ID is passed.
+ * Resolves the active checkout form variant:
+ * - Sawit (Aussie) defaults to 1 Liter (plantation acreage anchor).
+ * - Non-Sawit (Saratoga, Bensu, Kojien) defaults to 500ml so farmers do not get
+ *   sticker shock when COD shipping is added, while 1 Liter is offered as "Lebih Hemat".
  */
 export function resolvePreferredFormVariant(
   product: Product,
@@ -38,9 +49,16 @@ export function resolvePreferredFormVariant(
     if (matched) return matched;
   }
 
+  if (isSawitProduct(product)) {
+    return (
+      product.variants.find((variant) => /1\s*liter|\b1\s*l\b/i.test(variant.label)) ??
+      product.variants[1] ??
+      product.variants[0]
+    );
+  }
+
   return (
-    product.variants.find((variant) => /1\s*liter|\b1\s*l\b/i.test(variant.label)) ??
-    product.variants[1] ??
+    product.variants.find((variant) => /500\s*ml/i.test(variant.label)) ??
     product.variants[0]
   );
 }
@@ -56,31 +74,41 @@ export function getVariantPresentationMeta(
   variant: ProductVariant,
 ): VariantPresentationMeta {
   const label = variant.label || "";
-  const isSawit = /aussie|sawit/i.test(product.slug || "");
+  const isSawit = isSawitProduct(product);
+  const compareSavings =
+    (variant.comparePrice ?? variant.price) > variant.price
+      ? (variant.comparePrice ?? variant.price) - variant.price
+      : 0;
+  const savingsText =
+    compareSavings > 0
+      ? ` • HEMAT Rp ${Math.round(compareSavings).toLocaleString("id-ID")}`
+      : "";
 
   if (/500\s*ml/i.test(label)) {
+    if (isSawit) {
+      return {
+        dosageNote: "Kemasan Uji Coba (Cukup 16–20 Tangki / 50–100 Pokok Sawit)",
+      };
+    }
     return {
-      dosageNote: isSawit
-        ? "Kemasan Uji Coba (Cukup 16–20 Tangki / 50–100 Pokok Sawit)"
-        : "Kemasan Uji Coba (Cukup 16–20 Tangki Semprot)",
+      badge: `PALING LARIS${savingsText}`,
+      badgeTone: "popular",
+      dosageNote: "Paket Hemat Awal (Cukup 16–20 Tangki Semprot)",
     };
   }
 
   if (/1\s*liter|\b1\s*l\b/i.test(label)) {
-    const compareSavings =
-      (variant.comparePrice ?? variant.price) > variant.price
-        ? (variant.comparePrice ?? variant.price) - variant.price
-        : 0;
-    const savingsText =
-      compareSavings > 0
-        ? ` • HEMAT Rp ${Math.round(compareSavings).toLocaleString("id-ID")}`
-        : "";
+    if (isSawit) {
+      return {
+        badge: `PALING LARIS${savingsText}`,
+        badgeTone: "popular",
+        dosageNote: "Cukup 35–40 Tangki Semprot / 130 Pokok Sawit (1 Ha)",
+      };
+    }
     return {
-      badge: `PALING LARIS${savingsText}`,
-      badgeTone: "popular",
-      dosageNote: isSawit
-        ? "Cukup 35–40 Tangki Semprot / 130 Pokok Sawit (1 Ha)"
-        : "Cukup 35–40 Tangki Semprot (1 Musim)",
+      badge: `LEBIH HEMAT${savingsText}`,
+      badgeTone: "bulk",
+      dosageNote: "Lebih Hemat untuk 1 Musim (Cukup 35–40 Tangki Semprot)",
     };
   }
 

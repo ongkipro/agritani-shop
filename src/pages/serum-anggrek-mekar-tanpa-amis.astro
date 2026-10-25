@@ -35,9 +35,9 @@ const socialProofOrders = await recentOrderCount(
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 const preferredVariant =
-  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
-  product.variants[1] ??
-  cheapest;
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -71,8 +71,8 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
     <section class="bg-white pb-6 text-center">
       <div class="px-5 pt-7">
         <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">TANAMAN HIAS SUBUR DAUN TAPI SUSAH MUNCUL BUNGA?</span>
-          Pecahkan Spike Anggrek Mekar Lebat, Mawar & Aglonema Merona Dalam 14 Hari — <span class="hl-brush">100% TANPA BAU AMIS</span> di Teras Rumah!
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[17px]">ANGGREK MALAS BERBUNGA & KAPOK PUPUK BAU AMIS DI TERAS?</span>
+          Pancing Spike Anggrek Mekar Lebat, Mawar & Aglonema Merona 14 Hari — <span class="hl-brush">100% TANPA BAU AMIS!</span>
         </h1>
         <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
           Cukup tetes & semprot <strong class="text-slate-950 font-bold">SARATOGA</strong> (Japanese Odorless Serum): bangunkan mata tidur spike anggrek yang mogok berbunga bertahun-tahun, tajamkan mutasi warna merah Aglonema, dan belah daun Monstera tanpa bau busuk!
@@ -262,68 +262,51 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
         </div>
       </div>
 
-      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX -->
-      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 shadow-sm">
-        <div class="bg-slate-950 px-4 py-3 text-center">
-          <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
-            RAHASIA KOLEKTOR ANGGREK & AGLONEMA!
-          </span>
-          <h3 class="mt-1 text-[15px] font-bold leading-snug text-white">
-            Mengapa Vitamin B1 & POC Amis Gagal Membungakan vs SARATOGA?
-          </h3>
+      <!-- HEAD-TO-HEAD COMPETITOR-KILLER MATRIX (Clean 1-Line Scan) -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="grid grid-cols-2 bg-slate-900 text-[12px] font-bold text-white">
+          <div class="border-r border-slate-800 p-2.5 text-red-300">
+            ✗ Vitamin B1 & POC Bau Amis
+          </div>
+          <div class="p-2.5 text-[#4ADE80]">
+            ✓ SARATOGA Japanese Odorless
+          </div>
         </div>
 
-        <div class="divide-y divide-slate-200 text-[12px]">
-          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
-            <div class="border-r border-slate-200 p-2.5 text-red-700">
-              ✗ Vitamin B1 Biasa & POC Bau Amis Menyengat di Teras
+        <div class="divide-y divide-slate-200 text-[12px] leading-snug">
+          <div class="grid grid-cols-2">
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Cuma anti-stres tanpa pemecah spike bunga
             </div>
-            <div class="p-2.5 text-emerald-900">
-              ✓ SARATOGA Japanese Odorless Serum (L-Prolin + Boron + GA3 Aktif)
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Pecah 2–3 spike anggrek dalam 14 hari
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Cuma Anti-Stres Tanpa Pembunga:</strong>
-              Vitamin B1 hanya menyegarkan akar pindah pot, tidak punya hormon pemecah spike bunga anggrek.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Bau amis di teras & undang semut/lalat
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Pecah Spike Anggrek 14 Hari:</strong>
-              L-Prolin + Boron + GA3 aktif langsung membangunkan mata tunas tidur agar keluar 2–3 spike bunga!
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              100% Tanpa Bau Amis — bersih di teras rumah
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Bau Busuk & Undang Semut/Kecoa:</strong>
-              POC biasa membuat teras rumah bau amis menyengat dan mengundang hama merusak akar di dalam pot.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Garam NPK membakar ujung akar angin
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">100% Tanpa Bau Amis (Odorless):</strong>
-              Serum jernih teknologi Jepang yang bersih higienis, sangat aman disemprot di ruang tamu & teras rumah.
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Akar jalan aktif & merah Aglonema menyala
             </div>
           </div>
 
           <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Pupuk Kimia Membakar Akar Angin:</strong>
-              Garam NPK butiran membuat ujung akar anggrek menghitam gosong dan daun aglonema lonyot.
+            <div class="border-r border-slate-200 p-2.5 text-slate-600">
+              Boros beli botol akar, daun & bunga terpisah
             </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Sejuk di Akar & Tajamkan Warna:</strong>
-              Memicu ujung akar hijau jalan cepat, menyalakan merah Aglonema & membelah daun Monstera simetris.
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2">
-            <div class="border-r border-slate-200 p-2.5 text-slate-600 leading-snug">
-              <strong class="block text-slate-900">Boros Beli Botol Kecil-Kecil:</strong>
-              Harus beli botol khusus akar, daun, dan bunga terpisah yang cepat habis dalam beberapa minggu.
-            </div>
-            <div class="bg-emerald-50/40 p-2.5 text-slate-800 leading-snug">
-              <strong class="block text-emerald-950">Pupuk Cair Hemat Tetes All-in-One:</strong>
-              Cukup 1–2 tutup per sprayer untuk Anggrek, Mawar, Bougenville, Aglonema & Monstera sekaligus!
+            <div class="bg-emerald-50/40 p-2.5 font-bold text-emerald-950">
+              Irit 2 ml/liter (500ml = 250 liter semprotan)
             </div>
           </div>
         </div>
@@ -650,8 +633,8 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
         <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
           Form Pemesanan <span class="hl-brush">Serum Anggrek SARATOGA</span>
         </h2>
-        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
-          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        <p class="mx-auto mt-2 max-w-[340px] text-[13px] text-slate-600 leading-snug">
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong> cukup 250 liter semprotan — atau pilih <strong>1 Liter Lebih Hemat</strong>. Bisa bayar di tempat (COD) saat barang sampai.
         </p>
       </div>
 

@@ -35,9 +35,9 @@ const socialProofOrders = await recentOrderCount(
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 const preferredVariant =
-  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
-  product.variants[1] ??
-  cheapest;
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -71,8 +71,8 @@ const heroImage = '/images/landing/pemulih-cabai-stres-kuning-keriting/hero-prob
     <section class="bg-white pb-6 text-center">
       <div class="px-5 pt-7">
         <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight text-[18px]">DAUN CABAI MENGUNING, LAYU STRES & PUCUK MACET KERITING?</span>
-          Stimulator Imun 3X Lebih Cepat: Pulihkan Cabai Stres Keriting & Kuning Jadi <span class="hl-brush">TRUBUS HIJAU LEBAT</span> Dalam 72 Jam!
+          <span class="block text-red-600 mb-1.5 tracking-tight text-[17px]">CABAI KERACUNAN OBAT, PUCUK KERITING KAKU & DAUN MENGUNING LAYU?</span>
+          Stimulator Imun 3X Lebih Cepat: Pulihkan Cabai Stres, Keracunan Obat & Keriting Jadi <span class="hl-brush">TRUBUS HIJAU LEBAT</span> 72 Jam!
         </h1>
         <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
           Jangan dihantam pupuk kimia panas saat tanaman stres! Semprot kabut <strong class="text-slate-950 font-bold">BENSU Original (Botol Logo Timbul & Hologram Shieldtag)</strong>: tingkatkan kekebalan tanaman 3x lebih cepat, buka pucuk keriting kaku, dan lebatkan bunga cabai!
@@ -262,49 +262,28 @@ const heroImage = '/images/landing/pemulih-cabai-stres-kuning-keriting/hero-prob
         </div>
       </div>
 
-      <!-- Competitor-Killer Head-to-Head Matrix -->
-      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/60 shadow-sm">
-        <div class="bg-slate-900 px-3.5 py-2.5 text-center">
-          <h3 class="text-[13px] font-bold text-white">
-            Mengapa Pupuk Daun Kimia & POC Encer Gagal vs Keunggulan Mutlak BENSU?
-          </h3>
+      <!-- Competitor-Killer Head-to-Head Matrix (Clean 1-Line Scan) -->
+      <div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="grid grid-cols-2 bg-slate-900 text-[12px] font-bold text-white">
+          <div class="p-2.5 text-red-300 border-r border-slate-800">✗ Pupuk Daun Kimia & POC Biasa</div>
+          <div class="p-2.5 text-[#4ADE80]">✓ BENSU Stimulator Imun 3x Cepat</div>
         </div>
-        <div class="divide-y divide-slate-200 text-[11px] leading-snug">
-          <div class="grid grid-cols-2 bg-slate-100 font-bold text-slate-900">
-            <div class="p-2.5 text-red-700 border-r border-slate-200">✗ Pupuk Daun Kimia Panas & POC Molase Encer Rp 30rb-an</div>
-            <div class="p-2.5 text-emerald-800 bg-emerald-50/60">✓ BENSU Stimulator Imun 3x Cepat (L-Amino + Fulvic Detoks)</div>
+        <div class="divide-y divide-slate-200 text-[12px] leading-snug">
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Daun stres makin gosong terbakar</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Dinginkan sel & terserap 2 jam</div>
           </div>
           <div class="grid grid-cols-2">
-            <div class="p-2.5 text-slate-600 border-r border-slate-200">
-              <strong class="text-slate-900">Makin Membakar Daun Stres:</strong> Garam kimia NPK daun memicu plasmolisis sehingga daun kuning makin layu terbakar.
-            </div>
-            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
-              <strong class="text-emerald-950">Sejuk & Terserap 2 Jam:</strong> Nutrisi organik L-Amino langsung masuk stomata untuk menyegarkan sel yang layu.
-            </div>
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Pucuk keriting kaku tetap macet</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Buka trubus mulus 3x cepat (72 jam)</div>
           </div>
           <div class="grid grid-cols-2">
-            <div class="p-2.5 text-slate-600 border-r border-slate-200">
-              <strong class="text-slate-900">Tidak Bisa Buka Keriting:</strong> POC tetes tebu biasa hanya jadi makanan jamur & tidak mampu membelah sel pucuk yang terkunci.
-            </div>
-            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
-              <strong class="text-emerald-950">Dorong Trubus 3x Lebih Cepat:</strong> Mengaktifkan titik tumbuh meristem sehingga pucuk keriting membuka halus dalam 72 jam.
-            </div>
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Mudah kuning layu saat cuaca ekstrem</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Bentengi imun & kunci bunga cabai</div>
           </div>
           <div class="grid grid-cols-2">
-            <div class="p-2.5 text-slate-600 border-r border-slate-200">
-              <strong class="text-slate-900">Imun Tetap Lemah:</strong> Tanaman mudah kambuh menguning setiap kali diguyur hujan malam atau terik siang.
-            </div>
-            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
-              <strong class="text-emerald-950">Aktivator Kekebalan Sistemik:</strong> Meningkatkan antibodi alami tanaman 3x lipat terhadap stres cuaca & patogen.
-            </div>
-          </div>
-          <div class="grid grid-cols-2">
-            <div class="p-2.5 text-slate-600 border-r border-slate-200">
-              <strong class="text-slate-900">Botol Polos Mudah Dipalsukan:</strong> Kemasan jerigen/botol tipis tanpa segel verifikasi resmi.
-            </div>
-            <div class="p-2.5 text-slate-800 bg-emerald-50/30">
-              <strong class="text-emerald-950">Botol Logo Timbul & Shieldtag:</strong> Kemasan HDPE tebal anti-pecah dengan Emboss BENSU & Hologram Shieldtag resmi.
-            </div>
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Botol polos encer tanpa segel resmi</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Botol Emboss & Shieldtag (16–20 tangki)</div>
           </div>
         </div>
       </div>
@@ -627,8 +606,8 @@ const heroImage = '/images/landing/pemulih-cabai-stres-kuning-keriting/hero-prob
         <h2 class="mx-auto mt-2 max-w-[340px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
           Form Pemesanan <span class="hl-brush">Paket Pemulih Cabai Stres</span>
         </h2>
-        <p class="mx-auto mt-2 max-w-[340px] text-[14px] text-slate-600">
-          Pilih ukuran kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}) di bawah. Bisa bayar di tempat (COD) saat barang sampai.
+        <p class="mx-auto mt-2 max-w-[340px] text-[13px] text-slate-600 leading-snug">
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong> cukup 16–20 tangki semprot — atau pilih <strong>1 Liter Lebih Hemat</strong>. Bisa bayar di tempat (COD) saat barang sampai.
         </p>
       </div>
 

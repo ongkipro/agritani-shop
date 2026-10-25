@@ -35,9 +35,9 @@ const socialProofOrders = await recentOrderCount(
 
 const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
 const preferredVariant =
-  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
-  product.variants[1] ??
-  cheapest;
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
