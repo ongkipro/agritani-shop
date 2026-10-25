@@ -69,9 +69,11 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
   <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
     <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
     <section class="bg-white pb-6 text-center">
-      <div class="px-5 pt-7">
-        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight text-[17px]">BUNGA & PENTIL CABAI / BUAH SERING RONTOK SAAT HUJAN ANGIN?</span>
+      <div class="px-5 pt-6">
+        <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
+          BUNGA & PENTIL CABAI / BUAH SERING RONTOK SAAT HUJAN ANGIN?
+        </span>
+        <h1 class="mx-auto mt-2.5 max-w-[440px] text-[27px] font-extrabold leading-[1.14] tracking-tight text-slate-950">
           Kunci 98% Tangkai Bunga Anti-Rontok 48 Jam & Paksa Meledak <span class="hl-brush">DOMPOLAN BUAH LEBAT</span> — Tanpa Bau Amis!
         </h1>
         <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
@@ -440,24 +442,6 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
           </p>
         </div>
       </div>
-
-      <!-- Macro Detail Proof -->
-      <div class="-mx-5 mt-6 relative">
-        <img
-          src="/images/landing/serum-pelebat-buah-asam-amino/macro-proof.webp"
-          alt="Foto makro dompolan pentil buah dan tangkai bunga hijau kekar hasil semprot SARATOGA"
-          class="aspect-[16/9] w-full object-cover"
-          width="960"
-          height="536"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="bg-slate-900 py-2 px-4 text-center">
-          <p class="text-[11px] font-bold text-[#BBF7D0]">
-            Bukti Nyata di Cabang: Setiap ruas mengunci pentil buah segar tanpa satupun yang menguning gugur!
-          </p>
-        </div>
-      </div>
     </section>
 
     <!-- 5. ULTRA-CLEAN SOP (Gambar + 3 Baris Praktis) -->
@@ -576,24 +560,6 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
         </div>
       </div>
 
-      <!-- Fullwidth Overclaim Panorama -->
-      <div class="-mx-5 mt-6 relative">
-        <img
-          src="/images/landing/serum-pelebat-buah-asam-amino/hamparan-kebun.webp"
-          alt="Foto panorama kebun cabai dan buah lebat merata hasil aplikasi serum SARATOGA"
-          class="aspect-[16/9] w-full object-cover"
-          width="960"
-          height="536"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="bg-slate-950 py-2 px-4 text-center">
-          <p class="text-[11px] font-bold text-[#BBF7D0]">
-            Hamparan Kebun Lebat: Bunga mengunci 98% jadi buah bernas tanpa gugur di atas mulsa!
-          </p>
-        </div>
-      </div>
-
       <!-- 2-Card Final Overclaim Showcase -->
       <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
         <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -653,7 +619,10 @@ const heroImage = '/images/landing/serum-pelebat-buah-asam-amino/hero-problem.we
     </section>
   </main>
 
-  <StickyLandingCtaBar />
+  <StickyLandingCtaBar
+    ctaText="Pesan Serum Pelebat Buah SARATOGA — Bisa COD"
+    subText="Paket Hemat 500ml Rp 135.000 (16–20 Tangki) • 100% Tanpa Bau Amis"
+  />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

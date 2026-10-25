@@ -69,9 +69,11 @@ const heroImage = '/images/landing/perisai-silika-bulai-jagung-cabai/hero-proble
   <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
     <!-- 1. HERO SECTION (Clean, Punchy, Visual-First) -->
     <section class="bg-white pb-6 text-center">
-      <div class="px-5 pt-7">
-        <h1 class="mx-auto max-w-[440px] text-[28px] font-bold leading-[1.15] tracking-tight text-slate-950">
-          <span class="block text-red-600 mb-1.5 tracking-tight text-[17px]">JAGUNG RAWAN BULE BULAI & CABAI TERSERANG JAMUR KERITING?</span>
+      <div class="px-5 pt-6">
+        <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-[11px] font-extrabold tracking-wide text-white shadow-sm">
+          JAGUNG RAWAN BULE BULAI & CABAI TERSERANG JAMUR KERITING?
+        </span>
+        <h1 class="mx-auto mt-2.5 max-w-[440px] text-[27px] font-extrabold leading-[1.14] tracking-tight text-slate-950">
           Perisai Kaca Nano-Silika KOJIEN: Bentengi <span class="hl-brush">JAGUNG BULE BULAI & CABAI KEBAL JAMUR</span> Keriting Dalam 7 Hari!
         </h1>
         <p class="mx-auto mt-3 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
@@ -570,24 +572,6 @@ const heroImage = '/images/landing/perisai-silika-bulai-jagung-cabai/hero-proble
         </div>
       </div>
 
-      <!-- Fullwidth Overclaim Panorama -->
-      <div class="-mx-5 mt-6 relative">
-        <img
-          src="/images/landing/perisai-silika-bulai-jagung-cabai/hamparan-kebun.webp"
-          alt="Foto panorama kebun jagung dan cabai hijau segar bebas bulai dan keriting berkat KOJIEN"
-          class="aspect-[16/9] w-full object-cover"
-          width="960"
-          height="536"
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="bg-slate-950 py-2 px-4 text-center">
-          <p class="text-[11px] font-bold text-[#BBF7D0]">
-            Hamparan Lahan Terlindungi KOJIEN: Jagung tegap bebas bule bulai & cabai mulus sampai panen raya!
-          </p>
-        </div>
-      </div>
-
       <!-- 2-Card Final Overclaim Showcase -->
       <div class="mt-5 grid grid-cols-2 items-stretch gap-3">
         <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -647,7 +631,10 @@ const heroImage = '/images/landing/perisai-silika-bulai-jagung-cabai/hero-proble
     </section>
   </main>
 
-  <StickyLandingCtaBar />
+  <StickyLandingCtaBar
+    ctaText="Pesan Perisai Silika KOJIEN — Bisa COD"
+    subText="Paket Hemat 500ml Rp 130.000 (16–20 Tangki) • Segel Shieldtag Resmi"
+  />
 
   <script slot="head" is:inline>
     document.addEventListener('click', (e) => {

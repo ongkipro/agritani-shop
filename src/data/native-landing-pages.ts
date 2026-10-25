@@ -269,9 +269,9 @@ export const nativeLandingPages: NativeLandingPage[] = [
   },
   {
     slug: 'pemulih-cabai-stres-kuning-keriting',
-    title: 'Bensu - Stimulator Imun 3x Lebih Cepat Pemulih Daun Cabai Stres Keriting, Menguning & Layu',
+    title: 'Bensu - Pemulih Cabai Stres Cuaca, Overdosis Obat Semprot & Pucuk Keriting 72 Jam',
     productSlug: 'bensu-pupuk-cair-organik',
-    description: 'Tingkatkan kekebalan tanaman cabai 3x lebih cepat, buka pucuk keriting kaku dan daun menguning layu menjadi trubus hijau segar dalam 72 jam.',
+    description: 'Netralisir racun overdosis pestisida panas dalam 24 jam, pulihkan cabai stres cuaca ekstrem & hawa mulsa panas, serta buka pucuk keriting menjadi trubus hijau lebat dalam 72 jam.',
     image: '/images/landing/pemulih-cabai-stres-kuning-keriting/hero-problem.webp',
     isActive: true,
   },
