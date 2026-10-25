@@ -277,9 +277,9 @@ export const nativeLandingPages: NativeLandingPage[] = [
   },
   {
     slug: 'booster-padi-anakan-bulir-bernas',
-    title: 'Bensu - Formula Nutrisi Thailand Pembuka 45+ Anakan Padi Sawah & Pengisi Bulir Padat Sampai Ujung Malai',
+    title: 'Bensu - Obat Padi Asem-Aseman (Merah Kerdil) & Booster 45+ Anakan Bulir Bernas Formula Thailand',
     productSlug: 'bensu-pupuk-cair-organik',
-    description: 'Pacu akar serabut putih gondrong dalam 48 jam, bikin sawah hijau royo-royo tahan cuaca panas, meledak 45+ anakan produktif, dan bulir bernas tanpa hampa.',
+    description: 'Stop tabur Urea saat padi asem-aseman! Sembuhkan daun merah karat & kerdil dalam 4 hari, keluar akar putih gondrong 48 jam, meledak 45+ anakan produktif, dan bulir bernas padat sampai pangkal malai.',
     image: '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem.webp',
     isActive: true,
   },
