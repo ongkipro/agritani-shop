@@ -66,6 +66,7 @@ test("resolvePreferredFormVariant defaults non-sawit (Saratoga/Bensu/Kojien) to 
   const saratoga = {
     slug: "saratoga-serum-tanaman-premium",
     variants: [
+      { id: "13", label: "250ml", price: 75000, comparePrice: 115000 },
       { id: "3", label: "500ml", price: 135000, comparePrice: 198000 },
       { id: "4", label: "1 Liter", price: 268000, comparePrice: 396000 },
       { id: "10", label: "2 Liter", price: 520000, comparePrice: 792000 },
@@ -73,7 +74,13 @@ test("resolvePreferredFormVariant defaults non-sawit (Saratoga/Bensu/Kojien) to 
   } as Product;
 
   assert.equal(resolvePreferredFormVariant(saratoga)?.id, "3");
+  assert.equal(resolvePreferredFormVariant(saratoga, "13")?.id, "13");
   assert.equal(resolvePreferredFormVariant(saratoga, "4")?.id, "4");
+
+  const meta250 = getVariantPresentationMeta(saratoga, saratoga.variants[0]);
+  assert.equal(meta250.badge, "PAKET HEMAT COBA • HEMAT Rp 40.000");
+  assert.equal(meta250.badgeTone, "bulk");
+  assert.match(meta250.dosageNote || "", /8–10 Tangki/);
 
   const bensu = {
     slug: "bensu-pupuk-cair-organik",

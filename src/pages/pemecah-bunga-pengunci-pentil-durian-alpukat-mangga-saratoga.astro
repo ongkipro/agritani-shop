@@ -1,0 +1,587 @@
+---
+/**
+ * Native Landing Page #4 (NEW): Pemecah Bunga Pohon Mabuk Daun & Pengunci Pentil Durian, Alpukat, Mangga (SARATOGA)
+ *
+ * Visual-First Clean Direct-Response LP (High Overclaim Visuals, Concise Copy)
+ * Master Product: saratoga-serum-tanaman-premium (ID: 50510)
+ * Kontrak Arsitektur: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga.css';
+
+export const prerender = false;
+
+const SLUG = 'pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium')) ??
+  (await getStorefrontProduct(Astro.locals, '50510'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
+  cheapest ??
+  product.variants[0];
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Pemecah Bunga Durian, Alpukat & Mangga Mabuk Daun + Pengunci Pentil Kelereng: SARATOGA - ${Astro.locals.tenant.name}`}
+  description="Sudah tunggu 5 tahun pohon Durian, Alpukat, Mangga & Jeruk cuma mabuk daun atau pentil kelereng rontok habis disapu hujan malam? Paksa dahan tua pecah bunga serempak & las tangkai pentil anti-rontok dalam 48 jam dengan SARATOGA."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION (Ultra-Clean, Brutal Overclaim, Fast Scan) -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-6">
+        <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm">
+          POHON 5 TAHUN CUMA MABUK DAUN & PENTIL KELERENG GUGUR?
+        </span>
+        <h1 class="mx-auto mt-2.5 max-w-[440px] text-[28px] font-bold leading-[1.14] tracking-tight text-slate-950">
+          Paksa Dahan Tua <span class="hl-brush">PECAH BUNGA SEREMPAK</span> & Kunci Pentil Durian, Alpukat, Mangga <span class="hl-brush-red">Anti-Rontok!</span>
+        </h1>
+        <p class="mx-auto mt-2.5 max-w-[390px] text-[14px] font-normal leading-snug text-slate-700">
+          Hentikan penantian sia-sia! <strong class="text-slate-950 font-bold">SARATOGA Serum Jepang</strong> menghentikan "mabuk daun", membangunkan mata bunga di batang tua dalam 14–21 hari, dan mengelas tangkai pentil kelereng kebal hujan angin!
+        </p>
+      </div>
+
+      <div class="mt-4">
+        <div class="relative overflow-hidden bg-slate-950 aspect-[3/2]">
+          <img
+            src={heroImage}
+            alt="Perbandingan dahan pohon durian dan alpukat mabuk daun dengan pentil kelereng rontok di tanah vs dahan penuh dompolan bunga dan buah muda mengunci kuat dengan Saratoga"
+            class="h-full w-full object-cover"
+            width="960"
+            height="644"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="absolute bottom-0 left-0 right-0 bg-slate-950/90 px-4 py-2 text-center backdrop-blur-sm">
+            <p class="text-[12px] font-bold text-[#4ADE80]">
+              STOP MABUK DAUN: Pecah Bunga Dahan Tua • Kunci Pentil 48 Jam • 0% Lalat Buah!
+            </p>
+          </div>
+        </div>
+
+        <!-- Clean 3-Chip Brutal Value Strip -->
+        <div class="mx-4 mt-3.5 grid grid-cols-3 gap-2 text-center">
+          <div class="rounded-lg border border-emerald-200 bg-emerald-50/70 px-2 py-2">
+            <p class="text-[13px] font-bold text-emerald-950">14–21 Hr</p>
+            <p class="text-[10px] font-semibold text-slate-600 leading-tight">Pecah Mata Bunga</p>
+          </div>
+          <div class="rounded-lg border border-emerald-200 bg-emerald-50/70 px-2 py-2">
+            <p class="text-[13px] font-bold text-emerald-950">48 Jam</p>
+            <p class="text-[10px] font-semibold text-slate-600 leading-tight">Kunci Pentil Muda</p>
+          </div>
+          <div class="rounded-lg border border-emerald-200 bg-emerald-50/70 px-2 py-2">
+            <p class="text-[13px] font-bold text-emerald-950">0% Amis</p>
+            <p class="text-[10px] font-semibold text-slate-600 leading-tight">Anti Lalat Buah</p>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-3.5 rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Hentikan Mabuk Daun Muda</strong> — alihkan energi pohon untuk memecah dompolan bunga di dahan tua</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Las Tangkai Pentil Kelereng 48 Jam</strong> — cegah gugur bakal buah durian, alpukat, mangga & jeruk saat hujan malam</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>Aman Tanpa Paklobutrazol Keras</strong> — pohon tidak kerdil, tidak merusak tanah & tetap berbuah tiap musim</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-[10px] font-bold text-white">✓</span>
+              <span><strong>100% Tanpa Bau Amis</strong> — buah mangga, jambu & alpukat mulus bebas suntikan belatung lalat buah</span>
+            </li>
+          </ul>
+
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[#14532D] px-4 py-3 text-center text-[14px] font-bold text-white shadow-md transition-colors hover:bg-[#166534]"
+          >
+            PAKSA POHON BERBUAH & KUNCI PENTIL (MULAI Rp 75.000) →
+          </a>
+          <p class="mt-2 text-center text-[11px] font-semibold text-emerald-950">
+            Tersedia Kemasan Coba 250ml (Rp 75.000) & Paket Kebun 500ml (Rp 135.000) — Bisa COD!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION (Luka Pemilik Kebun Buah Tahunan) -->
+    <section class="bg-red-50/40 px-5 py-7">
+      <div class="text-center mb-4">
+        <span class="inline-block rounded bg-red-100 px-2.5 py-0.5 text-[10px] font-bold text-red-800">
+          KENAPA SUDAH NUNGGU 5 TAHUN MASIH ZONK PANEN?
+        </span>
+        <h2 class="mt-1 text-[24px] font-bold leading-tight tracking-tight text-slate-950">
+          2 Kesedihan <span class="hl-brush-red">Pemilik Pohon Durian, Alpukat & Mangga</span>
+        </h2>
+      </div>
+
+      <div class="space-y-3.5">
+        <div class="overflow-hidden rounded-xl border border-red-200 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/gejala-1.webp"
+              alt="Ratusan bunga dan pentil buah durian serta alpukat seukuran kelereng gugur berserakan di tanah basah habis hujan malam"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-transparent p-3">
+              <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                LUKA 1 • PENTIL SEUKURAN KELERENG GUGUR HABIS SEMALAM
+              </span>
+              <h3 class="mt-1 text-[14px] font-bold text-white leading-tight">
+                Sudah Senang Keluar Bunga Lebat, Habis Hujan Angin Rontok Jadi Sampah di Tanah!
+              </h3>
+            </div>
+          </div>
+          <p class="px-3 py-2 text-[12px] text-slate-600 leading-snug">
+            Perangsang bunga biasa tidak menguatkan tangkai; saat hujan malam turun, pohon memutus cincin pentil buah.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-200 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/gejala-2.webp"
+              alt="Pohon buah cuma rimbun daun muda tapi mogok berbunga dan buah busuk berulat disengat lalat buah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-transparent p-3">
+              <span class="inline-block rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                LUKA 2 • POHON "MABUK DAUN" BERTAHUN-TAHUN & LALAT BUAH
+              </span>
+              <h3 class="mt-1 text-[14px] font-bold text-white leading-tight">
+                Dikasih NPK Cuma Keluar Trubus Daun Muda Terus — Sekalinya Jadi Buah Busuk Berulat!
+              </h3>
+            </div>
+          </div>
+          <p class="px-3 py-2 text-[12px] text-slate-600 leading-snug">
+            Kelebihan nitrogen mengunci mata bunga tetap tidur, sedangkan POC amis mengundang lalat buah merusak panen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE, COMPARISON & COMPETITOR-KILLER MATRIX -->
+    <section class="bg-white px-5 py-7">
+      <h2 class="text-center text-[24px] font-bold leading-tight tracking-tight text-slate-950">
+        Bukti Nyata: <span class="hl-brush-red">Mabuk Daun</span> Jadi <span class="hl-brush">Dahan Merunduk Buah</span>
+      </h2>
+
+      <!-- 3-Stage Visual Progression Banner -->
+      <div class="-mx-5 mt-4 mb-4 relative bg-slate-950">
+        <img
+          src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/overclaim-timeline.webp"
+          alt="Tahapan pembungaan dan penguncian pentil buah tahunan dengan Saratoga"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 bg-slate-950 text-center text-[11px] font-bold py-2 px-2 border-t border-slate-800">
+          <span class="text-red-400">Minggu 0: Mabuk Daun</span>
+          <span class="text-amber-300">14 Hari: Pecah Bunga</span>
+          <span class="text-emerald-400">Panen: Pentil Mengunci</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-red-200 bg-red-50/30 shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/kondisi-rusak.webp"
+            alt="Pohon buah tanpa Saratoga pentil rontok habis dan dahan kosong"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white">
+            Tanpa SARATOGA
+          </div>
+          <div class="p-2.5 text-center">
+            <h3 class="text-[12px] font-bold text-red-950">Pentil Gugur Habis</h3>
+            <p class="mt-0.5 text-[11px] text-slate-600">Nunggu 1 tahun lagi sia-sia</p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-300 bg-emerald-50/50 shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/kondisi-pulih.webp"
+            alt="Dahan pohon buah penuh dompolan pentil dan buah lebat dengan Saratoga"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-[10px] font-bold text-white">
+            Pakai SARATOGA
+          </div>
+          <div class="p-2.5 text-center">
+            <h3 class="text-[12px] font-bold text-emerald-950">Dompolan Mengunci Kuat</h3>
+            <p class="mt-0.5 text-[11px] text-emerald-900 font-semibold">Berbuah lebat di luar musim</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitor-Killer Head-to-Head Matrix -->
+      <div class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="grid grid-cols-2 bg-slate-900 text-[12px] font-bold text-white">
+          <div class="p-2.5 text-red-300 border-r border-slate-800">✗ Booster Biasa & Paklobutrazol</div>
+          <div class="p-2.5 text-[#4ADE80]">✓ SARATOGA Serum Bunga & Pentil</div>
+        </div>
+        <div class="divide-y divide-slate-200 text-[12px] leading-snug">
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Cuma pancing bunga lalu rontok</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Pecah bunga + las tangkai pentil</div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Bikin pohon kerdil & merusak akar</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">100% Aman, pohon sehat & subur</div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Bau amis panggil lalat buah</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">100% Tanpa Bau Amis (0% Ulat)</div>
+          </div>
+          <div class="grid grid-cols-2">
+            <div class="p-2.5 text-slate-600 border-r border-slate-200">Daging buah tipis & hambar</div>
+            <div class="p-2.5 font-bold text-emerald-950 bg-emerald-50/40">Daging tebal manis legit berbobot</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT & 3 BRUTAL VISUAL OVERCLAIMS -->
+    <section class="bg-slate-50/70 px-5 py-7">
+      <div class="-mx-5 mb-4 overflow-hidden bg-slate-100">
+        <img
+          src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/saratoga-hero.webp"
+          alt="Botol resmi SARATOGA Serum Jepang Pemecah Bunga dan Pengunci Pentil Buah Tahunan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Compact Official Hologram & Shieldtag Badge -->
+      <div class="mb-5 flex items-center gap-3 rounded-xl border border-emerald-200 bg-white p-2.5 shadow-sm">
+        <img
+          src={product.heroImage}
+          alt="Foto Botol Resmi SARATOGA Segel Hologram Shieldtag"
+          class="h-12 w-12 shrink-0 rounded-lg object-contain bg-emerald-50/50 border border-emerald-100 p-0.5"
+          width="48"
+          height="48"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="min-w-0">
+          <p class="text-[12px] font-bold text-emerald-950">SARATOGA Original — Segel Hologram Resmi</p>
+          <p class="text-[11px] text-slate-600 leading-tight">
+            Japanese L-Prolin + Fosfat-Kalium Tinggi + Boron + GA3 (250ml, 500ml, 1L & 2L).
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-center text-[24px] font-bold leading-tight tracking-tight text-slate-950 mb-4">
+        3 Reaksi Brutal <span class="hl-brush">SARATOGA di Kebun Buah</span>
+      </h2>
+
+      <!-- 3 Clean Visual Overclaim Cards -->
+      <div class="space-y-4">
+        <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-950">
+            <img
+              src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/overclaim-1.webp"
+              alt="Dahan pohon durian dan alpukat tua pecah dompolan bunga dan pentil buah seukuran kelereng mengunci kuat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-transparent p-3.5">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                REAKSI 1 • BANGUNKAN MATA BUNGA DAHAN TUA & KUNCI PENTIL
+              </span>
+              <h3 class="mt-1 text-[15px] font-bold text-white leading-tight">
+                Paksa Pohon Malas Berbuah Pecah Bunga di Luar Musim & Anti Gugur!
+              </h3>
+            </div>
+          </div>
+          <p class="px-3 py-2 text-[12px] text-slate-700 leading-snug">
+            Rasio Fosfat-Kalium tinggi + Boron-GA3 mengubah tunas tidur menjadi dompolan bunga dengan tangkai sekuat kawat.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-950">
+            <img
+              src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/overclaim-2.webp"
+              alt="Dompolan buah mangga, alpukat, dan jeruk menggelantung lebat mulus bebas sengatan lalat buah"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-transparent p-3.5">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                REAKSI 2 • TAHAN CUACA EKSTREM & 0% LALAT BUAH
+              </span>
+              <h3 class="mt-1 text-[15px] font-bold text-white leading-tight">
+                Pentil Kelereng Selamat Sampai Besar Tanpa Busuk Berulat!
+              </h3>
+            </div>
+          </div>
+          <p class="px-3 py-2 text-[12px] text-slate-700 leading-snug">
+            L-Prolin meredam stres hujan malam, sementara formula tanpa bau amis menjaga buah bebas lalat buah.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
+          <div class="relative aspect-[3/2] w-full bg-slate-950">
+            <img
+              src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/overclaim-3.webp"
+              alt="Panen buah berdaging tebal manis legit dan berbobot berat"
+              class="h-full w-full object-cover"
+              width="960"
+              height="644"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-transparent p-3.5">
+              <span class="inline-block rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                REAKSI 3 • POMPA DAGING BUAH TEBAL, PULEN & MANIS LEGIT
+              </span>
+              <h3 class="mt-1 text-[15px] font-bold text-white leading-tight">
+                Ukuran Buah Jumbo Seragam & Harga Jual Kebun Naik Berkali Lipat!
+              </h3>
+            </div>
+          </div>
+          <p class="px-3 py-2 text-[12px] text-slate-700 leading-snug">
+            Mempercepat pengisian daging buah durian, alpukat mentega, mangga & jeruk hingga padat manis maksimal.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ULTRA-CLEAN SOP -->
+    <section class="bg-white px-5 py-7">
+      <h2 class="text-center text-[24px] font-bold leading-tight tracking-tight text-slate-950">
+        Cara Pakai <span class="hl-brush">Semprot & Kocor Praktis</span>
+      </h2>
+
+      <div class="-mx-5 my-3.5">
+        <img
+          src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/aplikasi-kebun.webp"
+          alt="Aplikasi semprot dan kocor Saratoga pada pohon buah tahunan"
+          class="aspect-[16/9] w-full object-cover"
+          width="960"
+          height="536"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-2.5">
+          <span class="mx-auto flex h-5 w-5 items-center justify-center rounded-full bg-[#14532D] text-[10px] font-bold text-white">1</span>
+          <p class="mt-1.5 text-[11px] font-bold text-slate-900">2–3 Tutup</p>
+          <p class="text-[10px] text-slate-600">Per tangki 16L / ember</p>
+        </div>
+        <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-2.5">
+          <span class="mx-auto flex h-5 w-5 items-center justify-center rounded-full bg-[#14532D] text-[10px] font-bold text-white">2</span>
+          <p class="mt-1.5 text-[11px] font-bold text-slate-900">Dahan & Akar</p>
+          <p class="text-[10px] text-slate-600">Semprot dahan & kocor</p>
+        </div>
+        <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-2.5">
+          <span class="mx-auto flex h-5 w-5 items-center justify-center rounded-full bg-[#14532D] text-[10px] font-bold text-white">3</span>
+          <p class="mt-1.5 text-[11px] font-bold text-slate-900">Tiap 7 Hari</p>
+          <p class="text-[10px] text-slate-600">Saat pacu & kunci pentil</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VISUAL TESTIMONIALS -->
+    <section class="bg-slate-50/60 px-5 py-7">
+      <h2 class="text-center text-[24px] font-bold leading-tight tracking-tight text-slate-950">
+        Bukti Pekebun Buah: <span class="hl-brush">Pohon Mogok Akhirnya Berbuah Lebat</span>
+      </h2>
+
+      <div class="mt-4 space-y-4">
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/testi-1.webp"
+            alt="Pak H. Burhan di Jombang berdiri di bawah pohon alpukat dan durian yang berbuah sangat lebat"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[13px] font-bold text-slate-950">Pak H. Burhan — Wonosalam, Jombang</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Pentil Durian & Alpukat Aman</span>
+            </div>
+            <p class="mt-1 text-[12px] leading-snug text-slate-700">
+              "Pohon alpukat dan durian umur 5 tahun yang tadinya cuma mabuk daun dan pentilnya rontok terus kena hujan malam, dikocor & semprot SARATOGA <strong class="bg-emerald-100 px-1 text-emerald-900">langsung pecah bunga serempak & pentil kelerengnya mengunci kuat sampai panen!</strong>"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/testi-2.webp"
+            alt="Pak H. Darmawan di Banyuwangi sukses mengunci bunga mangga dan jeruk dengan Saratoga"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-[13px] font-bold text-slate-950">Pak H. Darmawan — Banyuwangi</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-900">Dahan Merunduk Penuh Buah</span>
+            </div>
+            <p class="mt-1 text-[12px] leading-snug text-slate-700">
+              "Bunga mangga dan jeruk yang biasanya gugur disapu angin, <strong class="bg-emerald-100 px-1 text-emerald-900">dalam 2 hari tangkainya jadi kekar ulet dan dompolan buahnya sampai harus disangga bambu!</strong>"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2-Card Final Overclaim Showcase -->
+      <div class="mt-4 grid grid-cols-2 items-stretch gap-3">
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/panen-rekor.webp"
+            alt="Dompolan buah tahunan lebat siap panen"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="px-2.5 py-2 text-center">
+            <h3 class="text-[12px] font-bold text-slate-900">Berbuah Di Luar Musim</h3>
+            <p class="text-[10px] text-slate-500">Stop mabuk daun bertahun-tahun</p>
+          </div>
+        </div>
+
+        <div class="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/panen-2.webp"
+            alt="Pentil buah mengunci kuat jadi buah berkualitas"
+            class="aspect-[3/2] w-full shrink-0 object-cover object-center"
+            width="960"
+            height="644"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="px-2.5 py-2 text-center">
+            <h3 class="text-[12px] font-bold text-slate-900">Pentil Anti Gugur</h3>
+            <p class="text-[10px] text-slate-500">Tangkai ulet tahan hujan angin</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION -->
+    <section id="checkout-form" class="scroll-mt-8 bg-white py-10">
+      <div class="px-5 pb-5 text-center">
+        <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-900">
+          Garansi Produk Asli {product.productName} — Segel Hologram Resmi
+        </span>
+        <h2 class="mx-auto mt-2 max-w-[360px] text-[24px] font-bold leading-[1.15] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Booster Bunga & Pengunci Pentil SARATOGA</span>
+        </h2>
+        <p class="mx-auto mt-1.5 max-w-[360px] text-[12px] text-slate-600 leading-snug">
+          Tersedia <strong>Kemasan 250ml (Rp 75.000)</strong> untuk 3–5 pohon, <strong>Paket Kebun 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong>, hingga <strong>1 Liter Lebih Hemat</strong>. Bisa COD!
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar
+    ctaText="Pesan Booster Bunga & Pengunci Pentil SARATOGA — COD"
+    subText="Mulai Kemasan 250ml Rp 75.000 / 500ml Rp 135.000 • 100% Tanpa Bau Amis"
+  />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>

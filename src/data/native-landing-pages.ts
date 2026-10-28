@@ -315,6 +315,46 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image: '/images/landing/perisai-silika-bulai-jagung-cabai/hero-problem.webp',
     isActive: true,
   },
+  {
+    slug: 'penyelamat-bunga-rontok-pelebat-buah-saratoga',
+    title: 'Saratoga - Penyelamat Bunga Rontok 48 Jam, Anti-Lalat Buah & Pelebat Buah 2X Bobot Tanpa Bau Amis',
+    productSlug: 'saratoga-serum-tanaman-premium',
+    description: 'Kunci 98% cincin tangkai bunga anti-rontok dalam 48 jam, cegah serbuan lalat buah dengan formula Jepang 100% tanpa bau amis, dan pompa daging buah cabai, tomat & buah tahunan padat berbobot 2X lipat.',
+    image: '/images/landing/penyelamat-bunga-rontok-pelebat-buah-saratoga/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'serum-tanaman-hias-anggrek-aglonema-saratoga',
+    title: 'Saratoga - Serum Pemecah 3 Spike Anggrek 14 Hari, Mutasi Merah Aglonema & Cacah Bonggol 100% Tanpa Bau Amis',
+    productSlug: 'saratoga-serum-tanaman-premium',
+    description: 'Paksa anggrek mogok berbunga pecah 2-3 tangkai spike dalam 14 hari, kunci kuncup anti bud-blast, pompakan daun Aglonema merah menyala mengkilap tanpa bercak putih kapur, dan 100% tanpa bau amis.',
+    image: '/images/landing/serum-tanaman-hias-anggrek-aglonema-saratoga/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'pelindung-patek-busuk-pantat-pembobot-buah-saratoga',
+    title: 'Saratoga - Benteng Kulit Baja Anti-Patek Cabai, Anti-Busuk Pantat Tomat & Pembobot Timbangan 2X Lipat',
+    productSlug: 'saratoga-serum-tanaman-premium',
+    description: 'Tebalkan dinding sel kulit buah cabai dan tomat agar kalis air hujan dan kebal jamur patek antraknosa, hentikan busuk pantat hitam tomat, serta dongkrak bobot karung +6 kg lolos sortir Grade A.',
+    image: '/images/landing/pelindung-patek-busuk-pantat-pembobot-buah-saratoga/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga',
+    title: 'Saratoga - Pemecah Bunga Pohon Durian, Alpukat & Mangga Mabuk Daun + Pengunci Pentil Kelereng Anti-Rontok',
+    productSlug: 'saratoga-serum-tanaman-premium',
+    description: 'Hentikan mabuk daun pada pohon durian, alpukat, mangga, dan jeruk yang mogok berbuah bertahun-tahun, paksa dahan tua pecah bunga serempak, dan las tangkai pentil kelereng kebal hujan malam.',
+    image: '/images/landing/pemecah-bunga-pengunci-pentil-durian-alpukat-mangga-saratoga/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'booster-cacah-bonggol-pemulih-cabai-mandul-bunga-saratoga',
+    title: 'Saratoga - Booster Cacah Bonggol Tanaman Hias Cepat Jarum Tunas & Pemulih Cabai Mandul Bunga Pasca-Keriting',
+    productSlug: 'saratoga-serum-tanaman-premium',
+    description: 'Selamatkan 99% potongan cacah bonggol Aglonema dan Monstera bebas lonyot hingga pecah 3-4 jarum tunas caling, serta bangkitkan pohon cabai yang mandul bunga pasca-sembuh keriting.',
+    image: '/images/landing/booster-cacah-bonggol-pemulih-cabai-mandul-bunga-saratoga/hero-problem.webp',
+    isActive: true,
+  },
 ];
 
 /**

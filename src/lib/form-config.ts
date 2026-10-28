@@ -84,6 +84,14 @@ export function getVariantPresentationMeta(
       ? ` • HEMAT Rp ${Math.round(compareSavings).toLocaleString("id-ID")}`
       : "";
 
+  if (/250\s*ml/i.test(label)) {
+    return {
+      badge: `PAKET HEMAT COBA${savingsText}`,
+      badgeTone: "bulk",
+      dosageNote: "Kemasan Coba Awal (Cukup 8–10 Tangki Semprot)",
+    };
+  }
+
   if (/500\s*ml/i.test(label)) {
     if (isSawit) {
       return {
