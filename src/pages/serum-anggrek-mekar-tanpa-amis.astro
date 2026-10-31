@@ -38,6 +38,9 @@ const preferredVariant =
   product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
   cheapest ??
   product.variants[0];
+const trialVariant = product.variants.find((v) => /250\s*ml/i.test(v.label));
+const oneLiterVariant = product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label));
+const twoLiterVariant = product.variants.find((v) => /2\s*liter|\b2\s*l\b/i.test(v.label));
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -347,7 +350,7 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
           </span>
           <p class="mt-1 text-[12px] font-bold text-emerald-950">SARATOGA Original — 100% Odorless Japanese Serum Berhologram</p>
           <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
-            Lindungi koleksi anggrek & tanaman hias kesayangan Anda dari pupuk palsu! SARATOGA resmi bersegel hologram & Shieldtag verifikasi (500ml, 1L & 2L).
+            Lindungi koleksi anggrek & tanaman hias kesayangan Anda dari pupuk palsu! SARATOGA resmi bersegel hologram & Shieldtag verifikasi (250ml, 500ml, 1L & 2L).
           </p>
         </div>
       </div>
@@ -636,7 +639,7 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
           Form Pemesanan <span class="hl-brush">Serum Anggrek SARATOGA</span>
         </h2>
         <p class="mx-auto mt-2 max-w-[340px] text-[13px] text-slate-600 leading-snug">
-          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong> cukup 250 liter semprotan — atau pilih <strong>1 Liter Lebih Hemat</strong>. Bisa bayar di tempat (COD) saat barang sampai.
+          Tersedia <strong>Kemasan Hobi 250ml ({formatIdr(trialVariant?.price ?? 75000)})</strong>, <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? 135000)})</strong>, <strong>1 Liter ({formatIdr(oneLiterVariant?.price ?? 235000)})</strong>, hingga <strong>2 Liter ({formatIdr(twoLiterVariant?.price ?? 460000)}) Lebih Hemat</strong>. Bisa bayar di tempat (COD).
         </p>
       </div>
 
@@ -651,7 +654,7 @@ const heroImage = '/images/landing/serum-anggrek-mekar-tanpa-amis/hero-problem.w
 
   <StickyLandingCtaBar
     ctaText="Pesan Serum Anggrek SARATOGA — Bisa COD"
-    subText="Paket Hemat 500ml Rp 135.000 (250L Semprotan) • 100% Tanpa Bau Amis"
+    subText={`Mulai 250ml ${formatIdr(trialVariant?.price ?? 75000)} / 500ml ${formatIdr(preferredVariant?.price ?? 135000)} • Tersedia 1L & 2L`}
   />
 
   <script slot="head" is:inline>

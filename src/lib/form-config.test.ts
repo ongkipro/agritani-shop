@@ -67,27 +67,40 @@ test("resolvePreferredFormVariant defaults non-sawit (Saratoga/Bensu/Kojien) to 
     slug: "saratoga-serum-tanaman-premium",
     variants: [
       { id: "13", label: "250ml", price: 75000, comparePrice: 115000 },
-      { id: "3", label: "500ml", price: 135000, comparePrice: 198000 },
-      { id: "4", label: "1 Liter", price: 268000, comparePrice: 396000 },
-      { id: "10", label: "2 Liter", price: 520000, comparePrice: 792000 },
+      { id: "1", label: "500ml", price: 135000, comparePrice: 198000 },
+      { id: "2", label: "1 Liter", price: 235000, comparePrice: 389000 },
+      { id: "11", label: "2 Liter", price: 460000, comparePrice: 778000 },
     ],
   } as Product;
 
-  assert.equal(resolvePreferredFormVariant(saratoga)?.id, "3");
+  assert.equal(resolvePreferredFormVariant(saratoga)?.id, "1");
   assert.equal(resolvePreferredFormVariant(saratoga, "13")?.id, "13");
-  assert.equal(resolvePreferredFormVariant(saratoga, "4")?.id, "4");
+  assert.equal(resolvePreferredFormVariant(saratoga, "2")?.id, "2");
+  assert.equal(resolvePreferredFormVariant(saratoga, "11")?.id, "11");
 
   const meta250 = getVariantPresentationMeta(saratoga, saratoga.variants[0]);
   assert.equal(meta250.badge, "PAKET HEMAT COBA • HEMAT Rp 40.000");
   assert.equal(meta250.badgeTone, "bulk");
   assert.match(meta250.dosageNote || "", /8–10 Tangki/);
 
+  const saratogaMeta500 = getVariantPresentationMeta(saratoga, saratoga.variants[1]);
+  assert.equal(saratogaMeta500.badge, "PALING LARIS • HEMAT Rp 63.000");
+  assert.equal(saratogaMeta500.badgeTone, "popular");
+
+  const saratogaMeta1L = getVariantPresentationMeta(saratoga, saratoga.variants[2]);
+  assert.equal(saratogaMeta1L.badge, "LEBIH HEMAT • HEMAT Rp 154.000");
+  assert.equal(saratogaMeta1L.badgeTone, "bulk");
+
+  const saratogaMeta2L = getVariantPresentationMeta(saratoga, saratoga.variants[3]);
+  assert.equal(saratogaMeta2L.badge, "PAKET 1 HEKTAR • DISKON Rp 10.000");
+  assert.equal(saratogaMeta2L.badgeTone, "bulk");
+
   const bensu = {
     slug: "bensu-pupuk-cair-organik",
     variants: [
-      { id: "5", label: "500ml", price: 130000, comparePrice: 198000 },
-      { id: "6", label: "1 Liter", price: 215000, comparePrice: 298000 },
-      { id: "9", label: "2 Liter", price: 420000, comparePrice: 596000 },
+      { id: "5", label: "500ml", price: 135000, comparePrice: 198000 },
+      { id: "6", label: "1 Liter", price: 235000, comparePrice: 298000 },
+      { id: "9", label: "2 Liter", price: 460000, comparePrice: 596000 },
     ],
   } as Product;
 
@@ -96,12 +109,12 @@ test("resolvePreferredFormVariant defaults non-sawit (Saratoga/Bensu/Kojien) to 
   assert.equal(resolvePreferredFormVariant(bensu, "9")?.id, "9");
 
   const meta500 = getVariantPresentationMeta(bensu, bensu.variants[0]);
-  assert.equal(meta500.badge, "PALING LARIS • HEMAT Rp 68.000");
+  assert.equal(meta500.badge, "PALING LARIS • HEMAT Rp 63.000");
   assert.equal(meta500.badgeTone, "popular");
   assert.match(meta500.dosageNote || "", /16–20 Tangki/);
 
   const meta1L = getVariantPresentationMeta(bensu, bensu.variants[1]);
-  assert.equal(meta1L.badge, "LEBIH HEMAT • HEMAT Rp 83.000");
+  assert.equal(meta1L.badge, "LEBIH HEMAT • HEMAT Rp 63.000");
   assert.equal(meta1L.badgeTone, "bulk");
   assert.match(meta1L.dosageNote || "", /35–40 Tangki/);
 

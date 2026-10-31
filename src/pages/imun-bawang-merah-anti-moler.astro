@@ -38,6 +38,8 @@ const preferredVariant =
   product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
   cheapest ??
   product.variants[0];
+const oneLiterVariant = product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label));
+const twoLiterVariant = product.variants.find((v) => /2\s*liter|\b2\s*l\b/i.test(v.label));
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -636,7 +638,7 @@ const heroImage = '/images/landing/imun-bawang-merah-anti-moler/hero-problem.web
           Form Pemesanan <span class="hl-brush">Paket Imun Bawang BENSU</span>
         </h2>
         <p class="mx-auto mt-2 max-w-[340px] text-[13px] text-slate-600 leading-snug">
-          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)})</strong> cukup 16–20 tangki semprot — atau pilih <strong>1 Liter Lebih Hemat</strong>. Bisa bayar di tempat (COD) saat barang sampai.
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? 135000)})</strong> cukup 16–20 tangki — tersedia <strong>1 Liter ({formatIdr(oneLiterVariant?.price ?? 235000)})</strong> & <strong>2 Liter ({formatIdr(twoLiterVariant?.price ?? 460000)}) Lebih Hemat</strong>. Bisa bayar di tempat (COD).
         </p>
       </div>
 
@@ -651,7 +653,7 @@ const heroImage = '/images/landing/imun-bawang-merah-anti-moler/hero-problem.web
 
   <StickyLandingCtaBar
     ctaText="Pesan Imun Bawang Merah BENSU — Bisa COD"
-    subText="Paket Hemat 500ml Rp 130.000 (16–20 Tangki) • Segel Shieldtag Asli"
+    subText={`Paket Hemat 500ml ${formatIdr(preferredVariant?.price ?? 135000)} • Tersedia 1L & 2L • Segel Shieldtag Asli`}
   />
 
   <script slot="head" is:inline>

@@ -38,6 +38,8 @@ const preferredVariant =
   product.variants.find((v) => /500\s*ml/i.test(v.label)) ??
   cheapest ??
   product.variants[0];
+const oneLiterVariant = product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label));
+const twoLiterVariant = product.variants.find((v) => /2\s*liter|\b2\s*l\b/i.test(v.label));
 const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
 
 const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
@@ -136,7 +138,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
             Pesan Obat Asem-Aseman & Booster 45+ Anakan →
           </a>
           <p class="mt-2 text-center text-[11px] font-semibold text-emerald-950">
-            Tersedia Paket Uji Coba 500ml (Rp 130.000) untuk 16–20 tangki semprot!
+            Tersedia Paket Uji Coba 500ml ({formatIdr(preferredVariant?.price ?? 135000)}) untuk 16–20 tangki semprot!
           </p>
         </div>
       </div>
@@ -327,7 +329,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
         <div class="min-w-0">
           <p class="text-[12px] font-bold text-emerald-950">BENSU Original — Logo Timbul & Segel Shieldtag</p>
           <p class="text-[11px] text-slate-600 leading-tight mt-0.5">
-            Formula Dingin Thailand: L-Amino + Humat Pencuci Asam + Bio-Silika.
+            Formula Dingin Thailand: L-Amino + Humat Pencuci Asam + Bio-Silika (500ml, 1L & 2L).
           </p>
         </div>
       </div>
@@ -613,7 +615,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
           Form Pemesanan <span class="hl-brush">Obat Asem-Aseman & 45+ Anakan</span>
         </h2>
         <p class="mx-auto mt-1.5 max-w-[360px] text-[13px] text-slate-600 leading-snug">
-          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? product.price)}) untuk ½ Ha</strong> atau <strong>1 Liter Lebih Hemat untuk 1 Ha sawah</strong>. Bisa bayar di tempat (<strong>COD</strong>).
+          Mulai <strong>Paket Hemat 500ml ({formatIdr(preferredVariant?.price ?? 135000)})</strong>, <strong>1 Liter ({formatIdr(oneLiterVariant?.price ?? 235000)})</strong>, hingga <strong>2 Liter ({formatIdr(twoLiterVariant?.price ?? 460000)}) Lebih Hemat</strong>. Bisa bayar di tempat (<strong>COD</strong>).
         </p>
       </div>
 
@@ -628,7 +630,7 @@ const heroImage = '/images/landing/booster-padi-anakan-bulir-bernas/hero-problem
 
   <StickyLandingCtaBar
     ctaText="Pesan Obat Asem-Aseman & 45+ Anakan — Bisa COD"
-    subText="Paket Hemat 500ml Rp 130.000 (16–20 Tangki) • Segel Shieldtag Asli"
+    subText={`Paket Hemat 500ml ${formatIdr(preferredVariant?.price ?? 135000)} • Tersedia 1L & 2L • Segel Shieldtag Asli`}
   />
 
   <script slot="head" is:inline>
