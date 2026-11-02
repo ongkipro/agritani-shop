@@ -59,7 +59,10 @@ function sqliteD1() {
     CREATE TABLE stores (
       id INTEGER PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL,
       site_url TEXT, tagline TEXT, locale TEXT, storefront_template TEXT,
-      admin_name TEXT, support_whatsapp TEXT, created_at TEXT NOT NULL
+      admin_name TEXT, support_whatsapp TEXT, created_at TEXT NOT NULL,
+      -- as migrations 0020 and 0022 leave them
+      payment_fee_bearer TEXT NOT NULL DEFAULT 'buyer',
+      cod_fee_bearer TEXT NOT NULL DEFAULT 'buyer'
     );
     CREATE TABLE whatsapp_numbers (
       id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT NOT NULL DEFAULT '',
@@ -413,5 +416,17 @@ test("the install starts the WhatsApp list with its number, or leaves it empty (
   assert.equal(
     (withoutNumber.raw.prepare("SELECT COUNT(*) AS n FROM whatsapp_numbers").get() as { n: number }).n,
     0,
+  );
+});
+
+test("a new store's QRIS/VA fee is the seller's; its COD fee stays the buyer's (PAY-2, A-447)", async () => {
+  const { raw, database } = sqliteD1();
+  const planned = planInstall(valid);
+  assert.equal(planned.ok, true);
+  if (!planned.ok) return;
+  assert.deepEqual(await runInstall(database, planned.plan), { ok: true });
+  assert.deepEqual(
+    { ...(raw.prepare("SELECT payment_fee_bearer, cod_fee_bearer FROM stores").get() as object) },
+    { payment_fee_bearer: "seller", cod_fee_bearer: "buyer" },
   );
 });

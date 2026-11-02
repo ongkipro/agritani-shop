@@ -1,6 +1,6 @@
 # AdsBookCMS install fleet
 
-> Verified against disk: 2026-11-02 @ `cf4ce18` (versions, sync, distance, deploy time and schema read with `npm run fleet:status`, plus the live submit-button colour of nine stores, after the 1.9.2 rollout; "Version" is the working tree)
+> Verified against disk: 2026-11-02 @ `ba673bc` (fee bearer line 2026-11-02; versions, sync, distance, deploy time and schema read with `npm run fleet:status`, plus the live submit-button colour of nine stores, after the 1.9.2 rollout; "Version" is the working tree)
 
 Every store that runs AdsBookCMS: one install = one repository = one Worker
 = one store (`AGENTS.md`). This file is the registry of which installs exist,
@@ -267,7 +267,9 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   Grafir and the COD-excluded provinces can only pay by manual transfer. Payment
   fee bearer is `seller` (D1 `stores.payment_fee_bearer`, aligned 2026-11-02): this
   AutoLaris account bills the buyer the order total and keeps the fee, so `buyer`
-  showed a fee no QR asked for.
+  showed a fee no QR asked for. Every store is `seller` since 2026-11-02 (klikinaja,
+  cekat and skincarebpom changed that day, TASKS A-448); a new install is written
+  `seller` by the install wizard (A-447).
   Install-owned and protected on every merge: the **grafir** (engraving)
   feature (`FormMiddleContent`, `FormHybridContent`, `GeoIpResolvedForm`,
   `form-middle.ts`, `form-hybrid.ts`, `approved-grafir`, the `customer_note`

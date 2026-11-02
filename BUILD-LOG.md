@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `e256841` (Entry 247; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `ba673bc` (Entry 248; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8549,3 +8549,22 @@ What's new (two icons on the collapsed rail); Docs is also in the account menu a
 mobile menu. One item added to the 1.9.2 What's new entry at Paduka's request; no version
 bump. Rendered at 360, 390, 768, 1024, 1280 and 1920 px: no horizontal overflow, the
 previous/next links clear the mobile bottom bar, the copy button writes the clipboard.
+
+### Entry 248: every store bills QRIS/VA fees to the seller, and so does a new one (PAY-2)
+
+TASKS A-447 and A-448. A new install was written `payment_fee_bearer = 'buyer'`, the
+column default from `0020`, so its checkout would add an admin fee this AutoLaris account
+never bills (Entry 246). `runInstall` now writes `'seller'` in the store insert; no
+migration, since a SQLite column default needs a table rebuild and the wizard is the only
+writer of a new store row. `normalizePaymentFeeBearer` stays as it was: it also reads the
+COD bearer, which is the buyer's on purpose. `install.test.ts` runs the wizard on SQLite and
+reads `seller`/`buyer` back; it fails with the fix removed. On a fresh `dev:local --reset`
+plus `dev:seed`, every QRIS/VA channel reports `fee_bearer: "seller"` and the checkout reads
+"QRIS Tanpa biaya admin".
+
+With Paduka's go-ahead, one D1 row each on klikinaja, cekat and skincarebpom (the last one
+outside the update rollout, found `buyer` by the same read): `payment_fee_bearer` from
+`buyer` to `seller`, guarded on the old value, `changes = 1`, `cod_fee_bearer` untouched.
+`/api/payment-methods` on all twelve stores now reports `seller` for QRIS and VA. PAY-2
+stays open for A-449 (AutoLaris's answer on billing the fee to the buyer) and A-450 (one
+test order comparing the four totals). No version bump, no changelog.
