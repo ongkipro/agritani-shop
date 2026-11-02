@@ -170,7 +170,7 @@ const method = (value: string) => value === 'GET' ? 'bg-blue-50 text-blue-700 ri
     <ol>
       <li><code>GET /storefront</code> dan <code>GET /products</code> untuk menampilkan toko dan produk.</li>
       <li><code>GET /geo/districts?q=</code> saat pembeli mengetik kecamatan, lalu <code>POST /geo/shipping-rates</code> untuk pilihan kurir.</li>
-      <li><code>POST /checkout</code> membuat pesanan dan mengembalikan <code>order_number</code> serta <code>public_status_token</code>.</li>
+      <li><code>POST /checkout</code> membuat pesanan dan mengembalikan <code>order_number</code> serta <code>public_status_token</code>. Untuk QRIS/VA, nominal yang dibayar pembeli adalah <code>payment.total_amount</code>: bila biaya admin ditanggung pembeli, biaya itu sudah termasuk; bila ditanggung toko, nominalnya sama dengan total pesanan dan biaya admin tidak perlu ditampilkan.</li>
       <li><code>POST /orders/status</code> dengan body <code>order_number</code> dan <code>status_token</code> (berisi <code>public_status_token</code> tadi) untuk halaman terima kasih atau pembayaran.</li>
       <li><code>POST /tracking/events</code> untuk mengirim Purchase ke Meta; <code>event_id</code>-nya adalah nomor order.</li>
     </ol>
