@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `cf4ce18` (Entry 246; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `e256841` (Entry 247; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8527,3 +8527,25 @@ provider did not add (total equals amount) as the seller's, whatever the store s
 INV-10357 stays `pending`, its QR expires on its own; cancel it in the admin
 (UNIMPLEMENTED_SPECS OPS-1). No version bump, no changelog.
 
+
+### Entry 247: admin Docs book for the API and the CLI
+
+Requested by Paduka: one place inside AdsBookCMS that explains the CLI and the API, text
+only (a screenshot goes stale with the first UI change). `/admin/docs/<chapter>` (owner and
+admin, `ADMIN_PAGE_ROUTES`) is a six-chapter book: start here, API key and scope, Headless
+API, Operations API, `adsbook` CLI, errors and limits. A sticky contents column from 1280 px,
+a fold below it; previous/next under each chapter; a copy button on every code block; on a
+phone each table row reads as a stacked card. The endpoint, scope, limit and CLI tables are
+rendered from `HEADLESS_OPERATIONS`, `OPS_OPERATIONS`, the scope lists, the key limits and
+`ADSBOOK_CLI_USAGE` (now exported), and each operation and scope needs a sentence in a
+`Record` keyed by it, so a new operation without one fails `npm run check`.
+
+Checking the prose against the code corrected two things the earlier text had wrong: an
+API-key 429 carries `X-RateLimit-Reset` (ISO time), not `Retry-After`; and an ops order's
+fields are `number`, `status.shipping`, `amounts.total`. The hand-written endpoint cards on
+`/admin/settings/developer`, which missed `orders/status` and `tracking/events`, became a
+link to the book. The AdsBookCMS card under the sidebar now holds two actions, Docs and
+What's new (two icons on the collapsed rail); Docs is also in the account menu and the
+mobile menu. One item added to the 1.9.2 What's new entry at Paduka's request; no version
+bump. Rendered at 360, 390, 768, 1024, 1280 and 1920 px: no horizontal overflow, the
+previous/next links clear the mobile bottom bar, the copy button writes the clipboard.

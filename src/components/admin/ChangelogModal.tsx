@@ -40,6 +40,10 @@ const CHANGELOG_RELEASES: ChangelogRelease[] = [
         title: "Kolom terisi tetap abu-abu, bingkai fokus gelap",
         description: "Dengan tombol oranye, kolom yang sudah terisi kembali berlatar abu-abu netral (bukan peach), dan kolom yang sedang diketik berbingkai gelap dengan cincin aksen, supaya tidak tertukar dengan bingkai merah saat error.",
       },
+      {
+        title: "Docs API & CLI di admin",
+        description: "Panduan teks untuk API key dan scope, Headless API, Operations API, CLI adsbook, serta kode error, dibuka dari tombol Docs di kartu AdsBookCMS bawah sidebar (owner dan admin). Daftar endpoint dan scope di dalamnya dibaca langsung dari sistem, jadi selalu sesuai versi yang berjalan.",
+      },
     ],
   },
   {
