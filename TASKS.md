@@ -4429,6 +4429,9 @@ about honouring it. No (expected): `buyer` is not a real option for this account
   removed); `dev:local --reset` + `dev:seed`: every QRIS/VA channel
   `fee_bearer: "seller"`, the checkout shows "QRIS Tanpa biaya admin";
   `npm test` 1174, `npm run check` 0 errors.
+  **Reversed 2026-11-02 by Paduka** once the bill included the fee (A-449):
+  a new store is `buyer` again (the column default); the wizard no longer
+  writes the bearer, and `install.test.ts` now asserts `buyer`.
 - [x] **A-448** — Set klikinaja and cekat to `seller`.
   One row each, `UPDATE stores SET payment_fee_bearer='seller' WHERE id=(SELECT
   id FROM stores ORDER BY id LIMIT 1) AND payment_fee_bearer='buyer'`, via
@@ -4464,6 +4467,14 @@ about honouring it. No (expected): `buyer` is not a real option for this account
   and 1280 px. The dev AutoLaris stand-in now bills grand_total like the live
   account. Tests: `payment-fee-policy.test.ts`, `autolaris-payment.test.ts`
   (fails with grand_total reverted), `dev-providers.test.ts`.
+  Refined the same day (Paduka): `buyer` grosses QRIS up so the store receives
+  the whole order total after AutoLaris takes 0.7% of the bill
+  (`buyerPaymentAdminFee`, shared by checkout and `/submit`: Rp63.000 is
+  billed Rp63.445, AutoLaris keeps 445); a `seller` fee is not shown to the
+  buyer on `/payment`, and the order detail shows only "Diterima toko" for it.
+  Local orders: INV-10019 QRIS buyer 63.445 on checkout, /payment, record and
+  QR, store receives 63.000; INV-10016 VA BRI buyer 66.000, store 63.000;
+  INV-10018 QRIS seller 63.000 with no fee shown, store 62.559.
 - [x] **A-450** — Prove it with one order and close PAY-2.
   One QRIS test order on a store with AutoLaris live, labelled as a test in the
   name and address ("TEST ORDER ... JANGAN DIPROSES"), Pixel and

@@ -326,7 +326,7 @@ is either transitive (imported by another lib) or dead, and only reading tells w
 | `payment-brand` | 6 | — | ✓ | `/payment` `/thanks` `/api/payment-methods` |
 | `payment-dispatch-policy` | 10 | — | ✓ | `/api/admin/orders` `/api/admin/orders/[id]` `/api/admin/shipping` |
 | `payment-display` | 9 | — | ✓ | `/payment` `/thanks` |
-| `payment-fee-policy` | 13 | — | ✓ | `/api/payment-methods` `/admin/payments` `/api/admin/orders/[id]` |
+| `payment-fee-policy` | 14 | — | ✓ | `/api/payment-methods` `/admin/payments` `/api/admin/orders/[id]` |
 | `payment-switch` | 10 | `order_items` `orders` `seller_bank_accounts` `stores` `warehouses` | ✓ | `/api/admin/orders` `/api/admin/orders/[id]` |
 | `product-mutation` | 10 | `order_items` `product_variants` `products` `storefront_content` | ✓ | `/api/admin/products` |
 | `provider-config` | 6 | `stores` | ✓ | `/api/locations` `/api/payment-methods` `/api/submit-order` `/api/v1/checkout` `/api/admin/ongkir` `/api/admin/settings` `/api/admin/shipping` `/api/admin/warehouses` |

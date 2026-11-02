@@ -6,6 +6,7 @@ import {
 } from "./autolaris-client.ts";
 import {
   autoLarisGrandTotal,
+  buyerPaymentAdminFee,
   calculatePaymentAdminFee,
   normalizePaymentFeeBearer,
   recordedAutoLarisBill,
@@ -714,10 +715,9 @@ export async function createAutoLarisPaymentForOrder(
   // AutoLaris bills exactly grand_total and deducts its fee from it, so the
   // bearer is decided by what is asked for here (PAY-2).
   const requestAmount = Math.max(1, Math.round(order.total_amount));
-  const expectedAdminFee = calculatePaymentAdminFee(
-    input.channelCode,
-    requestAmount,
-  );
+  const expectedAdminFee = feeBearer === "buyer"
+    ? buyerPaymentAdminFee(input.channelCode, requestAmount) ?? 0
+    : calculatePaymentAdminFee(input.channelCode, requestAmount);
   const expectedBilledTotal = autoLarisGrandTotal(
     input.channelCode,
     order.total_amount,

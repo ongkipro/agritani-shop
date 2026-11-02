@@ -1796,29 +1796,30 @@ export function OrderDetail({
                 </span>
               </div>
 
-              {/* The QRIS/VA admin fee (PAY-2): out of the store's revenue when
-                  the seller bears it, on top of the bill when the buyer does. */}
+              {/* The QRIS/VA admin fee (Paduka, 2026-11-02). Seller-borne: not
+                  shown as a fee, it only lowers what the store receives.
+                  Buyer-borne: shown, and the store receives the whole order. */}
               {order.payment_method !== "cod" && order.payment && Number(order.payment.admin_fee) > 0 && (() => {
                 const payment = order.payment;
                 const sellers = paymentFeeIsSellers(payment);
                 return (
                   <div className="space-y-2 rounded-lg bg-slate-50 p-3">
-                    <div className="flex justify-between items-center gap-3">
-                      <span className="text-slate-500 font-medium">Biaya admin {payment.channel_code}</span>
+                    {!sellers && (
+                      <>
+                        <div className="flex justify-between items-center gap-3">
+                          <span className="text-slate-500 font-medium">Biaya admin {payment.channel_code} (pembeli)</span>
+                          <span className="font-semibold text-slate-900">{currency(payment.admin_fee)}</span>
+                        </div>
+                        <div className="flex justify-between items-center gap-3">
+                          <span className="text-slate-500 font-medium">Ditagih ke pembeli</span>
+                          <span className="font-semibold text-slate-900">{currency(payment.total_amount)}</span>
+                        </div>
+                      </>
+                    )}
+                    <div className={`flex justify-between items-center gap-3 ${sellers ? "" : "border-t border-slate-200 pt-2"}`}>
+                      <span className="font-semibold text-slate-900">Diterima toko</span>
                       <span className="font-semibold text-slate-900">
-                        {sellers ? `−${currency(payment.admin_fee)}` : currency(payment.admin_fee)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center gap-3">
-                      <span className="text-slate-500 font-medium">{sellers ? "Ditanggung" : "Dibayar"}</span>
-                      <span className={`rounded-md px-2 py-0.5 text-xs font-medium ${sellers ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"}`}>
-                        {sellers ? "Seller" : "Pembeli"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center gap-3 border-t border-slate-200 pt-2">
-                      <span className="font-semibold text-slate-900">{sellers ? "Diterima toko" : "Ditagih ke pembeli"}</span>
-                      <span className="font-semibold text-slate-900">
-                        {currency(sellers ? Math.max(0, payment.total_amount - payment.admin_fee) : payment.total_amount)}
+                        {currency(sellers ? Math.max(0, payment.total_amount - payment.admin_fee) : payment.amount)}
                       </span>
                     </div>
                   </div>

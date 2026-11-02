@@ -268,8 +268,8 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   fee bearer is `seller` (D1 `stores.payment_fee_bearer`, aligned 2026-11-02): this
   AutoLaris account bills the buyer the order total and keeps the fee, so `buyer`
   showed a fee no QR asked for. Every store is `seller` since 2026-11-02 (klikinaja,
-  cekat and skincarebpom changed that day, TASKS A-448); a new install is written
-  `seller` by the install wizard (A-447).
+  cekat and skincarebpom changed that day, TASKS A-448). A new install starts as
+  `buyer` (Paduka's choice; A-447 reversed once the bill included the fee).
   Install-owned and protected on every merge: the **grafir** (engraving)
   feature (`FormMiddleContent`, `FormHybridContent`, `GeoIpResolvedForm`,
   `form-middle.ts`, `form-hybrid.ts`, `approved-grafir`, the `customer_note`

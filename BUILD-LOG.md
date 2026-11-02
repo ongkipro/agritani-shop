@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `3f5027c` (Entry 249; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `3f5027c` (Entry 250; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8594,3 +8594,17 @@ buyer 63.441 on checkout, /payment, the recorded total and QR tag 54; INV-10015 
 69.500 on all three. `npm test` 1176, `npm run check` 0 errors; order detail opened at 390 and
 1280 px. Every live store is `seller`, so live behaviour is unchanged until an install takes
 this release and a store chooses `buyer`. No version bump, no changelog.
+
+### Entry 250: Paduka's fee rules — the buyer pays so the store keeps the whole order, the seller's fee stays out of sight
+
+Refines Entry 249 at Paduka's instruction. Buyer-borne: the store receives the whole order
+total, so QRIS grosses up — `buyerPaymentAdminFee()` returns the smallest bill X with
+X − ceil(0.7% of X) ≥ the order total (Rp63.000 → Rp63.445, AutoLaris keeps 445), and VA adds
+its fixed fee. Checkout (`form-hybrid.ts`) and `/submit` use the same function, so the QR asks
+what checkout showed. Seller-borne: the fee is not shown to the buyer on `/payment`; the order
+detail shows only "Diterima toko" (total minus fee), and for a buyer-borne fee it shows the fee,
+what the buyer is billed and "Diterima toko" = the order total. A new install is `buyer` again:
+the wizard stops writing `seller` (A-447 reversed), `install.test.ts` asserts `buyer`. The 1.9.2
+What's new items follow. Local orders through the checkout form: INV-10019 QRIS buyer 63.445 on
+checkout, /payment, record and QR tag 54, store 63.000; INV-10016 VA BRI buyer 66.000, store
+63.000; INV-10018 QRIS seller 63.000, no fee line, store 62.559. Order detail at 390 px.

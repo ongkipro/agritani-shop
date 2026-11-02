@@ -91,15 +91,30 @@ export function calculatePaymentAdminFee(
 }
 
 /**
+ * The fee a buyer pays on top of the order total so that the store still
+ * receives the whole order total once AutoLaris deducts its own fee from the
+ * bill (Paduka, 2026-11-02). A fixed VA fee is the fee itself; QRIS grosses up:
+ * the smallest bill X with X - ceil(0.7% of X) >= the order total. Null for a
+ * code with no AutoLaris fee rule, so a caller can fall back.
+ */
+export function buyerPaymentAdminFee(channel: string, orderTotal: number) {
+  const rule = (PAYMENT_FEE_RULES as Record<string, PaymentFeeRule | undefined>)[channel];
+  if (!rule) return null;
+  const total = Math.max(0, Math.round(orderTotal));
+  if (rule.kind === "fixed") return rule.amount;
+  let bill = Math.ceil(total / (1 - rule.rate));
+  while (bill - 1 - Math.ceil((bill - 1) * rule.rate) >= total) bill -= 1;
+  while (bill - Math.ceil(bill * rule.rate) < total) bill += 1;
+  return bill - total;
+}
+
+/**
  * What `/api/h2h/submit` is asked to bill. AutoLaris bills the buyer exactly
  * `grand_total` and deducts its admin fee from it (every live transaction since
  * October: provider total = grand_total, PAY-2), so the store chooses who pays
  * here: `seller` sends the order total and receives it minus the fee; `buyer`
- * sends the order total plus the fee, which is the total checkout showed.
- *
- * lazy: on `buyer` QRIS the provider takes 0.7% of the grossed-up total, so the
- * store nets the order total minus about 0.005% (Rp41 on Rp858.600). Grossing
- * up would change the fee checkout shows; do it only if that gap matters.
+ * sends the order total plus `buyerPaymentAdminFee`, the total checkout showed,
+ * and the store receives the whole order total.
  */
 export function autoLarisGrandTotal(
   channel: AutoLarisCheckoutChannel,
@@ -107,7 +122,7 @@ export function autoLarisGrandTotal(
   bearer: PaymentFeeBearer,
 ) {
   const total = Math.max(1, Math.round(orderTotal));
-  return bearer === "buyer" ? total + calculatePaymentAdminFee(channel, total) : total;
+  return bearer === "buyer" ? total + (buyerPaymentAdminFee(channel, total) ?? 0) : total;
 }
 
 /**

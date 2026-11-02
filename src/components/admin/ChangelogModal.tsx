@@ -46,15 +46,15 @@ const CHANGELOG_RELEASES: ChangelogRelease[] = [
       },
       {
         title: "Tagihan QRIS/VA sama dengan total di checkout",
-        description: "Bila biaya admin ditanggung pembeli, nominal QR atau VA kini memang ditambah biaya admin (QRIS 0,7%, VA BCA Rp6.500, VA lain Rp3.000), sama dengan total yang dilihat pembeli saat checkout. Bila ditanggung toko, pembeli membayar total pesanan dan biaya admin mengurangi pendapatan toko.",
+        description: "Bila biaya admin ditanggung pembeli, nominal QR atau VA kini memang ditambah biaya admin (VA BCA Rp6.500, VA lain Rp3.000, QRIS sekitar 0,7%), sama dengan total yang dilihat pembeli saat checkout, dan toko tetap menerima total pesanan utuh. Bila ditanggung toko, pembeli tidak melihat biaya admin dan biaya itu mengurangi nominal yang diterima toko.",
       },
       {
-        title: "Biaya admin di detail pesanan",
-        description: "Detail pesanan QRIS/VA menampilkan biaya admin, siapa yang menanggungnya, dan nominal yang diterima toko atau yang ditagih ke pembeli.",
+        title: "Nominal diterima toko di detail pesanan",
+        description: "Detail pesanan QRIS/VA menampilkan nominal yang diterima toko. Bila biaya admin dibayar pembeli, biaya itu dan total yang ditagih ke pembeli ikut ditampilkan.",
       },
       {
-        title: "Toko baru: biaya admin ditanggung toko",
-        description: "Instalasi baru langsung memakai pengaturan biaya admin QRIS/VA ditanggung toko, sesuai cara AutoLaris menagih. Biaya COD tetap ditanggung pembeli.",
+        title: "Toko baru: biaya admin ditanggung pembeli",
+        description: "Instalasi baru memakai pengaturan biaya admin QRIS/VA dan COD ditanggung pembeli. Pengaturannya bisa diubah di menu Pembayaran.",
       },
     ],
   },
