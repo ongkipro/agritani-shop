@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `2853d67` (Entry 252; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `040459c` (Entry 253; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8638,3 +8638,16 @@ requeue action that the health text points to; Analitik still offers a TikTok ch
 login page shows a donation QRIS that PRD-ADMIN-LOGIN LOGIN-18 forbids; the profile page
 shows integration keys to admins while only the owner may save them). All 13 chapters open
 200 with no console error; no horizontal overflow at 360-1920 px. `npm test` 1178.
+
+### Entry 253: forms open on the cheapest variant; a helper for what a page may state about couriers and payments
+
+From the revenleather screening (2026-11-02). `/produk/nayaka-pouch` opened its form on Brown
+Rp510.100 while its cards, Product JSON-LD and both feeds said Rp500.100 (Tan): a form with no
+variant chosen took `variants[0]`, the first entered. `cheapestVariant()` (form-config.ts, the
+first among equals) is now that default and the one rule the catalogue's "from" price and the
+feed already used, each of which had its own copy. A chosen variant still wins; an unknown one
+is still refused. Second, hand-written storefront copy named seven couriers and one bank while
+the checkout offered five and six: `getStorePublicFacts()` (public-store.ts) returns the
+enabled couriers, the payment methods `/api/payment-methods` offers (summarised by
+`summarizePaymentMethods`) and the store's non-COD provinces, for an install's own pages to
+print instead of a list that goes stale. Nothing in it varies per visitor. `npm test` 1180.

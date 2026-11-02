@@ -26,7 +26,7 @@ The [Modules](#modules) section is the same book read from the other side.
 | `/payment` | GET | public | — | `src/pages/payment.astro` | `format-idr` `payment-brand` `payment-display` | — | `format-idr.test.ts` `payment-brand.test.ts` `payment-display.test.ts` |
 | `/produk` | GET | public | — | `src/pages/produk/index.astro` | `auto-load-more` `catalog` `catalog-page-size` `format-idr` | `product_variants` `products` | `auto-load-more.test.ts` `catalog.test.ts` `format-idr.test.ts` |
 | `/produk/[slug]` | GET | public | — | `src/pages/produk/[slug].astro` | `catalog` `catalog-feed` `env` `form-mode` `geo` `json-ld` `landing-pages` `social-proof` | `landing_pages` `landing_sections` `orders` `product_variants` `products` `stores` | `catalog.test.ts` `catalog-feed.test.ts` `env.test.ts` `form-mode.test.ts` `geo.test.ts` `json-ld.test.ts` `landing-pages.test.ts` |
-| `/thanks` | GET | public | — | `src/pages/thanks.astro` | `catalog` `payment-brand` `payment-display` `public-store` `thanks-whatsapp` | `product_variants` `products` `stores` | `catalog.test.ts` `payment-brand.test.ts` `payment-display.test.ts` `public-store.test.ts` `thanks-whatsapp.test.ts` |
+| `/thanks` | GET | public | — | `src/pages/thanks.astro` | `catalog` `payment-brand` `payment-display` `public-store` `thanks-whatsapp` | `courier_rules` `product_variants` `products` `stores` | `catalog.test.ts` `payment-brand.test.ts` `payment-display.test.ts` `public-store.test.ts` `thanks-whatsapp.test.ts` |
 
 ## Content page (9)
 
@@ -34,11 +34,11 @@ The [Modules](#modules) section is the same book read from the other side.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `/disclaimer` | GET | public | — | `src/pages/disclaimer.astro` | — | — | — |
 | `/kebijakan-cookie` | GET | public | — | `src/pages/kebijakan-cookie.astro` | — | — | — |
-| `/kebijakan-privasi` | GET | public | — | `src/pages/kebijakan-privasi.astro` | `public-store` `tenant` | `stores` | `public-store.test.ts` `tenant.test.ts` |
-| `/kontak` | GET | public | — | `src/pages/kontak.astro` | `public-store` | `stores` | `public-store.test.ts` |
-| `/pengiriman` | GET | public | — | `src/pages/pengiriman.astro` | `public-store` `tenant` | `stores` | `public-store.test.ts` `tenant.test.ts` |
+| `/kebijakan-privasi` | GET | public | — | `src/pages/kebijakan-privasi.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
+| `/kontak` | GET | public | — | `src/pages/kontak.astro` | `public-store` | `courier_rules` `stores` | `public-store.test.ts` |
+| `/pengiriman` | GET | public | — | `src/pages/pengiriman.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
 | `/sitemap` | GET | public | — | `src/pages/sitemap.astro` | `catalog` `landing-pages` | `landing_pages` `landing_sections` `product_variants` `products` | `catalog.test.ts` `landing-pages.test.ts` |
-| `/syarat-ketentuan` | GET | public | — | `src/pages/syarat-ketentuan.astro` | `public-store` `tenant` | `stores` | `public-store.test.ts` `tenant.test.ts` |
+| `/syarat-ketentuan` | GET | public | — | `src/pages/syarat-ketentuan.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
 | `/tentang` | GET | public | — | `src/pages/tentang.astro` | — | — | — |
 | `/testimoni` | GET | public | — | `src/pages/testimoni.astro` | — | — | — |
 
@@ -46,7 +46,7 @@ The [Modules](#modules) section is the same book read from the other side.
 
 | Route | Methods | Auth | Roles | File | Libs | Tables | Tests |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `/[slug]` | GET | public | — | `src/pages/[slug].astro` | `admin-session` `auth-secret` `catalog` `catalog-feed` `env` `json-ld` `landing-pages` `native-landing-pages` `public-store` `social-proof` | `admin_credentials` `admin_sessions` `install_secrets` `landing_pages` `landing_sections` `orders` `product_variants` `products` `stores` | `admin-session.test.ts` `auth-secret.test.ts` `catalog.test.ts` `catalog-feed.test.ts` `env.test.ts` `json-ld.test.ts` `landing-pages.test.ts` `native-landing-pages.test.ts` `public-store.test.ts` |
+| `/[slug]` | GET | public | — | `src/pages/[slug].astro` | `admin-session` `auth-secret` `catalog` `catalog-feed` `env` `json-ld` `landing-pages` `native-landing-pages` `public-store` `social-proof` | `admin_credentials` `admin_sessions` `courier_rules` `install_secrets` `landing_pages` `landing_sections` `orders` `product_variants` `products` `stores` | `admin-session.test.ts` `auth-secret.test.ts` `catalog.test.ts` `catalog-feed.test.ts` `env.test.ts` `json-ld.test.ts` `landing-pages.test.ts` `native-landing-pages.test.ts` `public-store.test.ts` |
 | `/contoh-landing` | GET | public | — | `src/pages/contoh-landing.astro` | `catalog` `catalog-feed` `landing-pages` | `landing_pages` `landing_sections` `product_variants` `products` | `catalog.test.ts` `catalog-feed.test.ts` `landing-pages.test.ts` |
 | `/landing-page` | GET | public | — | `src/pages/landing-page/index.astro` | `image-derivative` `landing-pages` | `landing_pages` `landing_sections` `products` | `image-derivative.test.ts` `landing-pages.test.ts` |
 | `/solusi-terbaru` | GET | public | — | `src/pages/solusi-terbaru.astro` | — | — | — |
@@ -266,7 +266,7 @@ is either transitive (imported by another lib) or dead, and only reading tells w
 | `embed-security` | 6 | — | ✓ | `/api/admin/settings` |
 | `env` | 4 | — | ✓ | `/` `/produk/[slug]` `/[slug]` `/hybrid-form` `/assets/[...key]` `/media/[...key]` `/hello` `/api/form-config` `/api/geo-province` `/api/install` `/api/locations` `/api/meta-event` `/api/ops/v1/orders` `/api/ops/v1/orders/[number]` `/api/order-status` `/api/payment-methods` `/api/record-abandoned-order` `/api/shipping-rates` `/api/submit-middle-order` `/api/submit-order` `/api/v1/checkout` `/api/v1/geo/shipping-rates` `/api/v1/orders/status` `/api/v1/storefront` `/api/v1/tracking/events` `/api/webhooks/autolaris` `/admin/check` `/admin/dashboard` `/admin/products` `/admin/settings/plugins/kelola` `/admin/status` `/api/admin/abandoned-orders` `/api/admin/access` `/api/admin/ads` `/api/admin/analytics` `/api/admin/check` `/api/admin/content` `/api/admin/expeditions` `/api/admin/health` `/api/admin/health/check` `/api/admin/health/status` `/api/admin/logout` `/api/admin/media` `/api/admin/notifications` `/api/admin/ongkir` `/api/admin/orders` `/api/admin/orders/[id]` `/api/admin/orders/[id]/follow-up` `/api/admin/orders/attention` `/api/admin/orders/export` `/api/admin/orders/retention` `/api/admin/payment-reconciliation` `/api/admin/plugins` `/api/admin/plugins/kelola` `/api/admin/products` `/api/admin/profile` `/api/admin/rules` `/api/admin/seller-bank-accounts` `/api/admin/settings` `/api/admin/settings/developer` `/api/admin/shipping` `/api/admin/upload-r2` `/api/admin/warehouses` `/api/admin/whatsapp-numbers` |
 | `excluded-area` | 1 | — | ✓ | `/api/submit-middle-order` |
-| `form-config` | 6 | — | ✓ | `/embed/form` `/full-form` `/hybrid-form` `/middle-form` `/api/form-config` |
+| `form-config` | 7 | — | ✓ | `/embed/form` `/full-form` `/hybrid-form` `/middle-form` `/api/form-config` |
 | `form-mode` | 8 | `stores` | ✓ | `/produk/[slug]` `/geoipform` `/hybrid-form` `/api/form-config` `/api/geo-province` `/api/submit-middle-order` `/api/submit-order` `/api/v1/checkout` `/api/v1/storefront` `/api/admin/abandoned-orders` |
 | `format-idr` | 1 | — | ✓ | `/payment` `/produk` |
 | `geo` | 4 | — | ✓ | `/produk/[slug]` `/api/submit-middle-order` |
@@ -331,7 +331,7 @@ is either transitive (imported by another lib) or dead, and only reading tells w
 | `product-mutation` | 10 | `order_items` `product_variants` `products` `storefront_content` | ✓ | `/api/admin/products` |
 | `provider-config` | 6 | `stores` | ✓ | `/api/locations` `/api/payment-methods` `/api/submit-order` `/api/v1/checkout` `/api/admin/ongkir` `/api/admin/settings` `/api/admin/shipping` `/api/admin/warehouses` |
 | `province` | 13 | — | ✓ | `/api/submit-middle-order` `/api/v1/checkout` `/api/admin/expeditions` |
-| `public-store` | 3 | `stores` | ✓ | `/thanks` `/kebijakan-privasi` `/kontak` `/pengiriman` `/syarat-ketentuan` `/[slug]` |
+| `public-store` | 6 | `courier_rules` `stores` | ✓ | `/thanks` `/kebijakan-privasi` `/kontak` `/pengiriman` `/syarat-ketentuan` `/[slug]` |
 | `rate-check` | 10 | — | ✓ | — |
 | `rate-limit` | 12 | `rate_limits` | ✓ | `/hello` `/api/install` `/api/locations` `/api/meta-event` `/api/order-status` `/api/record-abandoned-order` `/api/shipping-rates` `/api/submit-middle-order` `/api/submit-order` `/api/v1/checkout` `/api/v1/tracking/events` `/api/webhooks/autolaris` `/api/admin/upload-r2` |
 | `receiver-performance` | 5 | — | ✓ | `/api/admin/orders/[id]` |
