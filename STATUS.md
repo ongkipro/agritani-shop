@@ -6,8 +6,11 @@
 
 On product `main`, no install has them yet, no version bump (What's new 1.9.2 lists them):
 
-- **Docs** (`/admin/docs`, owner and admin, PR #167): API key and scope, Headless API,
-  Operations API, the `adsbook` CLI, errors and limits; text only, tables read from the code.
+- **Docs** (`/admin/docs`, owner and admin, PRs #167 and the admin-guide PR): a 13-chapter
+  text book in two parts. Panduan admin: start (roles, dashboard, an order's path), orders,
+  shipping and couriers, payments and fees, catalogue and landing pages, ads and analytics,
+  settings. Integrasi API & CLI: API key and scope, Headless API, Operations API, the
+  `adsbook` CLI, errors and limits, with tables read from the code.
   The sidebar's AdsBookCMS card holds Docs and What's new.
 - **QRIS/VA admin fee** (PRs #168, #169, #171; PAY-2 closed): AutoLaris bills exactly what it
   is asked for and deducts its fee, so the store now decides. Buyer-borne: the bill is the

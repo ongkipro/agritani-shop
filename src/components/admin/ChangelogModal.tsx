@@ -41,8 +41,8 @@ const CHANGELOG_RELEASES: ChangelogRelease[] = [
         description: "Dengan tombol oranye, kolom yang sudah terisi kembali berlatar abu-abu netral (bukan peach), dan kolom yang sedang diketik berbingkai gelap dengan cincin aksen, supaya tidak tertukar dengan bingkai merah saat error.",
       },
       {
-        title: "Docs API & CLI di admin",
-        description: "Panduan teks untuk API key dan scope, Headless API, Operations API, CLI adsbook, serta kode error, dibuka dari tombol Docs di kartu AdsBookCMS bawah sidebar (owner dan admin). Daftar endpoint dan scope di dalamnya dibaca langsung dari sistem, jadi selalu sesuai versi yang berjalan.",
+        title: "Docs: panduan admin, API, dan CLI",
+        description: "Buku panduan teks dari tombol Docs di kartu AdsBookCMS bawah sidebar (owner dan admin). Bagian Panduan admin menjelaskan pesanan, pengiriman, pembayaran dan biaya admin, katalog dan landing page, iklan dan analitik, serta pengaturan. Bagian Integrasi menjelaskan API key, Headless API, Operations API, CLI adsbook, dan kode error; daftar endpoint dan scope-nya dibaca langsung dari sistem.",
       },
       {
         title: "Tagihan QRIS/VA sama dengan total di checkout",
