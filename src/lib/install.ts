@@ -215,8 +215,12 @@ export async function runInstall(
     const [storeResult, credentialResult] = await database.batch([
       database
         .prepare(
-          `INSERT INTO stores (name, slug, site_url, tagline, locale, storefront_template, admin_name, support_whatsapp, created_at)
-           SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+          // payment_fee_bearer is written 'seller', not left to the column's
+          // 'buyer' default (0020): the AutoLaris account bills the buyer the
+          // order total and keeps the fee, so 'buyer' showed a checkout total
+          // the QR never asked for (PAY-2, A-447). COD keeps 'buyer' on purpose.
+          `INSERT INTO stores (name, slug, site_url, tagline, locale, storefront_template, admin_name, support_whatsapp, payment_fee_bearer, created_at)
+           SELECT ?, ?, ?, ?, ?, ?, ?, ?, 'seller', ?
            WHERE NOT EXISTS (SELECT 1 FROM stores)`,
         )
         .bind(

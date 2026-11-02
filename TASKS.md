@@ -1,6 +1,6 @@
 # Tasks: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `b4db64e` (A46 added for PAY-2; other sections retain their recorded evidence)
+> Verified against disk: 2026-11-02 @ `ba673bc` (A-447 and A-448 done; other sections retain their recorded evidence)
 
 ## A21 — A landing page may become the product page
 
@@ -4410,7 +4410,7 @@ local table (`src/lib/payment-fee-policy.ts`), not from what the provider bills.
 bill the admin fee to the buyer. Yes: `buyer` stays a real option and A-449 is
 about honouring it. No (expected): `buyer` is not a real option for this account.
 
-- [ ] **A-447** — Make `seller` the default for new installs.
+- [x] **A-447** — Make `seller` the default for new installs.
   New forward migration (never edit `0020`): SQLite cannot alter a column
   default in place, so follow the repository's table-rebuild pattern only if a
   default is truly required; otherwise make the code treat a missing or unset
@@ -4421,7 +4421,15 @@ about honouring it. No (expected): `buyer` is not a real option for this account
   -> REQ: PAY-2 · deps: [] · Done when: a fresh local D1 (`npm run dev:local`,
   empty database) shows QRIS "Tanpa biaya admin" at checkout, a focused test
   proves the default, and `npm test` / `npm run check` stay green.
-- [ ] **A-448** — Set klikinaja and cekat to `seller`.
+  Done 2026-11-02: the install wizard (`src/lib/install.ts`) writes
+  `payment_fee_bearer='seller'`; no migration (a column default needs a table
+  rebuild, and the wizard is the only writer of a new store row).
+  `normalizePaymentFeeBearer` was left alone: it also normalises the COD
+  bearer, which stays `buyer`. Test in `install.test.ts` (fails with the fix
+  removed); `dev:local --reset` + `dev:seed`: every QRIS/VA channel
+  `fee_bearer: "seller"`, the checkout shows "QRIS Tanpa biaya admin";
+  `npm test` 1174, `npm run check` 0 errors.
+- [x] **A-448** — Set klikinaja and cekat to `seller`.
   One row each, `UPDATE stores SET payment_fee_bearer='seller' WHERE id=(SELECT
   id FROM stores ORDER BY id LIMIT 1) AND payment_fee_bearer='buyer'`, via
   `npx wrangler d1 execute <db> --remote` from each install's directory
@@ -4430,6 +4438,10 @@ about honouring it. No (expected): `buyer` is not a real option for this account
   -> REQ: PAY-2 · deps: [] · Done when: a read of `stores.payment_fee_bearer`
   on all eleven installs returns `seller`, and `/api/payment-methods` on
   klikinaja.shop and cekat.shop reports `fee_bearer: "seller"` for QRIS.
+  Done 2026-11-02 with Paduka's go-ahead: klikinaja-d1, cekat-shop-d1 and
+  also skincarebpom-d1 (the twelfth store, outside the update rollout, was
+  `buyer` too) — one row each, `changes = 1`, `cod_fee_bearer` untouched.
+  `/api/payment-methods` on all twelve stores reports `seller` for QRIS and VA.
 - [ ] **A-449** — Never promise a total the provider will not bill.
   If the gate answered "no": hide or disable `buyer` in the admin payment
   settings with a one-line reason, and keep the server refusing it. If "yes":
