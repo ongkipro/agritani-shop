@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `2853d67` (Entry 251; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `2853d67` (Entry 252; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8621,3 +8621,20 @@ Total tagihan Rp63.445. STOREFRONT_INTEGRATION.md: a 429 carries `X-RateLimit-Re
 `Retry-After` (the Docs book already said so), and `payment.total_amount` is what a headless
 storefront shows the buyer under either bearer; the Docs Headless chapter says the same.
 `npm test` 1178.
+
+### Entry 252: the Docs book gains the operator guide
+
+At Paduka's go-ahead on the proposed outline, `/admin/docs` becomes a 13-chapter book in two
+parts. "Panduan admin" (new, `DocsAdminChapter.astro`): Mulai di sini (roles, dashboard,
+an order's path), Pesanan, Pengiriman & ekspedisi, Pembayaran (methods, the fee bearer rules
+of Entries 249-251, reconciliation), Katalog & landing page, Iklan & analitik, Pengaturan.
+"Integrasi API & CLI": the six chapters of Entry 247, the first renamed `integrasi`. The table
+of contents groups the two parts; `/admin/docs` opens the operator guide. Facts were gathered
+from the code by three read-only searches and every label is quoted as the screen writes it;
+the date-filter labels are read from `admin-date-filter.ts`. Inconsistencies the searches
+found in the product are listed for follow-up, not written into the guide as fact (the Meta
+token help text says "encrypted KV" while the code stores it in D1; no UI calls the CAPI
+requeue action that the health text points to; Analitik still offers a TikTok channel; the
+login page shows a donation QRIS that PRD-ADMIN-LOGIN LOGIN-18 forbids; the profile page
+shows integration keys to admins while only the owner may save them). All 13 chapters open
+200 with no console error; no horizontal overflow at 360-1920 px. `npm test` 1178.
