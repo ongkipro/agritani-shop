@@ -44,6 +44,18 @@ const CHANGELOG_RELEASES: ChangelogRelease[] = [
         title: "Docs API & CLI di admin",
         description: "Panduan teks untuk API key dan scope, Headless API, Operations API, CLI adsbook, serta kode error, dibuka dari tombol Docs di kartu AdsBookCMS bawah sidebar (owner dan admin). Daftar endpoint dan scope di dalamnya dibaca langsung dari sistem, jadi selalu sesuai versi yang berjalan.",
       },
+      {
+        title: "Tagihan QRIS/VA sama dengan total di checkout",
+        description: "Bila biaya admin ditanggung pembeli, nominal QR atau VA kini memang ditambah biaya admin (QRIS 0,7%, VA BCA Rp6.500, VA lain Rp3.000), sama dengan total yang dilihat pembeli saat checkout. Bila ditanggung toko, pembeli membayar total pesanan dan biaya admin mengurangi pendapatan toko.",
+      },
+      {
+        title: "Biaya admin di detail pesanan",
+        description: "Detail pesanan QRIS/VA menampilkan biaya admin, siapa yang menanggungnya, dan nominal yang diterima toko atau yang ditagih ke pembeli.",
+      },
+      {
+        title: "Toko baru: biaya admin ditanggung toko",
+        description: "Instalasi baru langsung memakai pengaturan biaya admin QRIS/VA ditanggung toko, sesuai cara AutoLaris menagih. Biaya COD tetap ditanggung pembeli.",
+      },
     ],
   },
   {
