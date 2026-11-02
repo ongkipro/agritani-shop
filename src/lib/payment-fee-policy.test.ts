@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  calculateAutoLarisRequestAmount,
+  autoLarisGrandTotal,
+  paymentFeeIsSellers,
+  recordedAutoLarisBill,
   calculateCodFeeBreakdown,
   COD_EFFECTIVE_RATE_LABEL,
   calculateCodCustomerTotal,
@@ -45,21 +47,30 @@ test("COD bearer changes only the customer total", () => {
   assert.equal(calculateCodCustomerTotal(158_500, "seller"), 158_500);
 });
 
-test("buyer bearer sends the order total and adds the provider fee", () => {
-  const orderTotal = 170_000;
-  const requested = calculateAutoLarisRequestAmount("VABRI", orderTotal, "buyer");
-  assert.equal(requested, orderTotal);
-  assert.equal(requested + calculatePaymentAdminFee("VABRI", requested), 173_000);
+test("buyer bearer asks AutoLaris for the order total plus the fee (PAY-2)", () => {
+  // AutoLaris bills exactly grand_total, so the store adds the fee itself.
+  assert.equal(autoLarisGrandTotal("VABRI", 170_000, "buyer"), 173_000);
+  assert.equal(autoLarisGrandTotal("VABCA", 170_000, "buyer"), 176_500);
+  // revenleather INV-10357: checkout showed Rp864.611, the QR asked Rp858.600.
+  assert.equal(autoLarisGrandTotal("QRIS", 858_600, "buyer"), 864_611);
 });
 
-test("seller bearer reduces the provider amount so the buyer pays the order total", () => {
-  const orderTotal = 170_000;
-  const vaAmount = calculateAutoLarisRequestAmount("VABCA", orderTotal, "seller");
-  assert.equal(vaAmount, 163_500);
-  assert.equal(vaAmount + calculatePaymentAdminFee("VABCA", vaAmount), orderTotal);
+test("seller bearer asks for the order total; the fee comes out of the store's share", () => {
+  assert.equal(autoLarisGrandTotal("VABCA", 170_000, "seller"), 170_000);
+  assert.equal(autoLarisGrandTotal("QRIS", 287_500, "seller"), 287_500);
+  // zvara INV-11432 as AutoLaris answered it: amount 287500, admin 2013, total 287500.
+  const recorded = recordedAutoLarisBill(287_500, "seller", { amount: 287_500, admin: 2_013, total: 287_500 });
+  assert.deepEqual(recorded, { amount: 287_500, admin: 2_013, total: 287_500 });
+  assert.equal(paymentFeeIsSellers({ fee_bearer: "seller", amount: recorded.amount, admin_fee: recorded.admin, total_amount: recorded.total }), true);
+});
 
-  const qrisAmount = calculateAutoLarisRequestAmount("QRIS", orderTotal, "seller");
-  assert.equal(qrisAmount + calculatePaymentAdminFee("QRIS", qrisAmount), orderTotal);
+test("a buyer bill records the order value, the buyer's fee and the billed total", () => {
+  // AutoLaris answers amount = total = grand_total and its own admin (0.7% of it).
+  const recorded = recordedAutoLarisBill(858_600, "buyer", { amount: 864_611, admin: 6_053, total: 864_611 });
+  assert.deepEqual(recorded, { amount: 858_600, admin: 6_011, total: 864_611 });
+  assert.equal(paymentFeeIsSellers({ fee_bearer: "buyer", amount: recorded.amount, admin_fee: recorded.admin, total_amount: recorded.total }), false);
+  // A buyer row billed before this fix (total equals amount) was the seller's.
+  assert.equal(paymentFeeIsSellers({ fee_bearer: "buyer", amount: 858_600, admin_fee: 6_011, total_amount: 858_600 }), true);
 });
 
 test("invalid persisted fee bearer fails closed to buyer", () => {
