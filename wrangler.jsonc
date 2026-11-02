@@ -34,14 +34,15 @@
     "nodejs_compat"
   ],
 
-  // Run the Worker beside its D1, not beside the visitor. A page makes several
-  // sequential D1 reads, and Cloudflare serves part of Indonesian traffic (and
-  // all of PageSpeed Insights) from US colos: there each read crossed the
-  // Pacific, 3.7-6 s to the first byte on page.revenleather.com against 0.5 s
-  // from SIN. Static assets still serve from the nearest colo. Cloudflare needs
-  // up to 15 minutes of multi-location traffic to decide (ADR-030).
+  // Run the Worker beside its D1, not beside the visitor (ADR-030, ADR-034).
+  // Cloudflare serves part of Indonesian traffic (and all of PageSpeed
+  // Insights) from US colos, where each D1 read crossed the Pacific. Smart
+  // Placement declined some of them (cf-placement: local-LAX, 2-3 s to first
+  // byte against 0.3 s from SIN), so the Worker is pinned to Singapore, beside
+  // an APAC D1. A store whose D1 is not in APAC sets its own region or "mode":
+  // "smart" instead. Static assets still serve from the nearest colo.
   "placement": {
-    "mode": "smart"
+    "region": "aws:ap-southeast-1"
   },
 
   // The one secret a store cannot run without, and the only one the Deploy
