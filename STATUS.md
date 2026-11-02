@@ -2,6 +2,12 @@
 
 > Verified against disk: 2026-11-02 @ `f333530` (product `main` has PRs #167-#171 not yet on any install; installs run 1.9.2 plus PRs #157-#164 on eleven of the twelve; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
 
+## 2026-11-03 — baven updated
+
+baven.shop runs product #167-#179 (Worker `526a823f`), pinned to Singapore like revenleather.
+Nine installs still on 1.9.2 plus #157-#164 (zvara, permatamall, agritani, taniniaga, halotani,
+numaskin, beranda-tani, klikinaja, cekat; skincarebpom stays at 1.8.5). BUILD-LOG entry 258.
+
 ## 2026-11-02 — Singapore placement and a lighter dashboard
 
 revenleather's Worker is pinned to Singapore (ADR-034, Worker `e5ac2f20`): requests entering at
