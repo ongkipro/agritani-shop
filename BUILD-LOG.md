@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 257; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 258; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8710,3 +8710,17 @@ D1 round trip saved. `npm test` 1181.
 `/kontak` 200 with `cf-placement: local-SIN`, `/admin/dashboard` redirects to the login. The
 dashboard itself was not opened live (no store credentials used); it was proven locally in
 Entry 256. The other installs do not carry #167-#178 yet.
+
+### Entry 258: baven takes the refined product
+
+2026-11-03, Paduka: "lanjutkan baven + update dengan adsbookcms yang sudah di sempurnakan".
+`install/bavenshop` merged `product/main` (28 commits, #167-#179) without a conflict, its
+`wrangler.jsonc` kept by the merge driver, then pinned to Singapore (`placement.region
+aws:ap-southeast-1`; `wrangler d1 info`: APAC). `npm test` 1180 pass / 1 skipped, `npm run
+check` 0 errors; preflight: ledger 80 applied, no migration. Deployed from `938e864`, Worker
+`526a823f`. Live afterwards: home, `/produk`, `/kontak`, `/pengiriman` 200 with `cf-placement:
+local-SIN` at 0.4-0.5 s; `/api/payment-methods` COD buyer, QRIS and five VAs seller; the Google
+feed lists 27 items; a product page has one H1, one checked variant, three JSON-LD blocks, no
+overflow at 390/1280 px and no page error; `/admin/docs` asks for a login. The admin screens
+were not opened with store credentials. A first commit message carried a `Co-Authored-By`
+trailer against the global rule; it was unpushed and was redone without it before the push.
