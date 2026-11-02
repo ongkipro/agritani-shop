@@ -419,7 +419,7 @@ test("the install starts the WhatsApp list with its number, or leaves it empty (
   );
 });
 
-test("a new store's QRIS/VA fee is the seller's; its COD fee stays the buyer's (PAY-2, A-447)", async () => {
+test("a new store bills its QRIS/VA and COD fees to the buyer (Paduka, 2026-11-02)", async () => {
   const { raw, database } = sqliteD1();
   const planned = planInstall(valid);
   assert.equal(planned.ok, true);
@@ -427,6 +427,6 @@ test("a new store's QRIS/VA fee is the seller's; its COD fee stays the buyer's (
   assert.deepEqual(await runInstall(database, planned.plan), { ok: true });
   assert.deepEqual(
     { ...(raw.prepare("SELECT payment_fee_bearer, cod_fee_bearer FROM stores").get() as object) },
-    { payment_fee_bearer: "seller", cod_fee_bearer: "buyer" },
+    { payment_fee_bearer: "buyer", cod_fee_bearer: "buyer" },
   );
 });

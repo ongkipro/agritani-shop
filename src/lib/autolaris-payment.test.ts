@@ -265,9 +265,9 @@ test("a buyer-borne fee is asked for in grand_total, because AutoLaris only dedu
       rc: "00",
       data: {
         transaction_id: "TRX-PAY-41",
-        amount: 119_229,
+        amount: 119_235,
         biaya_admin: 835,
-        total: 119_229,
+        total: 119_235,
         payment_info: { expired: "2026-09-03 16:42:00", qr: "QR-PAYLOAD" },
       },
     });
@@ -278,12 +278,12 @@ test("a buyer-borne fee is asked for in grand_total, because AutoLaris only dedu
     channelCode: "QRIS",
   });
 
-  // 118.400 + 0,7% (Rp829, rounded up) is the total checkout showed.
-  assert.equal(grandTotal, "119229");
-  assert.equal(payment.totalAmount, 119_229);
+  // 118.400 grossed up so that 119.235 - 0,7% (835) leaves the store 118.400.
+  assert.equal(grandTotal, "119235");
+  assert.equal(payment.totalAmount, 119_235);
   // Recorded as the buyer sees it: the order value and the fee on top.
   assert.equal(payment.amount, 118_400);
-  assert.equal(payment.adminFee, 829);
+  assert.equal(payment.adminFee, 835);
 });
 
 test("payment orchestration records failure without a provider call when AutoLaris is unconfigured", async (context) => {
