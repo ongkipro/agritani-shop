@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `040459c` (Entry 253; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `d1fa64f` (Entry 254; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8651,3 +8651,22 @@ the checkout offered five and six: `getStorePublicFacts()` (public-store.ts) ret
 enabled couriers, the payment methods `/api/payment-methods` offers (summarised by
 `summarizePaymentMethods`) and the store's non-COD provinces, for an install's own pages to
 print instead of a list that goes stale. Nothing in it varies per visitor. `npm test` 1180.
+
+### Entry 254: revenleather screened and corrected
+
+A read-only screening of page.revenleather.com (pixel and order calls blocked, no form
+submitted): 86 sitemap URLs 200, no broken link or image in 892 checked, and the price of all
+79 products agrees across cards, product pages, Product JSON-LD and both feeds. Paduka chose
+to leave the page content's random flash-sale timer, stock and sold counts as they are.
+Corrected: the 79 product-page heroes held a tagline as their only H1; the product name sat
+in a `p.eyebrow` above it. The two tags swapped roles in D1 (`h1.eyebrow`, `p.rv-tagline`,
+the two hero CSS selectors renamed, one rule keeping the eyebrow's line height), first on one
+page, then the other 78, each UPDATE guarded on the old content's length. Tested on the live
+DOM before writing and re-shot after: 0 differing pixels at 390 and 1280 px once fonts are
+loaded; all 79 pages now answer one H1 naming the product. In the install repository
+(`f12522f`, not deployed): product #167-#175 merged with the grafir files kept, `/kontak`,
+`/pengiriman` and `/tentang` print `getStorePublicFacts()` instead of hand-written couriers,
+banks and "COD ke seluruh Indonesia", grafir copy names QRIS/VA/transfer, the `/kontak` title
+no longer doubles the store name, and the header nav (`justify-center-safe`, tighter gap) fits
+390 px. Latency: D1 is APAC; Smart Placement runs the Worker in Singapore and pulled a request
+that entered at HKG to SIN (`remote-SIN`), so an explicit `placement.region` would add nothing.
