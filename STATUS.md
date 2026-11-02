@@ -6,7 +6,7 @@
 
 revenleather's Worker is pinned to Singapore (ADR-034, Worker `e5ac2f20`): requests entering at
 LAX no longer run there (2-3 s to first byte; now a median 1.1 s). The other installs still use
-Smart Placement until each takes the change. On product `main` (not on any install yet): the
+Smart Placement until each takes the change. On product `main`, and on revenleather since 2026-11-03 (Worker `b19e3ed5`): the
 dashboard loads its chart lazily, requests its rankings beside its cards, and its analytics API
 makes its six D1 reads at once. BUILD-LOG entry 256.
 

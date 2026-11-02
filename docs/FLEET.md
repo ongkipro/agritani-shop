@@ -282,7 +282,7 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   the cheapest variant (nayaka-pouch). Its made-up flash-sale timer, stock and sold counts
   were left as they are by Paduka's decision. Latency: D1 runs in APAC and Smart Placement
   already runs the Worker in Singapore (`cf-placement: local-SIN`; a request entering at HKG
-  answered `remote-SIN`), so no explicit `placement.region` was set — corrected the same evening: requests entering at LAX stayed `local-LAX` (2-3 s), so the Worker is pinned to Singapore (`placement.region: aws:ap-southeast-1`, ADR-034, Worker `e5ac2f20`); LAX-entry product pages now run in SIN at a median 1.1 s.
+  answered `remote-SIN`), so no explicit `placement.region` was set — corrected the same evening: requests entering at LAX stayed `local-LAX` (2-3 s), so the Worker is pinned to Singapore (`placement.region: aws:ap-southeast-1`, ADR-034, Worker `e5ac2f20`); LAX-entry product pages now run in SIN at a median 1.1 s. 2026-11-03: product #176-#178 merged and deployed (`f047360`, Worker `b19e3ed5`): the lighter dashboard (lazy chart, parallel reads).
   Install-owned and protected on every merge: the **grafir** (engraving)
   feature (`FormMiddleContent`, `FormHybridContent`, `GeoIpResolvedForm`,
   `form-middle.ts`, `form-hybrid.ts`, `approved-grafir`, the `customer_note`
