@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `3f5027c` (Entry 250; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `2853d67` (Entry 251; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8608,3 +8608,16 @@ the wizard stops writing `seller` (A-447 reversed), `install.test.ts` asserts `b
 What's new items follow. Local orders through the checkout form: INV-10019 QRIS buyer 63.445 on
 checkout, /payment, record and QR tag 54, store 63.000; INV-10016 VA BRI buyer 66.000, store
 63.000; INV-10018 QRIS seller 63.000, no fee line, store 62.559. Order detail at 390 px.
+
+### Entry 251: the thanks page hides a seller-borne fee; the headless contract names what the buyer pays
+
+Paduka's rule from Entry 250 (a seller-borne QRIS/VA fee is not shown to the buyer) held on
+`/payment` but not on `/thanks`, whose payment details always listed "Biaya admin". It now
+hides that row when the store's bearer is `seller`, or when the bill did not grow (the same
+rule as `/payment` and `paymentFeeIsSellers()`); `payment-fee-display.test.ts` checks every
+place that fills the fee also hides it. Local orders through the checkout form, then `/thanks`:
+seller QRIS shows Rp63.000 with no fee row; buyer QRIS shows Rp63.000, Biaya admin Rp445,
+Total tagihan Rp63.445. STOREFRONT_INTEGRATION.md: a 429 carries `X-RateLimit-Reset`, never
+`Retry-After` (the Docs book already said so), and `payment.total_amount` is what a headless
+storefront shows the buyer under either bearer; the Docs Headless chapter says the same.
+`npm test` 1178.
