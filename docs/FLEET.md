@@ -1,6 +1,6 @@
 # AdsBookCMS install fleet
 
-> Verified against disk: 2026-11-02 @ `ba673bc` (fee bearer line 2026-11-02; versions, sync, distance, deploy time and schema read with `npm run fleet:status`, plus the live submit-button colour of nine stores, after the 1.9.2 rollout; "Version" is the working tree)
+> Verified against disk: 2026-11-02 @ `d1fa64f` (revenleather screening and fixes 2026-11-02; versions, sync, distance, deploy time and schema read with `npm run fleet:status`, plus the live submit-button colour of nine stores, after the 1.9.2 rollout; "Version" is the working tree)
 
 Every store that runs AdsBookCMS: one install = one repository = one Worker
 = one store (`AGENTS.md`). This file is the registry of which installs exist,
@@ -270,6 +270,19 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   showed a fee no QR asked for. Every store is `seller` since 2026-11-02 (klikinaja,
   cekat and skincarebpom changed that day, TASKS A-448). A new install starts as
   `buyer` (Paduka's choice; A-447 reversed once the bill included the fee).
+  Screening 2026-11-02 (read-only, BUILD-LOG 254): prices agree on all 79 products across
+  cards, product pages, JSON-LD and both feeds. Fixed the same day: every product page's
+  hero H1 was a tagline — 79 `landing_sections` rows now carry the product name as the H1
+  and the tagline as `p.rv-tagline` (D1, live; pixel-identical before and after at 390 and
+  1280 px; pre-change copy kept outside the repository, D1 Time Travel bookmark
+  `000019ea-00000000-00005117-7a64b136aad56c8efba9735e768b2954`). Committed to the install's
+  `main` (`f12522f`) but **not deployed**: product PRs #167-#175 merged in, `/kontak`,
+  `/pengiriman` and `/tentang` print the store's own couriers, payment methods and non-COD
+  provinces, grafir copy names QRIS/VA/transfer, the header nav fits 390 px, forms open on
+  the cheapest variant (nayaka-pouch). Its made-up flash-sale timer, stock and sold counts
+  were left as they are by Paduka's decision. Latency: D1 runs in APAC and Smart Placement
+  already runs the Worker in Singapore (`cf-placement: local-SIN`; a request entering at HKG
+  answered `remote-SIN`), so no explicit `placement.region` was set.
   Install-owned and protected on every merge: the **grafir** (engraving)
   feature (`FormMiddleContent`, `FormHybridContent`, `GeoIpResolvedForm`,
   `form-middle.ts`, `form-hybrid.ts`, `approved-grafir`, the `customer_note`
