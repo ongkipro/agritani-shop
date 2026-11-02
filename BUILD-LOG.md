@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `d1fa64f` (Entry 255; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 256; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8681,3 +8681,22 @@ its title names the store once; the home strip reads "QRIS · VA · Transfer"; t
 fits 390 px (scrolls from its first item at 360 px); `nayaka-pouch` opens on Tan Rp500.100,
 the feed's sale price; its H1 is the product name; no page error. `/admin/docs` asks for a
 login. The fleet's other installs do not carry #167-#175 yet.
+
+### Entry 256: the Worker pinned to Singapore; the dashboard paints without Recharts and asks for its data at once
+
+PageSpeed Insights' API now answers keyless requests with quota 0, so the same engine ran
+locally (Lighthouse 12.6.0, mobile preset, pixel beacon and CAPI blocked) on revenleather:
+home 72, `/produk` 82, product page 67, home desktop 99; Accessibility and SEO 97-100. Two
+causes. Third-party tags (Meta ~790 ms, Google ~400 ms of blocking time) stay by ADR-030's
+decision. The product page's document took 3.38 s: requests entering at LAX were not moved by
+Smart Placement (`local-LAX`, 2.0-2.9 s; SIN 0.3 s). ADR-034 pins the Worker with
+`placement.region: "aws:ap-southeast-1"`; revenleather deployed it (Worker `e5ac2f20`): every
+request now runs in SIN, LAX-entry product pages at a median 1.1 s. The template follows.
+
+Admin dashboard: Recharts (330 KB, 97 KB gzipped) loaded before any card could paint, the
+rankings were requested only after the cards' data arrived, and `/api/admin/analytics` made six
+independent D1 reads one after another. The chart is now its own lazy module
+(`DashboardRevenueChart`), the rankings go out beside the cards, and the six reads run in one
+`Promise.all` (a test holds them all in flight). Locally under Slow 4G and 4x CPU, three runs
+each: cards at 1.51/1.59/1.95 s before, 1.35/1.38/1.48 s after; the live gain grows with each
+D1 round trip saved. `npm test` 1181.
