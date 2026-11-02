@@ -1,6 +1,24 @@
 # STATUS — AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `cf4ce18` (1.9.2 plus PRs #157-#164 on eleven of the twelve installs; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
+> Verified against disk: 2026-11-02 @ `f333530` (product `main` has PRs #167-#171 not yet on any install; installs run 1.9.2 plus PRs #157-#164 on eleven of the twelve; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
+
+## 2026-11-02 — Docs book and QRIS/VA fee rules (product only, not deployed)
+
+On product `main`, no install has them yet, no version bump (What's new 1.9.2 lists them):
+
+- **Docs** (`/admin/docs`, owner and admin, PR #167): API key and scope, Headless API,
+  Operations API, the `adsbook` CLI, errors and limits; text only, tables read from the code.
+  The sidebar's AdsBookCMS card holds Docs and What's new.
+- **QRIS/VA admin fee** (PRs #168, #169, #171; PAY-2 closed): AutoLaris bills exactly what it
+  is asked for and deducts its fee, so the store now decides. Buyer-borne: the bill is the
+  order total plus the fee (VA fixed; QRIS grossed up) and the store receives the whole order
+  total. Seller-borne: the buyer sees no fee and the store receives the total minus the fee.
+  The order detail shows "Diterima toko". A new install is `buyer`.
+
+Live state: all twelve stores are `seller` (klikinaja, cekat and skincarebpom changed from
+`buyer` on 2026-11-02, TASKS A-448). Pending Paduka's go-ahead: rolling #167-#171 out to the
+installs, then returning those three stores to `buyer` (not before: their current code shows a
+checkout fee the QR does not bill). BUILD-LOG entries 247-250.
 
 ## 2026-11-02 — revenleather QRIS/VA and the fee shown to the buyer
 
