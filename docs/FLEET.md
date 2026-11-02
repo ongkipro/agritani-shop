@@ -275,8 +275,8 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   hero H1 was a tagline — 79 `landing_sections` rows now carry the product name as the H1
   and the tagline as `p.rv-tagline` (D1, live; pixel-identical before and after at 390 and
   1280 px; pre-change copy kept outside the repository, D1 Time Travel bookmark
-  `000019ea-00000000-00005117-7a64b136aad56c8efba9735e768b2954`). Committed to the install's
-  `main` (`f12522f`) but **not deployed**: product PRs #167-#175 merged in, `/kontak`,
+  `000019ea-00000000-00005117-7a64b136aad56c8efba9735e768b2954`). Deployed 2026-11-02 from the install's
+  `main` (`f12522f`, Worker version `c8639527`): product PRs #167-#175 merged in, `/kontak`,
   `/pengiriman` and `/tentang` print the store's own couriers, payment methods and non-COD
   provinces, grafir copy names QRIS/VA/transfer, the header nav fits 390 px, forms open on
   the cheapest variant (nayaka-pouch). Its made-up flash-sale timer, stock and sold counts

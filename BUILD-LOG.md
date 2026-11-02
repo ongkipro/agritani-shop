@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `d1fa64f` (Entry 254; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `d1fa64f` (Entry 255; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8670,3 +8670,14 @@ banks and "COD ke seluruh Indonesia", grafir copy names QRIS/VA/transfer, the `/
 no longer doubles the store name, and the header nav (`justify-center-safe`, tighter gap) fits
 390 px. Latency: D1 is APAC; Smart Placement runs the Worker in Singapore and pulled a request
 that entered at HKG to SIN (`remote-SIN`), so an explicit `placement.region` would add nothing.
+
+### Entry 255: revenleather deployed with product 1.9.2 + #167-#175
+
+At Paduka's go-ahead, `npm run deploy` from the install (`f12522f`, Worker version `c8639527`,
+no migration in the range). Checked live after the deploy, cache bypassed: `/pengiriman` lists
+JNE, SiCepat, J&T Express, Anteraja and SPX Express, COD plus QRIS, five VAs and Mandiri
+transfer, and the 15 non-COD provinces; `/kontak` says COD "Tersedia, kecuali 15 provinsi" and
+its title names the store once; the home strip reads "QRIS · VA · Transfer"; the header nav
+fits 390 px (scrolls from its first item at 360 px); `nayaka-pouch` opens on Tan Rp500.100,
+the feed's sale price; its H1 is the product name; no page error. `/admin/docs` asks for a
+login. The fleet's other installs do not carry #167-#175 yet.
