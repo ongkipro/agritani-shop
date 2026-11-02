@@ -5,7 +5,7 @@
 ## 2026-11-02 — revenleather screened and corrected
 
 Live now: the 79 product pages carry the product name as their H1 (D1 content, pixel-identical).
-Committed to the install but not deployed: product PRs #167-#175, store-read courier/payment/COD
+Deployed the same day (Worker `c8639527`): product PRs #167-#175, store-read courier/payment/COD
 copy on /kontak, /pengiriman and /tentang, the header nav at 390 px, forms opening on the
 cheapest variant. The Worker already runs in Singapore (Smart Placement). BUILD-LOG entry 254.
 
