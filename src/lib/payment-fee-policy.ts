@@ -90,26 +90,56 @@ export function calculatePaymentAdminFee(
     : Math.ceil(normalizedAmount * rule.rate);
 }
 
-export function calculateAutoLarisRequestAmount(
+/**
+ * What `/api/h2h/submit` is asked to bill. AutoLaris bills the buyer exactly
+ * `grand_total` and deducts its admin fee from it (every live transaction since
+ * October: provider total = grand_total, PAY-2), so the store chooses who pays
+ * here: `seller` sends the order total and receives it minus the fee; `buyer`
+ * sends the order total plus the fee, which is the total checkout showed.
+ *
+ * lazy: on `buyer` QRIS the provider takes 0.7% of the grossed-up total, so the
+ * store nets the order total minus about 0.005% (Rp41 on Rp858.600). Grossing
+ * up would change the fee checkout shows; do it only if that gap matters.
+ */
+export function autoLarisGrandTotal(
   channel: AutoLarisCheckoutChannel,
   orderTotal: number,
   bearer: PaymentFeeBearer,
 ) {
-  const normalizedTotal = Math.max(1, Math.round(orderTotal));
-  if (bearer === "buyer") return normalizedTotal;
+  const total = Math.max(1, Math.round(orderTotal));
+  return bearer === "buyer" ? total + calculatePaymentAdminFee(channel, total) : total;
+}
 
-  const rule = PAYMENT_FEE_RULES[channel];
-  if (rule.kind === "fixed") return Math.max(1, normalizedTotal - rule.amount);
+/**
+ * The provider's answer as the store records it: `amount` is the order value,
+ * `admin_fee` is the fee, `total_amount` is what the QR or VA asks for. On
+ * `buyer` the fee is what the buyer pays on top (total minus the order value);
+ * on `seller` it is the provider's deduction, so the store receives
+ * `total - admin_fee`.
+ */
+export function recordedAutoLarisBill(
+  orderTotal: number,
+  bearer: PaymentFeeBearer,
+  provider: { amount: number; admin: number; total: number },
+) {
+  const value = Math.max(1, Math.round(orderTotal));
+  return bearer === "buyer"
+    ? { amount: value, admin: Math.max(0, provider.total - value), total: provider.total }
+    : { amount: provider.amount, admin: provider.admin, total: provider.total };
+}
 
-  let low = 1;
-  let high = normalizedTotal;
-  while (low < high) {
-    const candidate = Math.ceil((low + high) / 2);
-    const billed = candidate + calculatePaymentAdminFee(channel, candidate);
-    if (billed <= normalizedTotal) low = candidate;
-    else high = candidate - 1;
-  }
-  return low;
+/**
+ * Whether a recorded payment's fee came out of the store's revenue. A row that
+ * says `buyer` but whose bill did not grow (total equals amount) was billed
+ * before the store added the fee itself (PR #164's rule), so it is the seller's.
+ */
+export function paymentFeeIsSellers(row: {
+  fee_bearer?: string | null;
+  amount: number;
+  admin_fee: number;
+  total_amount: number;
+}) {
+  return row.fee_bearer === "seller" || (row.admin_fee > 0 && row.total_amount === row.amount);
 }
 
 export function paymentFeeDescription(channel: AutoLarisCheckoutChannel) {

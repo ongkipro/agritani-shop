@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `ba673bc` (Entry 248; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `3f5027c` (Entry 249; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8568,3 +8568,29 @@ outside the update rollout, found `buyer` by the same read): `payment_fee_bearer
 `/api/payment-methods` on all twelve stores now reports `seller` for QRIS and VA. PAY-2
 stays open for A-449 (AutoLaris's answer on billing the fee to the buyer) and A-450 (one
 test order comparing the four totals). No version bump, no changelog.
+
+### Entry 249: the buyer pays the QRIS/VA fee only when the store asks AutoLaris for it (PAY-2 closed)
+
+TASKS A-449 and A-450. Reading the code behind Entry 246: `/api/h2h/submit` always sent
+`grand_total` = the order total, and the live account bills exactly `grand_total` and deducts
+its fee from it (zvara, every QRIS and VA row since October: amount = total, admin 0.7% /
+Rp3.000). `buyer` therefore never reached the provider; checkout added the fee on its own.
+Paduka's rule: seller, the fee comes out of the store's revenue; buyer, the bill is the order
+total plus the fee (QRIS 0.7% rounded up, which matches the provider's rounding — 229.430 gave
+1.607 — VA BCA Rp6.500, other VA Rp3.000; BCA not yet seen in a live transaction).
+
+`autoLarisGrandTotal()` now decides what is asked for (order total, plus the fee on `buyer`);
+`recordedAutoLarisBill()` records amount = order value, admin = the fee, total = the bill,
+so `/payment` keeps telling the two apart; `calculateAutoLarisRequestAmount()`, which assumed
+the provider adds the fee, is gone. The order detail shows the QRIS/VA fee with "Diterima toko"
+(total minus fee) or "Ditagih ke pembeli". The dev AutoLaris stand-in bills `grand_total` like
+the live account (it used to add the fee, which is how the local checks missed this).
+`lazy:` on `buyer` QRIS the provider's 0.7% is taken from the grossed-up total, so the store
+nets about 0.005% less than the order total (Rp41 on Rp858.600).
+
+Test orders on a local AdsBookCMS at Paduka's instruction, through the checkout form,
+Rp63.000 each: INV-10013 QRIS seller 63.000 everywhere, store receives 62.559; INV-10014 QRIS
+buyer 63.441 on checkout, /payment, the recorded total and QR tag 54; INV-10015 VA BCA buyer
+69.500 on all three. `npm test` 1176, `npm run check` 0 errors; order detail opened at 390 and
+1280 px. Every live store is `seller`, so live behaviour is unchanged until an install takes
+this release and a store chooses `buyer`. No version bump, no changelog.
