@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 256; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 257; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8700,3 +8700,13 @@ independent D1 reads one after another. The chart is now its own lazy module
 `Promise.all` (a test holds them all in flight). Locally under Slow 4G and 4x CPU, three runs
 each: cards at 1.51/1.59/1.95 s before, 1.35/1.38/1.48 s after; the live gain grows with each
 D1 round trip saved. `npm test` 1181.
+
+### Entry 257: revenleather takes the lighter dashboard
+
+2026-11-03, at Paduka's go-ahead: product #176-#178 merged into revenleather without a conflict
+(its `wrangler.jsonc` kept, already pinned to Singapore), `npm test` 1186 pass / 3 skipped,
+`npm run check` 0 errors, deployed from `f047360` (Worker `b19e3ed5`). Live: the new
+`AnalyticsDashboard` and `DashboardRevenueChart` chunks answer 200, home, a product page and
+`/kontak` 200 with `cf-placement: local-SIN`, `/admin/dashboard` redirects to the login. The
+dashboard itself was not opened live (no store credentials used); it was proven locally in
+Entry 256. The other installs do not carry #167-#178 yet.
