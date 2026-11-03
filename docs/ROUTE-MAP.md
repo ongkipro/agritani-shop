@@ -35,7 +35,7 @@ The [Modules](#modules) section is the same book read from the other side.
 | `/disclaimer` | GET | public | — | `src/pages/disclaimer.astro` | — | — | — |
 | `/kebijakan-cookie` | GET | public | — | `src/pages/kebijakan-cookie.astro` | — | — | — |
 | `/kebijakan-privasi` | GET | public | — | `src/pages/kebijakan-privasi.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
-| `/kontak` | GET | public | — | `src/pages/kontak.astro` | `public-store` | `courier_rules` `stores` | `public-store.test.ts` |
+| `/kontak` | GET | public | — | `src/pages/kontak.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
 | `/pengiriman` | GET | public | — | `src/pages/pengiriman.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
 | `/sitemap` | GET | public | — | `src/pages/sitemap.astro` | `catalog` `landing-pages` | `landing_pages` `landing_sections` `product_variants` `products` | `catalog.test.ts` `landing-pages.test.ts` |
 | `/syarat-ketentuan` | GET | public | — | `src/pages/syarat-ketentuan.astro` | `public-store` `tenant` | `courier_rules` `stores` | `public-store.test.ts` `tenant.test.ts` |
@@ -355,7 +355,7 @@ is either transitive (imported by another lib) or dead, and only reading tells w
 | `storefront-template` | 9 | `storefront_templates` `stores` | ✓ | `/` `/api/admin/settings` |
 | `tenant-content` | 3 | — | ✓ | `/` `/api/v1/storefront` |
 | `tenant-contract` | 3 | — | ✓ | — |
-| `tenant` | 15 | `stores` | ✓ | `/kebijakan-privasi` `/pengiriman` `/syarat-ketentuan` `/install` `/api/install` `/api/admin/settings` |
+| `tenant` | 15 | `stores` | ✓ | `/kebijakan-privasi` `/kontak` `/pengiriman` `/syarat-ketentuan` `/install` `/api/install` `/api/admin/settings` |
 | `thanks-whatsapp` | 6 | — | ✓ | `/thanks` |
 | `traffic-source` | 3 | — | ✓ | — |
 | `ui-variants` | 4 | — | ✓ | — |
