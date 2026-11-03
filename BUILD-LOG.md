@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 259; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 260; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8735,3 +8735,19 @@ admin copy/behaviour mismatches found while writing the Docs book, each re-read 
 code before recording), PERF-2 (public scores and the keyless PageSpeed quota), REV-2
 (revenleather's made-up counters, left by Paduka's decision, recorded so it is not raised again)
 and DASH-1 (the lighter dashboard not yet opened live). No code changed.
+
+### Entry 260: agritani and taniniaga reviewed; three product fixes from the findings
+
+Both installs merged `product/main` (#167-#181) and deployed on 2026-11-03 (agritani Worker
+`3c0cc17e`, taniniaga `0eaccb84`, ledger 80/80, `placement.region aws:ap-southeast-1` on APAC
+D1s). Each had install-owned variant logic (`resolvePreferredFormVariant`: agritani opens 500 ml,
+or 1 Liter for sawit products; taniniaga 500 ml for scoped brands, with badges and dosage notes);
+the merge kept the install's side and only replaced the "no match" fallback with
+`cheapestVariant()`. Read-only live reviews of both stores (49 and 40 sitemap URLs) found prices,
+JSON-LD and feeds consistent, no foreign merchant content, no overflow. Product-owned findings,
+fixed here with tests: (1) the shipping page and `/llms.txt` said shipping is computed in the
+order form, but both stores use the CS-confirm form with no courier list — the copy now covers
+both; (2) the skincare category rule held the keyword `kojien`, so taniniaga's plant nutrient
+titled only "Kojien" went to both feeds as Skin Care (567); (3) `/kontak` doubled the store name
+in its title (revenleather had patched it in its own copy). Still open for each store, recorded in
+UNIMPLEMENTED_SPECS: STORE-1 (agritani, which also holds a test lead left by a review agent) and STORE-2 (taniniaga).
