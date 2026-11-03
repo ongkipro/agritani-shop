@@ -34,11 +34,12 @@
     "nodejs_compat"
   ],
 
-  // Run the Worker beside its D1, not beside the visitor: a page makes several
-  // sequential D1 reads, and part of Indonesian traffic (and all of PageSpeed)
-  // is served from US colos (ADR-030).
+  // Run the Worker beside its D1, not beside the visitor (ADR-030, ADR-034).
+  // Smart Placement declined requests entering at LAX (2-3 s to first byte
+  // against 0.3 s from SIN), so the Worker is pinned to Singapore, beside the
+  // APAC D1. Static assets still serve from the nearest colo.
   "placement": {
-    "mode": "smart"
+    "region": "aws:ap-southeast-1"
   },
 
   // The one secret a store cannot run without, and the only one the Deploy
