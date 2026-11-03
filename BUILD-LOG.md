@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 261; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 262; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8764,3 +8764,15 @@ spot requests, and taniniaga's Kojien feed category is Google 113 (it was 567). 
 value, 1 row; the "before" read failed on a column name, the old value was known from an earlier
 read. A review agent that was told to read only filled a form on agritani and left the lead
 `ABN-10718` (UNIMPLEMENTED_SPECS STORE-1); review agents are now briefed never to type into a form.
+
+### Entry 262: baven and petanisejahtera reviewed; the landing list hides alias slugs
+
+beranda-tani (petanisejahtera.com) merged product #167-#183 (one conflict, `kontak.astro`, resolved
+to the install's themed page) and deployed twice: the first deploy ran without the Singapore pin
+because the pin script failed on that file's different comment and the following commands ran
+anyway (Worker `7730e80c`); the second carries it (`f134ad0f`). Read-only live reviews of baven
+(39 URLs) and petanisejahtera (24 URLs) were clean on prices, feeds, JSON-LD, payments, aliases
+and brand; their findings are STORE-3 and STORE-4. Product fix with a test: `listPublicLandingPages`
+now leaves out alias slugs that declare a `canonicalSlug`, as the sitemap already did, which
+removes petanisejahtera's duplicate "Aussie Formula Baru (2)" card and explains taniniaga's
+"32 of 32 listed, 28 in the sitemap". `npm test` 1185.
