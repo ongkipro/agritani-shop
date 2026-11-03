@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 258; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 259; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8724,3 +8724,14 @@ feed lists 27 items; a product page has one H1, one checked variant, three JSON-
 overflow at 390/1280 px and no page error; `/admin/docs` asks for a login. The admin screens
 were not opened with store credentials. A first commit message carried a `Co-Authored-By`
 trailer against the global rule; it was unpushed and was redone without it before the push.
+
+### Entry 259: open work from the 2026-11-02/03 sessions recorded
+
+`UNIMPLEMENTED_SPECS.md` gains eight rows so nothing lives only in a conversation: ROLL-1
+(product #167-#180 on two installs of twelve, with the per-install procedure), ROLL-2
+(klikinaja, cekat and skincarebpom return to `buyer` only after their rollout), PAY-3 (the BCA
+Rp6.500 fee and a `buyer` store's first live QR are unproven), PROD-1 and PROD-2 (the five
+admin copy/behaviour mismatches found while writing the Docs book, each re-read against the
+code before recording), PERF-2 (public scores and the keyless PageSpeed quota), REV-2
+(revenleather's made-up counters, left by Paduka's decision, recorded so it is not raised again)
+and DASH-1 (the lighter dashboard not yet opened live). No code changed.
