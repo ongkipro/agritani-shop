@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 260; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 261; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8751,3 +8751,16 @@ both; (2) the skincare category rule held the keyword `kojien`, so taniniaga's p
 titled only "Kojien" went to both feeds as Skin Care (567); (3) `/kontak` doubled the store name
 in its title (revenleather had patched it in its own copy). Still open for each store, recorded in
 UNIMPLEMENTED_SPECS: STORE-1 (agritani, which also holds a test lead left by a review agent) and STORE-2 (taniniaga).
+
+### Entry 261: llms.txt line, and the two stores redeployed
+
+Entry 260's copy fix missed `/llms.txt`, which builds its own "Cara memesan" text in `llms-txt.ts`
+and still said shipping and payment "ditampilkan di form pesanan sesuai alamat tujuan". It now
+says so only when the form shows them (test added). agritani (Worker `b8e6864f`) and taniniaga
+(`39a53872`) took Entries 260 and 261 and were checked live: `/kontak` names the store once,
+`/pengiriman` carries the new sentence, both stores answer `cf-placement: local-SIN` on 7 of 8
+spot requests, and taniniaga's Kojien feed category is Google 113 (it was 567). Data, taniniaga D1:
+`products.category` of Kojien (id 99118) 'Umum' -> 'Pupuk & Nutrisi Tanaman', guarded on the old
+value, 1 row; the "before" read failed on a column name, the old value was known from an earlier
+read. A review agent that was told to read only filled a form on agritani and left the lead
+`ABN-10718` (UNIMPLEMENTED_SPECS STORE-1); review agents are now briefed never to type into a form.
