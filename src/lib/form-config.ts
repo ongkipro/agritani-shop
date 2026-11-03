@@ -1,6 +1,15 @@
 import type { Product, ProductVariant } from "../data/products";
 import type { FormMode } from "./form-mode.ts";
 
+/**
+ * The cheapest variant, the first among equals: the "from" price the cards,
+ * the Product JSON-LD and both catalog feeds lead with. A form that opened on
+ * another variant showed Merchant Center a price its item never had.
+ */
+export function cheapestVariant<T extends { price: number }>(variants: readonly T[]): T | undefined {
+  return variants.reduce<T | undefined>((low, variant) => (!low || variant.price < low.price ? variant : low), undefined);
+}
+
 const FORM_PATHS: Record<FormMode, string> = {
   middle: "/middle-form",
   full: "/full-form",
@@ -57,9 +66,11 @@ export function resolvePreferredFormVariant(
     );
   }
 
+  // A store's preferred size wins; with none to match, the cheapest variant,
+  // the price the feeds and cards lead with (product rule, 2026-11-02).
   return (
     product.variants.find((variant) => /500\s*ml/i.test(variant.label)) ??
-    product.variants[0]
+    cheapestVariant(product.variants)
   );
 }
 
