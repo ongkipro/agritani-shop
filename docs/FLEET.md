@@ -289,7 +289,12 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   (agritani 500 ml, 1 Liter for sawit; taniniaga 500 ml for scoped brands); the merge conflicts were
   resolved to the install's side and only the "no match" fallback became `cheapestVariant()`. Review
   findings in UNIMPLEMENTED_SPECS STORE-1 and STORE-2.
-- **baven** took product #167-#179 on 2026-11-03 (merge `b94975a`, no conflict; pin commit
+- **baven** (Worker `195681ff`), **beranda-tani / petanisejahtera** (`2a968dcb`), **taniniaga** (`727cd330`)
+  and **agritani** (`a60d1b84`) took product #167-#185 on 2026-11-03, each pinned to Singapore. beranda-tani
+  merged with one conflict (`kontak.astro`, kept the install's themed page) and cleaned its public copy
+  (landing descriptions, `/produk` intro, home hero slide in D1 `storefront_content`, version 3 to 4).
+  Review findings: UNIMPLEMENTED_SPECS STORE-3 (baven) and STORE-4 (beranda-tani).
+- **baven** first took product #167-#179 on 2026-11-03 (merge `b94975a`, no conflict; pin commit
   `938e864` on `install/bavenshop`; Worker `526a823f`; ledger 80/80, no migration): Docs book,
   QRIS/VA fee rules, the cheapest-variant form default, the lighter dashboard, and
   `placement.region: aws:ap-southeast-1` (its D1 is APAC). Live: every page answers
