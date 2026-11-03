@@ -283,9 +283,9 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   were left as they are by Paduka's decision. Latency: D1 runs in APAC and Smart Placement
   already runs the Worker in Singapore (`cf-placement: local-SIN`; a request entering at HKG
   answered `remote-SIN`), so no explicit `placement.region` was set — corrected the same evening: requests entering at LAX stayed `local-LAX` (2-3 s), so the Worker is pinned to Singapore (`placement.region: aws:ap-southeast-1`, ADR-034, Worker `e5ac2f20`); LAX-entry product pages now run in SIN at a median 1.1 s. 2026-11-03: product #176-#178 merged and deployed (`f047360`, Worker `b19e3ed5`): the lighter dashboard (lazy chart, parallel reads).
-- **agritani** and **taniniaga** took product #167-#181 on 2026-11-03 (agritani merge `9081021`, pin
-  `0049f43`, Worker `3c0cc17e`; taniniaga merge `e2c567e`, pin `ebffeed`, Worker `0eaccb84`; ledger 80/80, no
-  migration), each pinned to Singapore (APAC D1). Both keep their own `resolvePreferredFormVariant`
+- **agritani** and **taniniaga** took product #167-#183 on 2026-11-03 (first deploy: agritani merge `9081021`,
+  pin `0049f43`; taniniaga merge `e2c567e`, pin `ebffeed`; final Workers agritani `19d65f93`, taniniaga
+  `bccf347e`; ledger 80/80, no migration), each pinned to Singapore (APAC D1). Both keep their own `resolvePreferredFormVariant`
   (agritani 500 ml, 1 Liter for sawit; taniniaga 500 ml for scoped brands); the merge conflicts were
   resolved to the install's side and only the "no match" fallback became `cheapestVariant()`. Review
   findings in UNIMPLEMENTED_SPECS STORE-1 and STORE-2.
