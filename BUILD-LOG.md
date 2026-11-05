@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 262; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 264; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8776,3 +8776,36 @@ and brand; their findings are STORE-3 and STORE-4. Product fix with a test: `lis
 now leaves out alias slugs that declare a `canonicalSlug`, as the sitemap already did, which
 removes petanisejahtera's duplicate "Aussie Formula Baru (2)" card and explains taniniaga's
 "32 of 32 listed, 28 in the sitemap". `npm test` 1185.
+
+### Entry 263: correction to Entry 262, and four installs redeployed
+
+Entry 262 said the landing list's alias filter explained taniniaga's "32 listed, 28 in the sitemap".
+It does not: taniniaga has no alias slugs. Read from its D1, 32 = 28 standalone landing pages plus 4
+that are the product pages (`is_product_page`, linked as `/produk/…`), which the sitemap leaves out by
+design; the count is correct and STORE-2 now says so. The filter fixes petanisejahtera's duplicate
+"Aussie Formula Baru (2)" card only. Redeployed on 2026-11-03 with #182-#185: baven `195681ff`,
+taniniaga `727cd330`, agritani `a60d1b84`, beranda-tani `2a968dcb`; live, every one answers `/llms.txt`
+with the corrected line and a single-name `/kontak` title, and `cf-placement` is SIN on most requests.
+petanisejahtera's home hero text, badges and `/produk` intro are fixed live; its landing descriptions
+come from `native-landing-pages.ts` through the hourly reconcile (cron minute 7), so "(dari
+petanisawit.com)" disappears at the next run, not at deploy. An import of the D1 content update through
+`--file` failed with an authentication error (nothing changed) and the same statement ran through
+`--command`, 1 row.
+
+### Entry 264: baven and petanisejahtera content cleaned (Paduka: "rekomendasi 1,2,3,4 jalankan")
+
+D1 edits, each row guarded on its old content length and backed up outside the repository.
+baven (`bavenshop-d1`): 13 `landing_sections` rows, 5 `storefront_content` rows and the garlive
+`landing_pages.meta_description`. Garlive's BPOM: a web search found TR183310871 listed for
+"Habbats Garlive" (ingredients identical: black seed oil, propolis, olive oil extract, garlic oil
+extract) and TR193332931 nowhere, so the page and its meta description now carry TR183310871; the
+source is a health blog, so the register check stays Paduka's (STORE-3). The `bvn` template's timer
+restarted from 02:14:45 on every load, its "Tersisa N paket lagi" bar had no data (stock never gates
+a sale, ADR-023), and foam toilet's script rotated six invented buyers; baven has 14 real orders in
+all. All removed or reworded as listed in STORE-3. beranda-tani: four `storefront_content` product
+rows lost their hand-written rating, reviews and sold counts, the dead email is hidden in the
+install (Worker `f32cdbf9`). Verified live with the cache bypassed: none of the removed strings on
+the eight baven pages checked, one BPOM number on both garlive URLs, no `AggregateRating` or
+`Review` in petanisejahtera's JSON-LD. Correction: the review agent called petanisejahtera's "42
+orang memesan dalam 24 jam" invented; it is the real aggregate of A-300 (83 orders in the last day
+by a plain count, 42 by the toast's own rule).
