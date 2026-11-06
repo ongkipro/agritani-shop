@@ -50,9 +50,18 @@ page on an install, starts and mostly ends here.
 7. **Browser proof beats a green build.** Open the page at a narrow and a wide
    width, check focus, console and horizontal overflow (§9). An SSR island that
    throws answers 200 with an empty body.
+8. **A landing page is storefront, not a third surface.** It inherits every rule
+   above — tokens, shape, image contract — whichever of the two kinds it is.
+   `docs/LANDING-PAGES.md` owns the CMS-vs-native choice, the `/<slug>` URL
+   contract and the reserved-slug mechanics; `docs/NATIVE_LANDING_PAGE_SPEC.md`
+   owns the native-Astro implementation standard. Neither restates this file's
+   tokens or shape rule, and this file does not restate their routing. CMS
+   section markup is wrapped by `.lp-section` (`src/styles/landing-pages/landing.css`),
+   which supplies the spacing and type rules an operator's HTML does not carry;
+   its own images are governed by rule 5 through `deferOffscreenImages()`.
 
 **Taking this to another project.** Copy the values from `design-tokens.md` and
-rules 1 to 7; keep the guards or write their equivalents, because a rule with no
+rules 1 to 8; keep the guards or write their equivalents, because a rule with no
 failing test is a rule the next agent will not see. Do not copy: the retired
 `wide-catalog` template (§1.2), the gold accent, the scroll-snap carousel (§7.4),
 the resolved items in §8, or any install's brand values (a store's logo, accent
