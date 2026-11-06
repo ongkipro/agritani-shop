@@ -2,6 +2,34 @@
 
 > Verified against disk: 2026-11-02 @ `f333530` (product `main` has PRs #167-#171 not yet on any install; installs run 1.9.2 plus PRs #157-#164 on eleven of the twelve; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
 
+## 2026-11-05 — nine installs rolled to product `a913fcb` (CHECKPOINT, session may close)
+
+**Task:** bring the nine in-scope installs to product `main` (`a913fcb`), pin Singapore, deploy, review live.
+Out of scope by instruction: permatamall, klikinaja, skincarebpom.
+
+**Done (verified):** product/main merged into zvarashop, agritani-shop, bavenshop, taniniaga, halotanishop,
+numaskin-adbook, revenleather, beranda-tani, cekat-shop; each pushed to its own `origin`, then `npm run deploy`
+(preflight passed, rc=0). `fleet:status` afterwards: all nine 0 behind, clean, synced, schema complete
+(zvara 93/93, others 80/80). `npm run check` 0 errors, `npm run build` ok, `npm test` 0 failed on all nine.
+Placement pinned `aws:ap-southeast-1` on zvara, halotani, numaskin, cekat (were `smart`); the other five already were.
+All D1 are APAC. Live: every domain 200, `cf-placement` local/remote-SIN, ~0.3-1.6 s TTFB.
+Install brand tokens intact: numaskin `#002b49`, beranda-tani `#1b5e20`, revenleather `#121212`; reven `/kontak` COD copy ok.
+
+**Conflicts resolved:** zvara (route-map regenerated), numaskin (`FormHybridContent`/`FormMiddleContent`: kept bundle logic,
+`cheapestVariant` fallback), revenleather (`kontak.astro` imports, kept Reven side).
+
+**Unverified:** no test order, so payment/thanks/checkout not exercised live. Live submit-button colour not measured on
+zvara and baven (no `sf-accent` in the HTML). Install deploy commits: halotani `488d350`, cekat `1964d31` carry only the placement pin.
+
+**Next steps:** (1) update `docs/FLEET.md` (versions, last deploy 2026-11-05, Singapore on all nine) via a PR, re-stamp its header;
+(2) measure live submit-button colour on zvara/baven; (3) decide on permatamall (44 behind, local clone +0/-2 vs origin),
+klikinaja (44 behind) and skincarebpom (1.8.5, 371 uncommitted files).
+
+**Open decisions:** whether/when to roll permatamall, klikinaja, skincarebpom.
+
+**Resume:** `cd ~/Projects/adsbookcms && npm run fleet:status -- ~/Projects/{zvarashop,agritani-shop,bavenshop,taniniaga,halotanishop,numaskin-adbook,revenleather,beranda-tani,cekat-shop}`
+No delivery ledger is active in this repository (no `.delivery/`).
+
 ## 2026-11-03 — baven and petanisejahtera reviewed; five installs on #167-#185
 
 baven (`195681ff`), petanisejahtera (`2a968dcb`), taniniaga (`727cd330`) and agritani (`a60d1b84`) run
