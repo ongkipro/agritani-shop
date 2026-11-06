@@ -38,7 +38,8 @@ page on an install, starts and mostly ends here.
    `admin-page-width.test.ts`.
 5. **Every public `<img>` declares `loading` and reserves its box.** `eager` plus
    `fetchpriority="high"` for the one image that is the page's first paint, `lazy` and
-   `decoding="async"` for the rest, `width` and `height` always. A product card asks
+   `decoding="async"` for the rest, `width` and `height` unless the size is genuinely
+   unknown (an uploaded logo or banner, a CMS image: the test lists each, with why). A product card asks
    `cardImageSrc()` for its `-sm` derivative. CMS landing HTML gets the same rule from
    `deferOffscreenImages()`. Guard: `storefront-images.test.ts`, whose exception list
    needs a reason per line and fails when an exception stops matching a tag.

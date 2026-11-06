@@ -1,6 +1,6 @@
 # AGENTS.md — Working Agreement for AdsBookCMS
 
-> Verified against disk: 2026-11-06 @ `61f7ec3` (1.9.2; baseline 1187)
+> Verified against disk: 2026-11-02 @ `8566bf6` (1.9.2). Only the §4 baseline was re-checked on 2026-11-06; counts elsewhere (116 lib modules, 15 auth tests) have since drifted to 140 and 17
 
 This file is the contract for any AI coding agent or contributor working in this repository. Read it before the first edit.
 
