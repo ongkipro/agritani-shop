@@ -17,6 +17,46 @@ Scope note from `ARCHITECTURE.md`: the **admin shell is a canonical product surf
 
 ---
 
+## 0. Contract — read this first, then only the section a rule points at
+
+Everything below this section is evidence for these rules, plus the history of
+how the tree got here. Applying this system to another project, or building a
+page on an install, starts and mostly ends here.
+
+1. **Tokens, not forks.** The public palette is neutral plus one accent. The nine
+   `--sf-*` properties in `src/styles/form-hybrid.css` are the whole re-brand
+   contract; an install overrides those declarations in its own CSS and never edits
+   the product stylesheet (§1.1, ADR-019). `design-tokens.md` is the portable copy of
+   the values; this file wins on conflict.
+2. **Two surfaces, two palettes.** The admin shell is identical on every install; the
+   storefront varies by template. Do not unify them (scope note above, §1.3).
+3. **Shape and type.** Soft radius (6 / 12 / 16 px, pills full), separation by
+   surface and whitespace rather than lines (§3). Inter at 400, 600 and 700 and
+   nothing else: the other weights render as one of these (§8.8).
+4. **A control's geometry belongs to its primitive.** A caller passes layout only,
+   never height, radius, colour or type size (§7.1). Guards: `admin-controls.test.ts`,
+   `admin-page-width.test.ts`.
+5. **Every public `<img>` declares `loading` and reserves its box.** `eager` plus
+   `fetchpriority="high"` for the one image that is the page's first paint, `lazy` and
+   `decoding="async"` for the rest, `width` and `height` always. A product card asks
+   `cardImageSrc()` for its `-sm` derivative. CMS landing HTML gets the same rule from
+   `deferOffscreenImages()`. Guard: `storefront-images.test.ts`, whose exception list
+   needs a reason per line and fails when an exception stops matching a tag.
+6. **No React on the public surface.** Scriptless Astro; a React island is for the
+   admin (§7.3, §7.4).
+7. **Browser proof beats a green build.** Open the page at a narrow and a wide
+   width, check focus, console and horizontal overflow (§9). An SSR island that
+   throws answers 200 with an empty body.
+
+**Taking this to another project.** Copy the values from `design-tokens.md` and
+rules 1 to 7; keep the guards or write their equivalents, because a rule with no
+failing test is a rule the next agent will not see. Do not copy: the retired
+`wide-catalog` template (§1.2), the gold accent, the scroll-snap carousel (§7.4),
+the resolved items in §8, or any install's brand values (a store's logo, accent
+and fonts are its own).
+
+---
+
 ## 1. Colour
 
 Storefront colour is mostly hex literals written inline as Tailwind arbitrary

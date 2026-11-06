@@ -1,6 +1,6 @@
 # AGENTS.md — Working Agreement for AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (1.9.2; baseline 1185)
+> Verified against disk: 2026-11-06 @ `61f7ec3` (1.9.2; baseline 1187)
 
 This file is the contract for any AI coding agent or contributor working in this repository. Read it before the first edit.
 
@@ -123,7 +123,7 @@ can reach it.
 
 On a fresh clone, run `npm run check` rather than bare `npx tsc --noEmit`. `astro check` generates `.astro/types.d.ts` first; without it `tsc` reports phantom errors such as `Property 'env' does not exist on type 'ImportMeta'`.
 
-Current verified baseline: **1185 passing** (0 skipped, 2026-11-03, `fix/storefront-copy-and-taxonomy`, 1.9.2), 0 type errors, `astro check` 0 errors / 0 warnings / 0 hints (586 files). A change that reduces this baseline is not done.
+Current verified baseline: **1187 passing** (0 skipped, 2026-11-06, `ui/storefront-image-guard`, 1.9.2), 0 type errors, `astro check` 0 errors / 0 warnings / 0 hints (590 files). A change that reduces this baseline is not done.
 
 New non-trivial logic — a branch, a parser, a money or auth path — leaves one runnable check behind. Trivial one-liners do not need a test.
 
@@ -154,7 +154,9 @@ primitives own every control's height, radius and colour (never pass them per
 call), filter rows are `FilterBar`/`FilterField`, search is `SearchInput`, page
 width belongs to AdminShell alone. `admin-controls.test.ts` and
 `admin-page-width.test.ts` fail the suite when a screen drifts from it — fix
-the screen, not the test.
+the screen, not the test. DESIGN-SYSTEM.md §0 is the whole UI contract in one
+page, including the public image rule that `storefront-images.test.ts` guards;
+read it before touching a component, and before taking the look to another project.
 
 Fix root causes, not symptoms. Grep every caller before editing a shared function: one guard in the shared path is a smaller diff than one guard per call site, and patching only the path in front of you leaves siblings broken.
 
