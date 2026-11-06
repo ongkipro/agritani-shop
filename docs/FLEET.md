@@ -294,6 +294,9 @@ Everything else merges `product/main` as is; regenerate `docs/ROUTE-MAP.md`,
   merged with one conflict (`kontak.astro`, kept the install's themed page) and cleaned its public copy
   (landing descriptions, `/produk` intro, home hero slide in D1 `storefront_content`, version 3 to 4).
   Review findings: UNIMPLEMENTED_SPECS STORE-3 (baven) and STORE-4 (beranda-tani).
+- **beranda-tani** redeployed 2026-11-06 (Worker version `d9d5db88`, install commit `296c94f`) with the product's
+  `public/_headers` (one-day cache for `/images/*`, BUILD-LOG 266) and a 192 px logo; it is the only install that has
+  `_headers` so far, the others get it with their next product merge.
 - **baven** first took product #167-#179 on 2026-11-03 (merge `b94975a`, no conflict; pin commit
   `938e864` on `install/bavenshop`; Worker `526a823f`; ledger 80/80, no migration): Docs book,
   QRIS/VA fee rules, the cheapest-variant form default, the lighter dashboard, and
