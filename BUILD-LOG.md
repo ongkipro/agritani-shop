@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 264; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-06 @ `61f7ec3` (Entry 266; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8816,3 +8816,18 @@ Merged product/main into nine installs, resolved three conflict sets (zvara rout
 pinned Singapore on zvara, halotani, numaskin and cekat, ran check/test/build (0 failures), pushed to each install's own origin and deployed with
 `npm run deploy` (reven first as canary). Live: all 200, placement SIN, brand tokens intact. Not verified: real order flow, live button colour on
 zvara and baven. `docs/FLEET.md` still describes 2026-11-02; update pending.
+
+### Entry 266: petanisejahtera.com "lemot" audit; unhashed `public/` files get a one-day cache (2026-11-06, Paduka: "review beranda tani ... lemot")
+
+Measured before changing anything. Server side is not slow: 24 sitemap URLs, TTFB 0.15-0.22 s from a SIN colo and
+0.3-0.55 s from HKG/NRT, nearly all `cf-cache-status: HIT`. Mobile lab (Fast 4G, CPU x4): LCP 0.89 s home and 1.08 s
+landing, CLS 0. `submit-middle-order` runs geo and D1 in parallel and schedules the heavy work; nothing chained. One curl
+hung past 120 s once and did not reproduce in eight repeats, so it is recorded as unexplained noise, not as a finding.
+Real finding: every file copied from `public/` (`/images/*`) was served `max-age=0, must-revalidate`, so a returning
+visitor revalidated every image on every page; `/_astro/*` and `/assets/*` were already immutable. `public/_headers` now
+gives `/images/*` a one-day `max-age` with a week of `stale-while-revalidate`; the adapter merges its own `/_astro/*` rule
+into the same file. Proved with `wrangler dev` on the built output (`/images/logo.svg` new header, `/favicon.png`
+unchanged), not assumed. Tradeoff: a replaced logo or hero reaches returning browsers within 24 h. Not changed: the Meta
+Pixel costs about 0.9 s of main thread at x4 CPU (owned by `MetaPixelBase`, TRACKING_SPECS), and hero images are not
+responsive (about 60 KB on mobile, LCP already ~1 s). Install-only: beranda-tani's 666 px logo (18 KB) shown at 34 px
+is now 192 px (4 KB); 192 keeps the JSON-LD Organization logo above Google's 112 px floor.
