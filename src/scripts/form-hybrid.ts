@@ -1213,7 +1213,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
     const brandCode = opt.bankCode || opt.channelCode || opt.code;
     const brandAsset = opt.logoUrl || paymentBrandAsset(brandCode);
     const badgeHtml = brandAsset
-      ? `<span class="payment-brand-mark" aria-hidden="true"><img src="${brandAsset}" alt="" loading="lazy" /></span>`
+      ? `<span class="payment-brand-mark" aria-hidden="true"><img src="${brandAsset}" alt="" width="36" height="24" loading="lazy" decoding="async" /></span>`
       : opt.paymentMethod === "cod"
         ? `<span class="payment-brand-mark payment-brand-mark--text" aria-hidden="true">COD</span>`
         : "";

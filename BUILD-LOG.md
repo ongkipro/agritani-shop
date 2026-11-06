@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-06 @ `61f7ec3` (Entry 266; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-06 @ `2cf79d0` (Entry 267; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8831,3 +8831,18 @@ unchanged), not assumed. Tradeoff: a replaced logo or hero reaches returning bro
 Pixel costs about 0.9 s of main thread at x4 CPU (owned by `MetaPixelBase`, TRACKING_SPECS), and hero images are not
 responsive (about 60 KB on mobile, LCP already ~1 s). Install-only: beranda-tani's 666 px logo (18 KB) shown at 34 px
 is now 192 px (4 KB); 192 keeps the JSON-LD Organization logo above Google's 112 px floor.
+
+### Entry 267: public images declare `loading` and their box, guarded; DESIGN-SYSTEM §0 is the portable UI contract (2026-11-06, PR #189)
+
+Every public `<img>` now says `loading` and reserves its box with `width`/`height`. The exceptions are the tags whose size is
+genuinely unknown (uploaded logo, merchant banner, CMS image section, script-filled QR), each listed with a reason and a tag count
+in `src/lib/storefront-images.test.ts`. The guard scans storefront components, layouts, public pages and `src/scripts`.
+`/hello` and `AdminLayout` are left out because they are the admin surface. `loading` counts only as a literal or a ternary
+of literals, because `loading={props.loading}` can render nothing. A stale exception fails, and so does a further tag that
+matches one. A DOM-built image or a file type the scan cannot read also fails. Two independent review passes found eight
+and then nine issues; all are fixed except the scanner's ignorance of comments and JS strings, which is marked `// lazy:`
+(it throws, it does not pass). Mutation-checked by injecting each violation. `DESIGN-SYSTEM.md` §0 states seven portable
+rules. In that pass its radius was corrected from Tailwind's stock 6/12/16 px to the tree's 14/18 px
+(`--radius: 0.625rem`), and its re-brand contract now lists all thirteen `--sf-*` tokens, not nine. Baseline 1188.
+Not verified: the payment brand logo at its new declared size in a browser (CSS sizes it to its box). Nothing deploys from
+this repository; installs pick it up with their next product merge.
