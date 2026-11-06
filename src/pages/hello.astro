@@ -222,7 +222,7 @@ if (database && !bootstrapAdminPassword) {
                  or who wants to see the shop, has one obvious way out. -->
             <h1 id="loginTitle" class="login-wordmark">
               <a href="/" class="login-wordmark-link" aria-label={`AdsBookCMS, kembali ke beranda ${Astro.locals.tenant.name}`} title={`Ke beranda ${Astro.locals.tenant.name}`}>
-                <img src="/images/adsbook-icon.svg" alt="" width="28" height="28" class="size-7 shrink-0" />
+                <img src="/images/adsbook-icon.svg" alt="" width="28" height="28" class="size-7 shrink-0" loading="eager" decoding="async" />
                 <span aria-hidden="true" class="login-wordmark-name"><span class="text-[#2563EB]">Ads</span>Book</span>
                 <span aria-hidden="true" class="login-wordmark-tag">CMS</span>
               </a>
