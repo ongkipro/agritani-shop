@@ -1,6 +1,6 @@
 # AdsBookCMS — Design System
 
-> Verified against disk: 2026-11-02 @ `156a214` (1.9.1: accent is CTA orange in §1.1; other sections retain their recorded evidence)
+> Verified against disk: 2026-11-02 @ `156a214` (1.9.1: accent is CTA orange in §1.1; other sections retain their recorded evidence). §0 was added 2026-11-06 and is checked by `storefront-images.test.ts`, `admin-controls.test.ts` and `admin-page-width.test.ts`; the rest of §0 restates sections below.
 >
 > **The public palette is neutral plus one overridable accent (ADR-019, as
 > amended 2026-08-23).** Colour tokens below that describe the retired gold
@@ -36,13 +36,15 @@ page on an install, starts and mostly ends here.
 4. **A control's geometry belongs to its primitive.** A caller passes layout only,
    never height, radius, colour or type size (§7.1). Guards: `admin-controls.test.ts`,
    `admin-page-width.test.ts`.
-5. **Every public `<img>` declares `loading` and reserves its box.** `eager` plus
-   `fetchpriority="high"` for the one image that is the page's first paint, `lazy` and
-   `decoding="async"` for the rest, `width` and `height` unless the size is genuinely
-   unknown (an uploaded logo or banner, a CMS image: the test lists each, with why). A product card asks
-   `cardImageSrc()` for its `-sm` derivative. CMS landing HTML gets the same rule from
-   `deferOffscreenImages()`. Guard: `storefront-images.test.ts`, whose exception list
-   needs a reason per line and fails when an exception stops matching a tag.
+5. **Every public `<img>` declares `loading` and reserves its box.** Guarded by
+   `storefront-images.test.ts` (storefront components, layouts, public pages and
+   `src/scripts`, which builds some `<img>` strings): an explicit `loading`, plus `width`
+   and `height` unless the size is genuinely unknown (an uploaded logo or banner, a CMS
+   image). Each exception is listed with its reason, and one that excuses nothing fails.
+   Convention, not guarded: the one image that is the page's first paint is `eager` with
+   `fetchpriority="high"`, the rest `lazy`; a product card asks `cardImageSrc()` for its
+   `-sm` derivative; CMS landing HTML gets `lazy` and `decoding="async"` from
+   `deferOffscreenImages()`. `/hello` is the admin login and follows the admin surface.
 6. **No React on the public surface.** Scriptless Astro; a React island is for the
    admin (§7.3, §7.4).
 7. **Browser proof beats a green build.** Open the page at a narrow and a wide

@@ -25,32 +25,48 @@ const walk = (dir: string): string[] =>
 const files = [
   ...walk("src/components/storefront"),
   ...walk("src/layouts"),
-  ...walk("src/pages").filter((f) => !f.startsWith("src/pages/admin/") && !f.startsWith("src/pages/api/")),
-].filter((f) => f.endsWith(".astro"));
+  ...walk("src/scripts"),
+  // /hello is the admin login: admin.css, the admin surface (DESIGN-SYSTEM §0.2), not this contract.
+  ...walk("src/pages").filter(
+    (f) => !f.startsWith("src/pages/admin/") && !f.startsWith("src/pages/api/") && f !== "src/pages/hello.astro",
+  ),
+].filter((f) => (f.endsWith(".astro") || f.endsWith(".ts")) && !f.endsWith(".test.ts"));
 
-/** Every `<img …>` in `source`, read to its real end: a `>` inside `{…}` or a quoted value is not the end. */
-function imgTags(source: string): string[] {
-  const tags: string[] = [];
+/**
+ * Every `<img …>` in `source`, read to its real end. A `>` inside `{…}` or inside a
+ * quoted value is not the end, and a quote opened inside `{…}` is honoured too. A tag
+ * that never closes throws: a guard that silently drops what it cannot read fails open.
+ */
+function imgTags(source: string): { tag: string; index: number }[] {
+  const tags: { tag: string; index: number }[] = [];
   for (const start of source.matchAll(/<img\s/g)) {
     let depth = 0;
     let quote = "";
-    for (let i = start.index; i < source.length; i++) {
+    let end = -1;
+    for (let i = start.index; i < source.length && end < 0; i++) {
       const ch = source[i];
       if (quote) {
         if (ch === quote) quote = "";
-      } else if (depth === 0 && (ch === '"' || ch === "'")) {
+      } else if (ch === '"' || ch === "'" || ch === "`") {
         quote = ch;
       } else if (ch === "{") {
         depth++;
       } else if (ch === "}") {
         depth--;
       } else if (ch === ">" && depth === 0) {
-        tags.push(source.slice(start.index, i + 1));
-        break;
+        end = i;
       }
     }
+    if (end < 0) throw new Error(`unterminated <img at offset ${start.index}`);
+    tags.push({ tag: source.slice(start.index, end + 1), index: start.index });
   }
   return tags;
+}
+
+/** A real attribute name: not `data-loading=`, not `max-width=`, and not text inside a value. */
+function hasAttr(tag: string, name: string): boolean {
+  const bare = tag.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, '""');
+  return new RegExp(`(?<![\\w-])${name}\\s*=`).test(bare);
 }
 
 type Skip = "loading" | "dimensions";
@@ -104,27 +120,36 @@ test("every public <img> declares loading and reserves its box", () => {
   const failures: string[] = [];
   for (const file of files) {
     const source = readFileSync(file, "utf8");
-    for (const tag of imgTags(source)) {
+    for (const { tag, index } of imgTags(source)) {
+      const missing: Skip[] = [];
+      const names: string[] = [];
+      if (!hasAttr(tag, "loading")) (missing.push("loading"), names.push("loading"));
+      if (!hasAttr(tag, "width")) (missing.push("dimensions"), names.push("width"));
+      if (!hasAttr(tag, "height")) (missing.push("dimensions"), names.push("height"));
       const hit = EXCEPTIONS.findIndex((e) => e.file === file && tag.includes(e.contains));
-      if (hit >= 0) used.add(hit);
-      const skip = new Set<Skip>(hit >= 0 ? EXCEPTIONS[hit].skip : []);
-      const line = source.slice(0, source.indexOf(tag)).split("\n").length;
-      const missing: string[] = [];
-      if (!skip.has("loading") && !/\bloading\s*=/.test(tag)) missing.push("loading");
-      if (!skip.has("dimensions") && !/\bwidth\s*=/.test(tag)) missing.push("width");
-      if (!skip.has("dimensions") && !/\bheight\s*=/.test(tag)) missing.push("height");
-      if (missing.length) failures.push(`${file}:${line} is missing ${missing.join(", ")}`);
+      const excused = hit >= 0 ? EXCEPTIONS[hit].skip : [];
+      // An exception counts as used only when it actually excused something.
+      if (hit >= 0 && missing.some((m) => excused.includes(m))) used.add(hit);
+      const unexcused = names.filter((_, i) => !excused.includes(missing[i]));
+      if (unexcused.length) {
+        const line = source.slice(0, index).split("\n").length;
+        failures.push(`${file}:${line} is missing ${unexcused.join(", ")}`);
+      }
     }
   }
   assert.deepEqual(failures, []);
   const stale = EXCEPTIONS.filter((_, i) => !used.has(i)).map((e) => `${e.file} ~ ${e.contains}`);
-  assert.deepEqual(stale, [], "an exception that matches no tag must be deleted");
+  assert.deepEqual(stale, [], "an exception that excuses nothing must be deleted");
 });
 
-test("the scan reads a tag to its real end and sees what the guard needs to see", () => {
-  const tags = imgTags('<img alt={`a > b`} src="x>y" loading="lazy" /> <img\n width="1"\n/>');
-  assert.equal(tags.length, 2);
-  assert.match(tags[0], /loading="lazy"/);
-  assert.match(tags[1], /width="1"/);
+test("the scan reads a tag to its real end and cannot be satisfied by look-alikes", () => {
+  const tags = imgTags('<img alt={`a > b`} src="x>y" loading="lazy" /> <img\n width="1"\n/> <img alt={c ? "}" : ""} src="a" />');
+  assert.equal(tags.length, 3);
+  assert.ok(hasAttr(tags[0].tag, "loading"));
+  assert.ok(hasAttr(tags[2].tag, "src") && !hasAttr(tags[2].tag, "loading"), "a `}` in a string must not end the expression early");
+  assert.ok(!hasAttr('<img data-loading="x" max-width="1" alt="width = 3" />', "loading"));
+  assert.ok(!hasAttr('<img data-loading="x" max-width="1" alt="width = 3" />', "width"));
+  assert.throws(() => imgTags('<img src="a" loading="lazy"'), /unterminated/);
+  assert.ok(files.some((f) => f.endsWith("form-hybrid.ts")), "the walk must reach the scripts that build <img> strings");
   assert.ok(files.length > 20, "the walk must actually find the storefront files");
 });

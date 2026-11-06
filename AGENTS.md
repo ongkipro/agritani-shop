@@ -1,6 +1,6 @@
 # AGENTS.md — Working Agreement for AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (1.9.2). Only the §4 baseline was re-checked on 2026-11-06; counts elsewhere (116 lib modules, 15 auth tests) have since drifted to 140 and 17
+> Verified against disk: 2026-11-06 @ `61f7ec3` (1.9.2; §4 baseline, the lib-module count and the auth test count re-checked; other claims not re-audited)
 
 This file is the contract for any AI coding agent or contributor working in this repository. Read it before the first edit.
 
@@ -127,7 +127,7 @@ Current verified baseline: **1187 passing** (0 skipped, 2026-11-06, `ui/storefro
 
 New non-trivial logic — a branch, a parser, a money or auth path — leaves one runnable check behind. Trivial one-liners do not need a test.
 
-`src/lib/auth.ts` is covered by `src/lib/auth.test.ts` (15 tests, mutation-verified). That suite asserts security *properties* — a tampered signature is rejected, a rotated credential closes the session, a role never reaches a route it should not. Keep it that way: a test that merely asserts a valid token is valid buys nothing.
+`src/lib/auth.ts` is covered by `src/lib/auth.test.ts` (17 tests; mutation-verified when it had 15). That suite asserts security *properties* — a tampered signature is rejected, a rotated credential closes the session, a role never reaches a route it should not. Keep it that way: a test that merely asserts a valid token is valid buys nothing.
 
 ---
 
@@ -145,7 +145,7 @@ A permitted command is not an approved one. The tooling here runs with broad per
 
 ## 6. Code discipline
 
-Smallest change that is correct. Reuse what exists before adding; the codebase already has 116 non-test lib modules and duplicating one is the most common failure mode.
+Smallest change that is correct. Reuse what exists before adding; the codebase already has 140 non-test lib modules and duplicating one is the most common failure mode.
 
 Before adding a dependency, check whether the platform already provides it. Two headless UI libraries already ship side by side (`radix-ui` and `@base-ui/react`) — do not add a third.
 
