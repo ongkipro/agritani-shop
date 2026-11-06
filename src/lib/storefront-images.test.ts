@@ -22,24 +22,31 @@ const walk = (dir: string): string[] =>
     return statSync(path).isDirectory() ? walk(path) : [path];
   });
 
-const files = [
+// /hello (the admin login) and AdminLayout are the admin surface (DESIGN-SYSTEM §0.2), not this contract.
+const ADMIN = new Set(["src/pages/hello.astro", "src/layouts/AdminLayout.astro"]);
+const all = [
   ...walk("src/components/storefront"),
   ...walk("src/layouts"),
   ...walk("src/scripts"),
-  // /hello is the admin login: admin.css, the admin surface (DESIGN-SYSTEM §0.2), not this contract.
-  ...walk("src/pages").filter(
-    (f) => !f.startsWith("src/pages/admin/") && !f.startsWith("src/pages/api/") && f !== "src/pages/hello.astro",
-  ),
-].filter((f) => (f.endsWith(".astro") || f.endsWith(".ts")) && !f.endsWith(".test.ts"));
+  ...walk("src/pages").filter((f) => !f.startsWith("src/pages/admin/") && !f.startsWith("src/pages/api/")),
+].filter((f) => !ADMIN.has(f) && !f.endsWith(".test.ts"));
+const files = all.filter((f) => f.endsWith(".astro") || f.endsWith(".ts"));
+/** A file type the scan cannot read (`.tsx`, `.mdx`, `.js` …) would be a public image it never sees. */
+const unread = all.filter((f) => !files.includes(f) && !f.endsWith(".md") && !f.endsWith(".json"));
 
 /**
  * Every `<img …>` in `source`, read to its real end. A `>` inside `{…}` or inside a
  * quoted value is not the end, and a quote opened inside `{…}` is honoured too. A tag
  * that never closes throws: a guard that silently drops what it cannot read fails open.
+ *
+ * lazy: the scan does not know it is inside a comment or a JS string, so a prose
+ * `<img` in a `//` comment can open a quote that never closes (it then throws, it
+ * does not pass). Upgrade path: tokenize `.ts` with the TypeScript scanner and
+ * `.astro` with `@astrojs/compiler` once a false throw actually happens.
  */
 function imgTags(source: string): { tag: string; index: number }[] {
   const tags: { tag: string; index: number }[] = [];
-  for (const start of source.matchAll(/<img\s/g)) {
+  for (const start of source.matchAll(/<img\s/gi)) {
     let depth = 0;
     let quote = "";
     let end = -1;
@@ -69,8 +76,26 @@ function hasAttr(tag: string, name: string): boolean {
   return new RegExp(`(?<![\\w-])${name}\\s*=`).test(bare);
 }
 
+/**
+ * `loading` that always renders: a literal `lazy`/`eager`, or an expression whose
+ * every branch is one. `loading={props.loading}` or `{x ? "eager" : undefined}`
+ * renders no attribute at all when the value is undefined, which is the oversight
+ * this guard exists to catch.
+ */
+function declaresLoading(tag: string): boolean {
+  const at = tag.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, (q) => " ".repeat(q.length)).search(/(?<![\w-])loading\s*=/);
+  if (at < 0) return false;
+  const value = tag.slice(at).replace(/^loading\s*=\s*/, "");
+  if (/^(["'])(lazy|eager)\1/.test(value)) return true;
+  const expr = value.match(/^\$?\{([^}]*)\}/)?.[1] ?? "";
+  const one = /^\s*(["'`])(lazy|eager)\1\s*$/;
+  const ternary = /^[^?]+\?\s*(["'`])(lazy|eager)\1\s*:\s*(["'`])(lazy|eager)\3\s*$/;
+  return one.test(expr) || ternary.test(expr);
+}
+
 type Skip = "loading" | "dimensions";
-const EXCEPTIONS: { file: string; contains: string; skip: Skip[]; why: string }[] = [
+/** `tags` is how many tags the exception covers (default 1), checked exactly. */
+const EXCEPTIONS: { file: string; contains: string; skip: Skip[]; why: string; tags?: number }[] = [
   {
     file: "src/components/storefront/tracking/MetaPixelBase.astro",
     contains: "facebook.com/tr",
@@ -99,7 +124,8 @@ const EXCEPTIONS: { file: string; contains: string; skip: Skip[]; why: string }[
     file: "src/pages/[slug].astro",
     contains: "src={config.src}",
     skip: ["dimensions"],
-    why: "a CMS image section stores only src and alt, so there is no size to declare",
+    why: "a CMS image section stores only src and alt, so there is no size to declare; eager first, lazy after",
+    tags: 2,
   },
   {
     file: "src/pages/payment.astro",
@@ -117,16 +143,22 @@ const EXCEPTIONS: { file: string; contains: string; skip: Skip[]; why: string }[
 
 test("every public <img> declares loading and reserves its box", () => {
   const used = new Set<number>();
-  const failures: string[] = [];
+  const matches = EXCEPTIONS.map(() => 0);
+  const failures: string[] = unread.map((f) => `${f} is a file type this scan cannot read`);
   for (const file of files) {
     const source = readFileSync(file, "utf8");
+    // A DOM-built image never appears as `<img` text, so it would ship unchecked.
+    for (const m of source.matchAll(/createElement\(\s*["'`]img["'`]\s*\)|new Image\(/gi)) {
+      failures.push(`${file}:${source.slice(0, m.index).split("\n").length} builds an image through the DOM; write the tag as markup or a string this scan reads`);
+    }
     for (const { tag, index } of imgTags(source)) {
       const missing: Skip[] = [];
       const names: string[] = [];
-      if (!hasAttr(tag, "loading")) (missing.push("loading"), names.push("loading"));
+      if (!declaresLoading(tag)) (missing.push("loading"), names.push("loading"));
       if (!hasAttr(tag, "width")) (missing.push("dimensions"), names.push("width"));
       if (!hasAttr(tag, "height")) (missing.push("dimensions"), names.push("height"));
       const hit = EXCEPTIONS.findIndex((e) => e.file === file && tag.includes(e.contains));
+      if (hit >= 0) matches[hit]++;
       const excused = hit >= 0 ? EXCEPTIONS[hit].skip : [];
       // An exception counts as used only when it actually excused something.
       if (hit >= 0 && missing.some((m) => excused.includes(m))) used.add(hit);
@@ -137,19 +169,35 @@ test("every public <img> declares loading and reserves its box", () => {
       }
     }
   }
+  // An exception excuses the tags it names. Another tag that happens to share
+  // its src expression is new code nobody reviewed against the reason.
+  EXCEPTIONS.forEach((e, i) => {
+    const want = e.tags ?? 1;
+    if (matches[i] > want) failures.push(`${e.file} ~ ${e.contains} matches ${matches[i]} tags; the exception covers ${want}`);
+  });
   assert.deepEqual(failures, []);
   const stale = EXCEPTIONS.filter((_, i) => !used.has(i)).map((e) => `${e.file} ~ ${e.contains}`);
   assert.deepEqual(stale, [], "an exception that excuses nothing must be deleted");
 });
 
 test("the scan reads a tag to its real end and cannot be satisfied by look-alikes", () => {
-  const tags = imgTags('<img alt={`a > b`} src="x>y" loading="lazy" /> <img\n width="1"\n/> <img alt={c ? "}" : ""} src="a" />');
-  assert.equal(tags.length, 3);
+  const tags = imgTags('<img alt={`a > b`} src="x>y" loading="lazy" /> <img\n width="1"\n/> <img alt={c ? "}" : ""} src="a" /> <IMG src="u" />');
+  assert.equal(tags.length, 4, "the tag name is case-insensitive");
   assert.ok(hasAttr(tags[0].tag, "loading"));
   assert.ok(hasAttr(tags[2].tag, "src") && !hasAttr(tags[2].tag, "loading"), "a `}` in a string must not end the expression early");
   assert.ok(!hasAttr('<img data-loading="x" max-width="1" alt="width = 3" />', "loading"));
   assert.ok(!hasAttr('<img data-loading="x" max-width="1" alt="width = 3" />', "width"));
   assert.throws(() => imgTags('<img src="a" loading="lazy"'), /unterminated/);
   assert.ok(files.some((f) => f.endsWith("form-hybrid.ts")), "the walk must reach the scripts that build <img> strings");
+  assert.ok(!files.includes("src/layouts/AdminLayout.astro"), "the admin layout is not the public surface");
   assert.ok(files.length > 20, "the walk must actually find the storefront files");
+});
+
+test("loading counts only when it always renders", () => {
+  for (const ok of ['loading="lazy"', "loading='eager'", "loading={i === 0 ? 'eager' : 'lazy'}", 'loading={"lazy"}']) {
+    assert.ok(declaresLoading(`<img src="a" ${ok} />`), ok);
+  }
+  for (const bad of ["loading={props.loading}", "loading={eager ? 'eager' : undefined}", 'loading="auto"', "loading={x ?? 'lazy'}", 'alt="loading=lazy"']) {
+    assert.ok(!declaresLoading(`<img src="a" ${bad} />`), bad);
+  }
 });
