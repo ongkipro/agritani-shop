@@ -2,6 +2,22 @@
 
 > Verified against disk: 2026-11-02 @ `f333530` (product `main` has PRs #167-#171 not yet on any install; installs run 1.9.2 plus PRs #157-#164 on eleven of the twelve; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
 
+## 2026-11-10 — PR #191 (COD Purchase at checkout) live on agritani.shop only
+
+**Done (verified):** PR #191 (`df35c5d`) merged; agritani-shop merged product/main and its own
+`origin` (3 landing-page commits from another session), `npm test` 1198/1198 (1 skipped), check 0
+errors, build ok, pushed `688f433`, `npm run deploy` (preflight passed) → Worker `46619b10`.
+Live: `/`, `/produk`, `/thanks`, landing 200, `/admin` 302; D1 80/80 migrations. Every COD order of
+the last 48 h older than 2 h has a Purchase in the outbox (67/67).
+
+**Not yet observed:** an order placed after the deploy (none arrived in the first 5 minutes), so
+the at-checkout send and the new `meta-purchase-coverage` signal are proven locally, not yet in
+production. Meta's own view (Events Manager) not checked: needs the store CAPI token.
+
+**Fleet:** the other installs (taniniaga and the rest) do not have #191 yet. Roll it with the
+RELEASE §7 procedure per install. Audit and decisions: `docs/AUDIT-2026-11-10-agritani-purchase-gap.md`,
+ADR-035 (leads 14 days, never deleted by hand), ADR-036.
+
 ## 2026-11-05 — nine installs rolled to product `a913fcb` (CHECKPOINT, session may close)
 
 **Task:** bring the nine in-scope installs to product `main` (`a913fcb`), pin Singapore, deploy, review live.
