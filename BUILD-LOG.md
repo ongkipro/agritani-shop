@@ -1,6 +1,6 @@
 # BUILD LOG: AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (Entry 264; earlier entries retain their historical evidence)
+> Verified against disk: 2026-11-06 @ `2cf79d0` (Entry 267; earlier entries retain their historical evidence)
 
 Author & Curator: **[ongki.pro](https://ongki.pro)**
 
@@ -8809,3 +8809,40 @@ the eight baven pages checked, one BPOM number on both garlive URLs, no `Aggrega
 `Review` in petanisejahtera's JSON-LD. Correction: the review agent called petanisejahtera's "42
 orang memesan dalam 24 jam" invented; it is the real aggregate of A-300 (83 orders in the last day
 by a plain count, 42 by the toast's own rule).
+
+### Entry 265: nine installs rolled to product `a913fcb` (2026-11-05, Paduka: "commit push deploy", skip permatamall, klikinaja, skincarebpom)
+
+Merged product/main into nine installs, resolved three conflict sets (zvara route-map, numaskin form components, reven `kontak.astro`),
+pinned Singapore on zvara, halotani, numaskin and cekat, ran check/test/build (0 failures), pushed to each install's own origin and deployed with
+`npm run deploy` (reven first as canary). Live: all 200, placement SIN, brand tokens intact. Not verified: real order flow, live button colour on
+zvara and baven. `docs/FLEET.md` still describes 2026-11-02; update pending.
+
+### Entry 266: petanisejahtera.com "lemot" audit; unhashed `public/` files get a one-day cache (2026-11-06, Paduka: "review beranda tani ... lemot")
+
+Measured before changing anything. Server side is not slow: 24 sitemap URLs, TTFB 0.15-0.22 s from a SIN colo and
+0.3-0.55 s from HKG/NRT, nearly all `cf-cache-status: HIT`. Mobile lab (Fast 4G, CPU x4): LCP 0.89 s home and 1.08 s
+landing, CLS 0. `submit-middle-order` runs geo and D1 in parallel and schedules the heavy work; nothing chained. One curl
+hung past 120 s once and did not reproduce in eight repeats, so it is recorded as unexplained noise, not as a finding.
+Real finding: every file copied from `public/` (`/images/*`) was served `max-age=0, must-revalidate`, so a returning
+visitor revalidated every image on every page; `/_astro/*` and `/assets/*` were already immutable. `public/_headers` now
+gives `/images/*` a one-day `max-age` with a week of `stale-while-revalidate`; the adapter merges its own `/_astro/*` rule
+into the same file. Proved with `wrangler dev` on the built output (`/images/logo.svg` new header, `/favicon.png`
+unchanged), not assumed. Tradeoff: a replaced logo or hero reaches returning browsers within 24 h. Not changed: the Meta
+Pixel costs about 0.9 s of main thread at x4 CPU (owned by `MetaPixelBase`, TRACKING_SPECS), and hero images are not
+responsive (about 60 KB on mobile, LCP already ~1 s). Install-only: beranda-tani's 666 px logo (18 KB) shown at 34 px
+is now 192 px (4 KB); 192 keeps the JSON-LD Organization logo above Google's 112 px floor.
+
+### Entry 267: public images declare `loading` and their box, guarded; DESIGN-SYSTEM §0 is the portable UI contract (2026-11-06, PR #189)
+
+Every public `<img>` now says `loading` and reserves its box with `width`/`height`. The exceptions are the tags whose size is
+genuinely unknown (uploaded logo, merchant banner, CMS image section, script-filled QR), each listed with a reason and a tag count
+in `src/lib/storefront-images.test.ts`. The guard scans storefront components, layouts, public pages and `src/scripts`.
+`/hello` and `AdminLayout` are left out because they are the admin surface. `loading` counts only as a literal or a ternary
+of literals, because `loading={props.loading}` can render nothing. A stale exception fails, and so does a further tag that
+matches one. A DOM-built image or a file type the scan cannot read also fails. Two independent review passes found eight
+and then nine issues; all are fixed except the scanner's ignorance of comments and JS strings, which is marked `// lazy:`
+(it throws, it does not pass). Mutation-checked by injecting each violation. `DESIGN-SYSTEM.md` §0 states seven portable
+rules. In that pass its radius was corrected from Tailwind's stock 6/12/16 px to the tree's 14/18 px
+(`--radius: 0.625rem`), and its re-brand contract now lists all thirteen `--sf-*` tokens, not nine. Baseline 1188.
+Not verified: the payment brand logo at its new declared size in a browser (CSS sizes it to its box). Nothing deploys from
+this repository; installs pick it up with their next product merge.

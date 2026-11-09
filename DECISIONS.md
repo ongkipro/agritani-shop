@@ -1,6 +1,6 @@
 # Architecture Decision Record — AdsBookCMS
 
-> Verified against disk: 2026-11-02 @ `8566bf6` (ADR-034 pins placement to Singapore; earlier ADRs retain their recorded evidence)
+> Verified against disk: 2026-11-10 @ `700bc21` (ADR-035 leads kept 14 days, ADR-036 COD Purchase is sent at checkout; earlier ADRs retain their recorded evidence)
 
 Append-only. One decision per entry. A decision is recorded here only when it constrains future work; implementation detail belongs in `ARCHITECTURE.md`, remaining work in `UNIMPLEMENTED_SPECS.md`.
 
@@ -1305,3 +1305,54 @@ of South-East Asia, the pin works against it; `cf-placement` and the D1
 region (`wrangler d1 info`) are the two things to re-check. Each install's
 `wrangler.jsonc` is its own (keepours), so the fleet changes one install at a
 time.
+
+## ADR-035 — A lead is kept 14 days and is never deleted by hand
+
+**Date:** 2026-11-10 · **Status:** Accepted (Paduka: "lead jangan pernah di
+hapus", then "pesanan tertinggal boleh di hapus setelah 14 hari tercreate").
+Audit `docs/AUDIT-2026-11-10-agritani-purchase-gap.md` F-4.
+
+**Context.** The hourly cron deleted every unpaid `abandoned` row older than
+seven days. On agritani.shop the oldest lead on 2026-11-10 was from
+2026-11-03, so any Insights period longer than a week counted too few Leads
+and too high a closing rate, and CS lost leads it was still following up. The
+order delete route also accepted an `ABN-` key, so a lead could be removed by
+hand at any age.
+
+**Decision.** `ABANDONED_RETENTION_DAYS` is 14: the cron (and `POST
+/api/admin/orders/retention`) deletes an unpaid lead 14 days after it was
+captured, never sooner. Nothing else deletes a lead:
+`deleteOrdersReleasingReservations` refuses any batch holding an `abandoned`
+row (409), and the operator marks the follow-up or converts it instead. A
+source scan test fails if a third `DELETE FROM orders` appears.
+
+**Consequences.** Lead figures are complete for any Insights period up to 14
+days; a 30- or 90-day period still under-counts leads older than that and
+reads a higher closing rate. A lead's name, phone and address are kept twice
+as long as before.
+
+## ADR-036 — The COD Purchase leaves the server at checkout
+
+**Date:** 2026-11-10 · **Status:** Accepted.
+Audit `docs/AUDIT-2026-11-10-agritani-purchase-gap.md` F-1, F-7, F-9.
+`TRACKING_SPECS.md` §13.
+
+**Context.** Both Meta legs of a COD Purchase left only from `/thanks`, after
+an order-status round trip. A buyer whose in-app browser closed, or whom the
+WhatsApp auto-redirect took away first, was never reported: 5 of 732 on
+agritani.shop in 30 days. No signal noticed, because the queue signals only
+see events that were enqueued.
+
+**Decision.** Checkout (`submit-order`, `submit-middle-order`,
+`/api/v1/checkout`) enqueues the COD Purchase itself through
+`enqueuePurchaseForPaidOrder`, after the response, keyed on the order number.
+The hourly cron sweeps COD orders 30 min to 48 h old that still have none.
+`/thanks` keeps the browser Pixel on the same `event_id`. A CS-converted lead
+is reported the same way at conversion. A new health signal,
+`meta-purchase-coverage`, degrades and alerts on any COD order 2-48 h old
+without a Purchase.
+
+**Consequences.** The server leg no longer depends on the buyer's browser, so
+the WhatsApp hand-off and in-app browsers cannot lose it. A cancelled order is
+still reported, as it always was at submit; the order count on Meta is the
+order count, not the delivered count.
