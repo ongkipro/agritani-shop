@@ -88,6 +88,7 @@ const worker = spawn(
     "wrangler", "dev", "--local",
     "--port", String(port),
     ...(host ? ["--ip", host] : []),
+    "--local-upstream", host || "localhost",
     "--persist-to", stateDir,
     "--env-file", envFile,
     ...Object.entries(providerVars).flatMap(([key, value]) => ["--var", `${key}:${value}`]),

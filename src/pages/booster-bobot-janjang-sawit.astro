@@ -1,0 +1,469 @@
+---
+/**
+ * Native Landing Page: Booster Bobot Janjang Sawit & Pengisi Daging Berondol: Saratoga
+ *
+ * Clean, High-Contrast Direct-Response LP (Precision Visuals & Scannable Copy)
+ * Master Product: saratoga-serum-tanaman-premium (ID: 50510)
+ * Architecture Contract: docs/LANDING-PAGES.md
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import SocialProofToast from '../components/storefront/shared/SocialProofToast.astro';
+import StickyLandingCtaBar from '../components/storefront/shared/StickyLandingCtaBar.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { formatIdr } from '../lib/format-idr';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { recentOrderCount } from '../lib/social-proof';
+import { getRuntimeEnv } from '../lib/env';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/booster-bobot-janjang-sawit.css';
+
+export const prerender = false;
+
+const SLUG = 'booster-bobot-janjang-sawit';
+
+const product =
+  (await getStorefrontProduct(Astro.locals, 'saratoga-serum-tanaman-premium')) ??
+  (await getStorefrontProduct(Astro.locals, '50510'));
+if (!product) return Astro.rewrite('/404');
+
+const socialProofOrders = await recentOrderCount(
+  getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined,
+);
+
+const cheapest = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+const preferredVariant =
+  product.variants.find((v) => /1\s*liter|\b1\s*l\b/i.test(v.label)) ??
+  product.variants[1] ??
+  cheapest;
+const price = preferredVariant?.price ?? cheapest?.price ?? product.price;
+
+const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, SLUG)}`;
+const heroImage = '/images/landing/booster-bobot-janjang-sawit/hero-problem.webp';
+---
+
+<BaseLayout
+  title={`Booster Bobot Janjang Sawit & Pengisi Daging Berondol: Saratoga - ${Astro.locals.tenant.name}`}
+  description="Dongkrak bobot janjang kelapa sawit +5 hingga 9 kg per tandan, cegah trek kemarau, dan padatkan daging minyak mesokarp dengan Serum Asam Amino SARATOGA."
+  image={heroImage}
+  preloadImages={heroImage}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <div data-landing-hero aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-screen"></div>
+  <SocialProofToast
+    orderCount={socialProofOrders}
+    heroSelector="[data-landing-hero]"
+    formSelector="#checkout-form"
+  />
+  <MetaLandingTracker
+    slug={SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName || product.productName}
+    price={price}
+  />
+
+  <main class="mx-auto min-h-screen w-full max-w-[480px] bg-white pb-20 text-slate-950">
+    <!-- 1. HERO SECTION -->
+    <section class="bg-white pb-6 text-center">
+      <div class="px-5 pt-5">
+        <span class="inline-block rounded-full bg-red-600 px-3 py-1 text-xs font-bold tracking-wide text-white">
+          BOOSTER BOBOT TBS & RENDEMEN SAWIT
+        </span>
+        <h1 class="mx-auto mt-2.5 max-w-[440px] text-[24px] font-bold leading-[1.18] tracking-tight text-slate-950">
+          Dongkrak Bobot Tandan Sawit Tembus <span class="hl-brush">35–40 KG PER JANJANG</span> & Daging Berondol Tebal!
+        </h1>
+        <p class="mx-auto mt-2.5 max-w-[400px] text-[14px] font-normal leading-snug text-slate-700">
+          Hentikan kerugian tandan ringan dan trek kemarau! Pompa pengisian daging minyak mesokarp agar timbangan RAM naik drastis.
+        </p>
+      </div>
+
+      <div class="mt-4">
+        <div class="overflow-hidden bg-slate-950">
+          <img
+            src={heroImage}
+            alt="Booster Bobot Janjang Sawit & Pengisi Daging Berondol: Saratoga"
+            class="aspect-[16/9] w-full object-cover"
+            width="1280"
+            height="720"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div class="grid grid-cols-2 border-t border-slate-800 bg-slate-950 text-xs font-bold">
+            <div class="border-r border-slate-800 bg-red-950/80 px-2.5 py-2 text-red-200">
+              SEBELUM: Janjang Ringan 12 Kg
+            </div>
+            <div class="bg-emerald-950/80 px-2.5 py-2 text-emerald-200">
+              SESUDAH: Janjang Padat 40.2 Kg
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 px-4 text-xs font-semibold text-slate-700">
+          <span>✓ Garansi 100% Asli</span>
+          <span class="text-slate-300">•</span>
+          <span>✓ Segel Barcode Resmi</span>
+          <span class="text-slate-300">•</span>
+          <span>✓ Bisa COD</span>
+        </div>
+
+        <!-- Scannable 4-Point Checklist + Primary CTA -->
+        <div class="mx-5 mt-4 rounded-xl border border-emerald-200 bg-emerald-50/40 p-3.5 text-left">
+          <ul class="space-y-2 text-[13px] font-normal leading-snug text-slate-800">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span>
+              <span><strong class="font-bold text-slate-950">Lonjakan Bobot +5 s/d 9 Kg/Tandan:</strong> Isi penuh tiap lapis berondolan dari dalam hingga luar tandan.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span>
+              <span><strong class="font-bold text-slate-950">Daging Mesokarp Tebal Berminyak:</strong> Tingkatkan rendemen CPO dan lolos sortir PKS kelas A.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span>
+              <span><strong class="font-bold text-slate-950">Putus Siklus Trek Musiman:</strong> Jaga pasokan asam amino bebas agar bunga baru muncul tanpa jeda.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">✓</span>
+              <span><strong class="font-bold text-slate-950">Cegah Gugur Bunga & Buah Muda:</strong> Kuatkan tangkai mayang saat cuaca panas ekstrem maupun hujan.</span>
+            </li>
+          </ul>
+          <a
+            href="#checkout-form"
+            class="mt-3.5 flex min-h-[46px] w-full items-center justify-center rounded-lg bg-[#14532D] px-4 py-2.5 text-center text-[14px] font-bold text-white shadow-sm transition-colors hover:bg-[#166534]"
+          >
+            Pesan Booster Bobot Sawit Sekarang →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISUAL PROBLEM SECTION -->
+    <section class="bg-red-50/40 px-5 py-7">
+      <h2 class="text-[20px] font-bold leading-[1.2] tracking-tight text-slate-950">
+        2 Kerugian Fatal <span class="hl-brush-red">Janjang Sawit Ringan & Trek</span>
+      </h2>
+
+      <div class="mt-4 space-y-3.5">
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-bobot-janjang-sawit/gejala-1.webp"
+              alt="Tandan Besar Tapi Timbangan Ringan (Kopong)"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+              MASALAH 1
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[15px] font-bold leading-snug text-slate-950">Tandan Besar Tapi Timbangan Ringan (Kopong)</h3>
+            <p class="mt-1 text-[13px] font-normal leading-snug text-slate-600">
+              Kurangnya asam amino dan Kalium organik membuat berondol hanya besar cangkang tapi tipis daging minyak.
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div class="relative aspect-[16/9] w-full bg-slate-900">
+            <img
+              src="/images/landing/booster-bobot-janjang-sawit/gejala-2.webp"
+              alt="Trek Panjang Habis Panen Raya"
+              class="h-full w-full object-cover"
+              width="960"
+              height="536"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="absolute left-2.5 top-2.5 rounded bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+              MASALAH 2
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h3 class="text-[15px] font-bold leading-snug text-slate-950">Trek Panjang Habis Panen Raya</h3>
+            <p class="mt-1 text-[13px] font-normal leading-snug text-slate-600">
+              Pohon kehabisan energi pasca panen puncak sehingga pelepah atas berhenti mengeluarkan seludang buah baru.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUAL RECOVERY TIMELINE & COMPARISON -->
+    <section class="bg-white px-5 py-7">
+      <h2 class="text-[20px] font-bold leading-[1.2] tracking-tight text-slate-950">
+        Bukti Perubahan: <span class="hl-brush-red">Janjang Ringan</span> Jadi <span class="hl-brush">TBS 40 Kg Berondol Tebal</span>
+      </h2>
+
+      <div class="-mx-5 mt-3.5 mb-4 overflow-hidden bg-slate-950">
+        <img
+          src="/images/landing/booster-bobot-janjang-sawit/overclaim-timeline.webp"
+          alt="Tahapan pemulihan dan panen"
+          class="aspect-[16/9] w-full object-cover"
+          width="1280"
+          height="720"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="grid grid-cols-3 border-t border-slate-800 bg-slate-950 px-2 py-2 text-center text-xs font-bold">
+          <span class="text-amber-300">14 Hari: Pelepah Hijau Segar</span>
+          <span class="text-emerald-300">30 Hari: Berondol Membengkak</span>
+          <span class="text-emerald-400">60 Hari: TBS 35–40 Kg Merah</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 items-stretch gap-3">
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+          <img
+            src="/images/landing/booster-bobot-janjang-sawit/kondisi-rusak.webp"
+            alt="Tandan Ringan & Trek"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="absolute left-2 top-2 rounded bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+            Tanpa SARATOGA
+          </span>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold leading-tight text-slate-900">Tandan Ringan & Trek</h3>
+            <p class="mt-1 text-xs font-normal leading-snug text-slate-600">
+              Berondol kecil pucat, daging tipis, tonase panen anjlok.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative flex h-full flex-col overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/40">
+          <img
+            src="/images/landing/booster-bobot-janjang-sawit/kondisi-pulih.webp"
+            alt="Bobot Rekor 35–40 Kg"
+            class="aspect-[16/9] w-full shrink-0 object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="absolute left-2 top-2 rounded bg-emerald-700 px-2 py-0.5 text-xs font-bold text-white">
+            Pakai SARATOGA
+          </span>
+          <div class="p-3">
+            <h3 class="text-[13px] font-bold leading-tight text-emerald-950">Bobot Rekor 35–40 Kg</h3>
+            <p class="mt-1 text-xs font-normal leading-snug text-emerald-900">
+              Berondol rapat berlapis, merah mengkilap, timbangan berat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SHOWCASE & 3 CORE PILLARS -->
+    <section class="bg-emerald-950 px-5 py-7 text-white">
+      <div class="text-center">
+        <span class="inline-block rounded-full bg-emerald-800 px-3 py-1 text-xs font-bold text-emerald-100">
+          FORMULA BIOAKTIF RESMI
+        </span>
+        <h2 class="mx-auto mt-2 text-[20px] font-bold leading-[1.2] tracking-tight text-white">
+          3 Keunggulan <span class="hl-brush">SARATOGA Pembobot Sawit</span>
+        </h2>
+      </div>
+
+      <!-- Full-Width 16:9 Precision Product Bottle Card -->
+      <div class="mt-4 overflow-hidden rounded-xl border border-emerald-700 bg-emerald-900/60 shadow-sm">
+        <img
+          src="/images/landing/booster-bobot-janjang-sawit/saratoga-hero.webp"
+          alt="SARATOGA 500ML — Serum Asam Amino"
+          class="aspect-[16/9] w-full object-cover"
+          width="1280"
+          height="720"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="p-3.5 text-center">
+          <h3 class="text-[15px] font-bold text-white">SARATOGA 500ML — Serum Asam Amino</h3>
+          <p class="mt-0.5 text-xs font-normal text-emerald-200">
+            Japan Technology • Pembobot Tandan & Pengisi Minyak Sawit
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        <div class="flex items-start gap-3 rounded-xl border border-emerald-800 bg-emerald-900/50 p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">1</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-white">18 L-Amino Acid Japan Technology</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-emerald-100">Diserap instan tanpa menguras energi pohon untuk menghentikan trek.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-xl border border-emerald-800 bg-emerald-900/50 p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">2</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-white">Kalium & Boron Pengisi Mesokarp</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-emerald-100">Memompa karbohidrat menjadi minyak padat di dalam daging berondol.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-xl border border-emerald-800 bg-emerald-900/50 p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">3</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-white">Pengunci Tangkai Mayang & Brondol</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-emerald-100">Mencegah aborsi bunga betina dan busuk tandan saat musim ekstrem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. COMPACT SOP FIELD GUIDE -->
+    <section class="bg-slate-50 px-5 py-7">
+      <h2 class="text-center text-[20px] font-bold leading-[1.2] tracking-tight text-slate-950">
+        3 Langkah Mudah <span class="hl-brush">Dosis & Aplikasi</span>
+      </h2>
+
+      <div class="mt-4 space-y-2.5">
+        <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">1</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-slate-950">Takaran Dosis</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-slate-600">Campurkan 100 ml SARATOGA ke dalam 15 liter air bersih.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">2</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-slate-950">Kocor / Semprot</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-slate-600">Kocor merata di piringan akar 1.5 meter dari pangkal pokok sawit.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5">
+          <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">3</span>
+          <div>
+            <h3 class="text-[14px] font-bold text-slate-950">Jadwal Rutin</h3>
+            <p class="mt-0.5 text-xs font-normal leading-snug text-slate-600">Aplikasikan tiap 14–21 hari untuk menjaga putaran buah tanpa trek.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. FARMER TESTIMONIALS -->
+    <section class="bg-white px-5 py-7">
+      <div class="text-center">
+        <h2 class="mx-auto text-[20px] font-bold leading-[1.2] tracking-tight text-slate-950">
+          Hasil Nyata di Lapangan
+        </h2>
+      </div>
+
+      <div class="mt-4 space-y-3.5">
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-bobot-janjang-sawit/testi-1.webp"
+            alt="Pak Burhanuddin — Musi Banyuasin, Sumsel"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Burhanuddin — Musi Banyuasin, Sumsel</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-900">Naik +7 Kg/Janjang</span>
+            </div>
+            <p class="mt-1.5 text-[13px] font-normal leading-snug text-slate-700">
+              "Biasanya rata-rata janjang cuma 18–20 kg. Sejak rutin kocor SARATOGA, rata-rata timbangan di RAM naik jadi 26–28 kg per janjang!"
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-bobot-janjang-sawit/testi-2.webp"
+            alt="Pak Togar Pasaribu — Simalungun, Sumut"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak Togar Pasaribu — Simalungun, Sumut</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-900">Bebas Trek Tahunan</span>
+            </div>
+            <p class="mt-1.5 text-[13px] font-normal leading-snug text-slate-700">
+              "Kebun tetangga lagi trek kosong, pokok sawit saya tetap keluar buah keliling. Brondolan besar merah berminyak."
+            </p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <img
+            src="/images/landing/booster-bobot-janjang-sawit/testi-3.webp"
+            alt="Pak H. Darwis — Paser, Kaltim"
+            class="aspect-[16/9] w-full object-cover"
+            width="960"
+            height="536"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="p-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-[14px] font-bold text-slate-950">Pak H. Darwis — Paser, Kaltim</h3>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-900">Rendemen Kelas A</span>
+            </div>
+            <p class="mt-1.5 text-[13px] font-normal leading-snug text-slate-700">
+              "Supir truk sampai kaget, jumlah janjang sama tapi tonase timbangan naik hampir 1.2 ton sekali angkut!"
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. CHECKOUT FORM SECTION -->
+    <section id="checkout-form" class="scroll-mt-8 border-t border-slate-100 bg-white py-8">
+      <div class="px-5 pb-5 text-center">
+        <h2 class="mx-auto max-w-[360px] text-[20px] font-bold leading-[1.2] tracking-tight text-slate-950">
+          Form Pemesanan <span class="hl-brush">Booster Sawit SARATOGA Original</span>
+        </h2>
+        <p class="mx-auto mt-1.5 max-w-[360px] text-[13px] font-normal text-slate-600">
+          Pilih kemasan resmi ({product.variants.map((v) => `${v.label} ${formatIdr(v.price)}`).join(' / ')}). Bisa bayar di tempat (COD) saat barang sampai.
+        </p>
+      </div>
+
+      <GeoIpResolvedForm
+        productSlug={product.slug}
+        selectedVariantId={preferredVariant?.id}
+        mode="hybrid"
+        embedded={true}
+      />
+    </section>
+  </main>
+
+  <StickyLandingCtaBar
+    ctaText="Pesan SARATOGA Asli — Bisa COD"
+    subText="Garansi Asli Japan Technology • Bayar di Tempat"
+  />
+
+  <script slot="head" is:inline>
+    document.addEventListener('click', (e) => {
+      const target =
+        e.target instanceof Element
+          ? e.target.closest('a[href="#checkout-form"]')
+          : null;
+      if (!target) return;
+      e.preventDefault();
+      document
+        .getElementById('checkout-form')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</BaseLayout>
