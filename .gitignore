@@ -10,4 +10,5 @@ dist/
 !.dev.vars.example
 tmp/
 design/
+drafts/
 
