@@ -160,7 +160,7 @@
   align-items: center;
   padding: 0.16rem 0.48rem;
   border-radius: 999px;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.015em;
@@ -342,7 +342,7 @@
      (padding-top 1.4rem) so the two do not close up on each other. */
   top: 0.55rem;
   color: var(--sf-accent-strong);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 /* Filled but not being edited: the soft grey that says "done". `placeholder=" "`
@@ -395,7 +395,7 @@
   border-radius: 999px;
   background: #fee4e2;
   color: #d92d20;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   flex: 0 0 auto;
 }
@@ -599,7 +599,7 @@
   display: block;
   width: 100%;
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.25;
   color: #555555;
@@ -647,7 +647,7 @@
 .payment-block-anchor small {
   flex: 0 0 auto;
   margin: 0;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.08em;
@@ -724,7 +724,7 @@
   border-color: var(--sf-field-border);
   background: var(--sf-surface-alt);
   color: #4a4a4a;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   /* was 900: the only 900 in the tree, and no Inter 900 is loaded, so it already
      resolved to the 700 face. Declaring what ships (A-32). */
   font-weight: 700;
@@ -748,7 +748,7 @@
 }
 .payment-option-desc {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 400;
   line-height: 1.4;
   color: #555555;
@@ -855,7 +855,7 @@
   font-size: 0.8125rem;
 }
 .payment-group-body .payment-option-desc {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
 }
 .summary-block {
   gap: 1rem;
@@ -976,7 +976,7 @@
 .total-box small {
   display: block;
   margin-top: 0.1rem;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   line-height: 1.2;
   color: #555555;
   font-weight: 600;
@@ -1152,7 +1152,7 @@
 }
 .trust-strip i {
   font-style: normal;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.25;
   text-transform: uppercase;
