@@ -363,6 +363,46 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image: '/images/landing/obat-sawit-jantan-vesipera/hero-problem.webp',
     isActive: true,
   },
+  {
+    slug: 'booster-bobot-janjang-sawit',
+    title: 'Booster Bobot Janjang Kelapa Sawit & Pemadat Berondol: Aussie',
+    productSlug: 'aussie-pupuk-cair-organik',
+    description: 'Dongkrak bobot janjang kelapa sawit +5 hingga 9 kg per tandan, cegah trek kemarau, dan padatkan daging minyak mesokarp dengan Pupuk Organik AUSSIE Original.',
+    image: '/images/landing/booster-bobot-janjang-sawit/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'aussie-asli-segel-barcode-resmi',
+    title: 'Pusat Distribusi Resmi Pupuk Aussie Original Bersegel Barcode: Agritani',
+    productSlug: 'aussie-pupuk-cair-organik',
+    description: 'Waspada Aussie palsu tutup polos! Dapatkan pupuk organik AUSSIE asli bersegel barcode resmi dan hologram pabrik di Agritani Shop. Bayar di Tempat (COD).',
+    image: '/images/landing/aussie-asli-segel-barcode-resmi/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'paket-combo-cabai-sembuh-lebat',
+    title: 'Paket Cabai Sembuh Dari Keriting Kuning & Berbuah Lebat: Bensu',
+    productSlug: 'bensu-pupuk-cair-organik',
+    description: 'Atasi daun cabai keriting mangkuk, layu jamur, dan rontok bunga pasca hujan. Pulih segar dan panen lebat hingga 25+ kali petik dengan BENSU Organik.',
+    image: '/images/landing/paket-combo-cabai-sembuh-lebat/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'paket-combo-bawang-anti-moler-umbi-jumbo',
+    title: 'Paket Bawang Merah Bebas Moler Inul & Umbi Jumbo Merah Merona: Bensu',
+    productSlug: 'bensu-pupuk-cair-organik',
+    description: 'Atasi penyakit moler inul (Fusarium) pada tanaman bawang merah, tegakkan daun jegrik kaku, dan cetak umbi super jumbo merah merona dengan BENSU Organik.',
+    image: '/images/landing/paket-combo-bawang-anti-moler-umbi-jumbo/hero-problem.webp',
+    isActive: true,
+  },
+  {
+    slug: 'paket-combo-padi-baja-gabah-bernas',
+    title: 'Benteng Padi Batang Baja Anti-Rebah & Pengisi Gabah Bernas Sampai Pangkal: Kojien',
+    productSlug: 'kojien',
+    description: 'Bikin batang padi sekeras baja tahan angin rendeng, bebas kresek potong leher, dan isi gabah kuning bening bernas sampai malai paling pangkal dengan KOJIEN.',
+    image: '/images/landing/paket-combo-padi-baja-gabah-bernas/hero-problem.webp',
+    isActive: true,
+  },
 ];
 
 /**
